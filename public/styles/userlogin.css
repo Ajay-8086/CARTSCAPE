@@ -1,0 +1,229 @@
+
+ /*---------- end of header ----------*/
+ 
+ /*---------- main COntent ----------*/
+ .loginsection{
+     width: 100vw;
+     min-height: 70vh;
+     padding: 8% 0;
+ }
+ .loginbox{
+     width: 24rem;
+     background-color: #FFF;
+     stroke-width: 1px;
+     stroke: #E0E0E0;
+     filter: drop-shadow(2px 4px 4px rgba(0, 0, 0, 0.25));
+     border-radius: 9px;
+     font-family: 'Rubik', sans-serif;
+     line-height: normal;
+     font-style: normal;
+     padding: 30px 51px;
+ }
+ .headingLogin{
+     margin-left: 50%;
+     transform: translateX(-50%);
+ }
+ .headingLogin p{
+     color: #00224e;
+     font-size: 1.125rem;
+     font-weight: 700;
+     line-height: normal;
+ }
+ .error{
+     margin-left: 50%;
+     transform: translateX(-50%);
+     width: max-content;
+ }
+ .error p{
+     margin-top: 10px;
+     color: red;
+     font-size: 0.8125rem;
+     font-weight: bold;
+ }
+ .inputForm{
+     width: 100%;
+     padding: 1.5rem 0 0;
+ }
+ .inputForm label{
+     color: #000;
+     font-size: 0.8125rem;
+     font-weight: 400;
+ }
+ .inputForm input{
+     width: 100%;
+     font-size: medium;
+     padding: 10px 16px;
+     outline: none;
+     border-radius: 8px;
+     margin: 0.75rem 0;
+     border: 1px solid #E0E0E0;
+     background: #FFF;
+ }
+ .inputForm a{
+     color: rgba(0, 0, 255, 0.75);
+     font-size: 0.8125rem;
+     font-weight: 400;
+     text-decoration-line: underline;
+ }
+ .inputForm div{
+     margin-bottom: 1.5rem;
+ }
+ .loginBtn{
+     color: white;
+     font-size: 0.9375rem;
+     font-weight: bold;
+     border-radius: 7px;
+     width:172px;
+     height: 45px;
+     background: #00224e;
+     border: transparent;
+     margin-bottom: 1.5rem;
+     border-radius: 100px;
+ }
+ .registerText a{
+     color: black;
+     font-size: 0.8125rem;
+     font-weight: 500;
+     text-decoration: underline;
+ }
+
+.form-label{
+    background: none !important;
+}
+    
+
+ .form-outline input.form-control  {
+    outline: 1px solid rgb(244, 244, 244);
+ }
+ 
+ input[type="search"]:focus + .form-label {
+   background-color: #00224e !important;
+ }
+ 
+
+
+
+
+ 
+ /*---------- media query ----------*/
+ @media (max-width: 1472px) {
+     .navigation{
+         padding: 0 9.5%;
+     }
+ }
+ @media (max-width: 1401px) {
+     .navigation{
+         padding: 0 6.5%;
+     }
+ }
+ @media (max-width: 1305px) {
+     .navigation{
+         padding: 0 3.5%;
+     }
+ }
+ @media (max-width: 1223px) {
+     .navigation{
+         padding: 0 20px;
+     }
+ }
+ @media (max-width: 1179px) {
+     .navigationnavbar ul li a{
+         font-size: 12px;
+     }
+     .logo svg{
+         width: 87.85px;
+         height: 1.5rem;
+     }
+ }
+ @media (max-width: 1158px) {
+     .footerdescription{
+         display: none;
+     }
+     .mediumScreen{
+         display: block;
+     }
+     .subheading h2{
+         font-size: 1rem;
+         margin-bottom: 0;
+     }
+     .descriptionOne svg:first{
+         margin-bottom: 1.25rem;
+     }
+     .dateTime{
+         border: none;
+         font-size: 0.68rem;
+     }
+     .contact{
+         font-size: 0.75rem;
+     }
+     .accordion-flush .accordion-item:last-child {
+         border-bottom: 1px solid var(--bs-border-color);
+     }
+     .largeScreenSocial{
+         display: none;
+     }
+     .smallScreenSocial{
+         display: block;
+     }
+ }
+ @media (max-width: 1048px) {
+     .navigationnavbar ul li{
+         margin-left: 1rem;
+     }
+     .navigationnavbar ul li:last-child{
+         margin-right: 1rem;
+     }
+ }
+ @media (max-width: 861px) {
+     .navigationnavbar{
+         display: none;
+     }
+     .mobilenavigation{
+         display: block;
+     }
+     .mobilenavigationList{
+         display: block;
+     }
+     .logo.active a{
+         margin-left: 50px;
+     }
+ }
+ @media (max-width: 600px) {
+     .loginbox{
+         width: 21rem;
+     }
+     .loginBtn{
+         width:100px;
+         height: 42px;
+     }
+     .inputForm input{
+         font-size: small;
+     }
+     .useroptions ul li:nth-child(2){
+         display: none;
+     }
+     .error p{
+         margin-top: 10px;
+         color: red;
+         font-size: 0.75rem;
+         font-weight: bold;
+     }
+     .inputForm a{
+         color: rgba(0, 0, 255, 0.75);
+         font-size: 0.7rem;
+         font-weight: 400;
+         text-decoration-line: underline;
+     }
+     .registerText a{
+         color: black;
+         font-size: 0.7rem;
+         font-weight: 500;
+         text-decoration: underline;
+     }
+ }
+ @media (min-width: 1537px){
+     .catgoryDiv{
+         height: 4em;
+     }
+ }
+ /*---------- end of media query ----------*/

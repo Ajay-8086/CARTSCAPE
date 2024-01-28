@@ -1,0 +1,45 @@
+
+<!-- header section  -->
+
+<%-include('../partials/header.ejs') %>
+
+<!-- header section  -->
+
+<!-- Navbar -->
+  <section>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 m-0 loginsection d-flex align-items-center justify-content-center">
+                <div class="loginbox">
+                    <div class="headingLogin d-inline-block">
+                        <p>Login</p>
+                    </div>
+                    
+                    <div class="inputForm d-inline-block">
+                        <form action="/login" method="POST">
+                            <label class="d-block" for="email">Email</label>
+                            <input class="d-block " type="text" name="email" value=""   />
+                            <p class="errorP " ></p>
+                            <label class="d-block" for="password">Password</label>
+                            
+                            <input class="d-block " type="password" name="password" />
+                            <p class="errorP text-start" ></p>
+                            <p class="errorP" ></p>
+
+                            <div class="text-end"">
+                                <a href="/forget-password"  style="color: #131921 ; text-decoration: none;">Forgot Password ?</a>
+                            </div>
+                            <div class="text-center m-0">
+                                <button class="loginBtn" type="submit">Login</button>
+                            </div>
+                        </form>
+                        <div class="registerText text-center m-0">
+                            <a href="/signup">Register an account</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</main>
