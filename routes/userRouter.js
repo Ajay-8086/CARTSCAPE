@@ -17,4 +17,5 @@ router.get('/',home)
       .get('/cart',getCart)
       .get('/wishlist',getWishList)
       
+      
 module.exports = router
