@@ -1,0 +1,27 @@
+<%-include('../partials/adminHeader.ejs') %>
+
+
+
+  <section class="vh-200 " style="background-color: rgb(255,255,255);" ><div
+    class="mask d-flex align-items-center h-100 gradient-custom-3">
+    <div class="container h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+          <div class="card" style="border-radius: 15px;">
+            <div class="card-body p-5" style="box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;">
+              <h2 class="text-uppercase text-center mb-5 h" style="color: #777777; font-weight: bold;">Authentication Key</h2>
+
+              <% if (error && error.key) { %>
+                <div class="alert alert-danger" role="alert">
+                  <%= error.key %>
+                </div>
+              <% } %>
+              <form action="/admin/verify" method="post"  id="signup">
+                <input type="hidden" value="<%= error?error.email:null %>"  name="email">
+                <div class="form-outline mb-4">
+                    
+                  <input type="number" id="form3Example1cg" name="key" class="form-control form-control-lg"  style="background-color: #d9d9d99d;"
+                    placeholder="Key" />
+                </div>
+                <button class="btn-success" type="submit">Submit</button>
+              </form>

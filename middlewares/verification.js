@@ -17,7 +17,7 @@ const verifyOtp = async (res, phone, digits) => {
         .verificationChecks.create({ to: `+91${phone}`, code: digits });
 
     if (verificationCheck.status === 'approved') {
-        await customerModel.findOneAndUpdate({ phone }, { $set: { role: true } });
+        await customerModel.findOneAndUpdate({ phone }, { $set: { verified: true } });
         res.redirect('/login');
     } else {
         res.redirect('/signup');

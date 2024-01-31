@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const userRouter = require('./routes/userRouter')
+const adminRouter = require('./routes/adminRoutes')
 const flash = require('connect-flash');
 const dotenv = require('dotenv');
 const session = require('express-session')
@@ -31,6 +32,7 @@ app.use(session({
 }))
 
 app.use('/',userRouter)
+app.use('/',adminRouter)
 
 
 app.listen(port,()=>{
