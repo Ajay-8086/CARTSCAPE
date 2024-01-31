@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var customer = new mongoose.Schema({
-  user_name: {
+  name: {
     type: String
   },
   password: {
@@ -11,11 +11,11 @@ var customer = new mongoose.Schema({
     type: String,
     required: true
   },
-  mobileNumber: {
+  phone: {
     type: Number,
     required: true
   },
-  role: {
+  verified: {
     type: Boolean,
     default:false
   }

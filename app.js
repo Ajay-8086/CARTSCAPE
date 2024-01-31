@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const userRouter = require('./routes/userRouter')
-// const flash = require('connect-flash');
+const flash = require('connect-flash');
 const dotenv = require('dotenv');
+const session = require('express-session')
 
 
 dotenv.config();
@@ -10,16 +11,24 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 const connection = process.env.URI;
+const secret = process.env.SECRET
 mongoose.connect(connection)
 
+app.use(express.urlencoded({extended:true}))
 app.use(express.json())
 
-app.use(express.urlencoded({extended:true}))
 app.set('view engine' , 'ejs')
 
 
   
 app.use(express.static('public'))
+
+app.use(flash());
+app.use(session({
+    secret:secret,
+    resave:true,
+    saveUninitialized:true
+}))
 
 app.use('/',userRouter)
 
