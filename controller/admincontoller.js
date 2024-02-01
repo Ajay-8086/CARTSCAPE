@@ -1,4 +1,5 @@
 const adminModel = require('../models/admin')
+const productModel = require('../models/product')
 const bcrypt = require('bcrypt')
 const dotenv = require('dotenv');
 dotenv.config();
@@ -60,7 +61,8 @@ module.exports={
     },
     getLogin:(req,res)=>{
         
-        res.render('admin/login',{error:req.flash('error')})
+        const errorMessages = req.flash('error');
+        res.render('admin/addProduct', { error: errorMessages });
     },
     postLogin:async(req,res)=>{
         const {email,password} = req.body
@@ -68,13 +70,64 @@ module.exports={
 
         if(adminExist){
             if(adminExist.verified){
+                const passwordVerify = await bcrypt.compare(password,(adminExist.password))
+                if(passwordVerify)
                 res.redirect('/admin/dashboard')
+                else{
+                    res.redirect('/admin/login')
+                }
             }else{
                 res.redirect('/admin/verify')
             }
         }else{
             req.flash('error','please register')
         }
-    }
+    },
+    getDashboard:(req,res)=>{
+        res.render('admin/dashboard',{error:req.flash('error')})
+    },
 
+    //product listing page
+    getProducts:async(req,res)=>{
+        const products = await productModel.find({})
+        res.render('admin/products',{products})
+    },
+
+
+    getAddProduct:(req,res)=>{
+        const error = req.flash('error')
+        
+        res.render('admin/addProduct',{error:error[0]})
+    },
+    postAddProduct:async (req,res)=>{
+        try {
+            const {name,price,stock,discount,description,colors} =req.body
+            // console.log(req.body);
+            const productExist = await productModel.findOne({name})
+            console.log(productExist);
+            if (!req.files || req.files.length === 0) {
+                console.log('in length');
+                return res.status(400).json({error:'No files uploaded'});
+            }
+            if(req.files.length>5){
+                console.log('in 5');
+                return res.status(400).json({error:'product images exceeded(>5)'})
+            }
+            if(productExist){
+                console.log('in exis');
+
+               return res.status(400).json({error:'Product already exist'})
+            }
+   
+           const  image= req.files.map((file) => file.filename)
+        
+        const newProduct = await productModel({name,price,stock,discount,description,image,colors })
+        await newProduct.save()
+        res.status(200).json({success:true})
+        } catch (error) {
+            res.status(500).json({error:'Internal server error'})
+        }
+        
+    }
+    
 }
