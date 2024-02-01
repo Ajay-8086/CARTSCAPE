@@ -23,7 +23,10 @@
             <table>
                 <thead>
                     <tr>
-                        <th>products</th>
+                        
+                        <th>Image</th>
+                        <th>stock</th>
+                        <th>price</th>
                         <th>Date product added</th>
                         
                         <th>Actions</th> <!-- Added Actions column -->
@@ -34,10 +37,13 @@
                     
                     
                     <tr>
+                       
                         <td>
-                            <img src="/uploads/products/<%=product.image%>" alt="User Image">
+                            <img src="/uploads/products/<%=product.image%>" alt="<%=product.name%>">
                             <p><%=product.name%></p>
                         </td>
+                        <td><%= product.stock %></td>
+                        <td><%= product.price %></td>
                         <td><%= product.productAdded %></td>
                         
                         <td>

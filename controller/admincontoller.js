@@ -146,7 +146,18 @@ module.exports={
     getUserList:async(req,res)=>{
         const users = await userModel.find({})
         res.render('admin/userList',{users})
+    },
+    deleteUser:async(req,res)=>{
+       try {
+        const userId = req.params.userId
+        await userModel.deleteOne({_id:userId})
+        res.status(200).redirect('/admin/users')
+       } catch (error) {
+        console.log('Server error');
+        res.status(500).send('Internal server error')
+       }
     }
+    
     
     
 }
