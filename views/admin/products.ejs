@@ -38,13 +38,13 @@
                             <img src="/uploads/products/<%=product.image%>" alt="User Image">
                             <p><%=product.name%></p>
                         </td>
-                        <td>01-10-2021</td>
+                        <td><%= product.productAdded %></td>
                         
                         <td>
-                            <a href="/edit-product/<%=product._id%>" class="edit-btn" title="Edit Order">
+                            <a href="/admin/edit-product/<%=product._id%>" class="edit-btn" title="Edit Order">
                                 <i class='bx bx-edit'></i>
                             </a>
-                            <a href="/delete/<%=product._id%>" class="delete-btn" title="Delete Order">
+                            <a href="/admin/delete/<%=product._id%>" class="delete-btn" title="Delete Order">
                                 <i class='bx bx-trash'></i>
                             </a>
                         </td>

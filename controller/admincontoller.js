@@ -2,6 +2,7 @@ const adminModel = require('../models/admin')
 const productModel = require('../models/product')
 const bcrypt = require('bcrypt')
 const dotenv = require('dotenv');
+const moment = require('moment')
 dotenv.config();
 
 module.exports={
@@ -106,28 +107,41 @@ module.exports={
             const productExist = await productModel.findOne({name})
             console.log(productExist);
             if (!req.files || req.files.length === 0) {
-                console.log('in length');
+                
                 return res.status(400).json({error:'No files uploaded'});
             }
             if(req.files.length>5){
-                console.log('in 5');
+                
                 return res.status(400).json({error:'product images exceeded(>5)'})
             }
             if(productExist){
-                console.log('in exis');
+               
 
                return res.status(400).json({error:'Product already exist'})
             }
    
            const  image= req.files.map((file) => file.filename)
-        
-        const newProduct = await productModel({name,price,stock,discount,description,image,colors })
+        const productAdded = moment().format('DD/MM/YYYY')
+        const newProduct = await productModel({name,price,stock,discount,description,image,colors,productAdded })
         await newProduct.save()
         res.status(200).json({success:true})
         } catch (error) {
             res.status(500).json({error:'Internal server error'})
         }
         
+    },
+ 
+    // deleting the product
+
+    deleteProduct:async(req,res)=>{
+        try {
+            const product_id = req.params.id
+            await productModel.deleteOne({_id:product_id})
+            res.status(200).redirect('/admin/product')
+        } catch (error) {
+            console.log('Error while deleting the product');
+            res.status(500).send('intenal server error')
+        }
     }
     
 }

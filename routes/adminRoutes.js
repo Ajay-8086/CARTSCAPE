@@ -13,7 +13,8 @@ const{
     getDashboard,
     getAddProduct,
     postAddProduct,
-    getProducts
+    getProducts,
+    deleteProduct
 
 
 }=require('../controller/admincontoller')
@@ -27,7 +28,8 @@ router.get('/admin/signup',getSignup)
       .get('/admin/dashboard',getDashboard)
       .get('/admin/addproduct',getAddProduct)
       .post('/admin/addproduct',setUploadType('products'),upload.array('image[]',999),postAddProduct)
-      .get('/admin/products',getProducts)
+      .get('/admin/product',getProducts)
+      .get('/admin/delete/:id',deleteProduct)
 
 
 
