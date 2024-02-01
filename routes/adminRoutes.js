@@ -14,7 +14,8 @@ const{
     getAddProduct,
     postAddProduct,
     getProducts,
-    deleteProduct
+    deleteProduct,
+    getUserList
 
 
 }=require('../controller/admincontoller')
@@ -30,6 +31,7 @@ router.get('/admin/signup',getSignup)
       .post('/admin/addproduct',setUploadType('products'),upload.array('image[]',999),postAddProduct)
       .get('/admin/product',getProducts)
       .get('/admin/delete/:id',deleteProduct)
+      .get('/admin/users',getUserList)
 
 
 

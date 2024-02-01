@@ -1,5 +1,6 @@
 const adminModel = require('../models/admin')
 const productModel = require('../models/product')
+const userModel = require('../models/customer')
 const bcrypt = require('bcrypt')
 const dotenv = require('dotenv');
 const moment = require('moment')
@@ -96,9 +97,8 @@ module.exports={
 
 
     getAddProduct:(req,res)=>{
-        const error = req.flash('error')
         
-        res.render('admin/addProduct',{error:error[0]})
+        res.render('admin/addProduct')
     },
     postAddProduct:async (req,res)=>{
         try {
@@ -142,6 +142,11 @@ module.exports={
             console.log('Error while deleting the product');
             res.status(500).send('intenal server error')
         }
+    },
+    getUserList:async(req,res)=>{
+        const users = await userModel.find({})
+        res.render('admin/userList',{users})
     }
+    
     
 }
