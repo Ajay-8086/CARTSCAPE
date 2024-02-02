@@ -1,12 +1,18 @@
 const adminModel = require('../models/admin')
 const productModel = require('../models/product')
 const userModel = require('../models/customer')
+const categoryModel = require('../models/category')
 const bcrypt = require('bcrypt')
 const dotenv = require('dotenv');
 const moment = require('moment')
+
 dotenv.config();
 
 module.exports={
+
+    // ADMIN SIGNUP MANAGEMENT ------------------------------------------------------------------------------->
+
+
     getSignup:(req,res)=>{  
         res.render('admin/signup')
     },
@@ -89,7 +95,9 @@ module.exports={
         res.render('admin/dashboard',{error:req.flash('error')})
     },
 
-    //product listing page
+    // PRODUCT MANAGEMENT ----------------------------------------------------------------------->
+
+
     getProducts:async(req,res)=>{
         const products = await productModel.find({})
         res.render('admin/products',{products})
@@ -100,6 +108,7 @@ module.exports={
         
         res.render('admin/addProduct')
     },
+
     postAddProduct:async (req,res)=>{
         try {
             const {name,price,stock,discount,description,colors} =req.body
@@ -131,7 +140,7 @@ module.exports={
         
     },
  
-    // deleting the product
+    
 
     deleteProduct:async(req,res)=>{
         try {
@@ -143,6 +152,9 @@ module.exports={
             res.status(500).send('intenal server error')
         }
     },
+
+    // USER MANAGEMENT -------------------------------------------------------------------------->
+
     getUserList:async(req,res)=>{
         const users = await userModel.find({})
         res.render('admin/userList',{users})
@@ -156,6 +168,49 @@ module.exports={
         console.log('Server error');
         res.status(500).send('Internal server error')
        }
+    },
+    
+
+    // CATEGORY MANAGEMENT ------------------------------------------------------------------------>
+
+    getCategoryList:async(req,res)=>{
+        try {
+           const categoryList = await categoryModel.find({})
+           res.render('admin/category',{categoryList})
+        } catch (error) {
+            console.log('server error');
+            res.status(500).send('Internal server error')
+        }
+    },
+    getAddCategory:(req,res)=>{
+        res.render('admin/addCategory')
+    },
+    postAddCategory: async (req, res) => {
+        try {
+            const { subCategory, categoryName, categoryimage } = req.body;
+            const categoryExist = await categoryModel.findOne({ categoryName });
+    
+            if (categoryExist) {
+                const subCategoryExist = subCategory.find(element => element === categoryExist.subCategory);
+    
+                if (subCategoryExist) {
+                    return res.status(400).json({ error: 'Category already exists' });
+                } else {
+                    await categoryModel.updateOne({ categoryName }, { $push: { subCategory: { $each: subCategory } } });
+                    res.status(200).json({ message: 'Subcategories added successfully' });
+                }
+            } else {
+                await categoryModel.create({
+                    categoryName,
+                    categoryimage,
+                    subCategory
+                });
+                res.status(200).json({ message: 'Category created successfully' });
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
     }
     
     

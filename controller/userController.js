@@ -3,7 +3,7 @@ const sendMail = require('../middlewares/sendMail');
 const{sendVerificationCode,verifyOtp} = require('../middlewares/verification')
 const bcrypt = require('bcrypt');
 
-const generateOTP = parseInt(Math.random() * 10000);
+const generateOTP = Math.floor(1000 + Math.random() * 9000);
 
 module.exports = {
     home: (req, res) => res.render('user/userDashboard'),

@@ -529,6 +529,12 @@ body {
 	align-items: center;
 	height: 100vh;
 }
+.addingcategories {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
 
 .category {
 	background-color: #fff;
@@ -559,6 +565,27 @@ body {
 	border-radius: 4px;
 }
 
+#imageInput {
+	margin-bottom: 10px;
+}
+
+#imagePreview {
+	max-width: 100%;
+	height: auto;
+	margin-bottom: 10px;
+}
+.subcategory-division{
+	display: flex;
+	gap: 3rem;
+	padding-bottom: 10px;
+	height: 100%;
+
+}
+.subcategory-division button{
+	width: 20%;
+	height: 40px
+}
+
 .add_category {
 	background-color: #00224e;
 	color: white;
@@ -573,7 +600,9 @@ body {
 	background-color: #00224e;
 }
 
-
+.success{
+	color: green !important;
+}
 
 
 

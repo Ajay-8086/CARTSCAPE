@@ -1,0 +1,79 @@
+<%-include('../partials/adminDashHeader.ejs') %>
+<main>
+    <div class="table-data">
+        <div class="order">
+            <div class="head">
+                <h3>Categories</h3>
+               
+                <a href="#" class="pagination-icon" onclick="changePage(-1)">
+                    <i class='bx bxs-chevron-left'></i>
+                </a>
+                <input type="number" id="pageNumberInput" value="1" min="1" max="10" onkeydown="jumpOnEnter(event)"> <!-- Set max value as needed -->
+                <a href="" class="pagination-icon" onclick="changePage(1)">
+                    <i class='bx bxs-chevron-right'></i>
+                </a>
+                <i class='bx bx-filter'></i>
+                <a href="/admin/addCategory">
+                    <i class='bx bxs-plus-circle'></i>
+                </a>
+            </div>
+            
+            
+            
+            <table>
+                <thead>
+                    <tr>
+                        
+                        <th>Category</th>
+                        <th>Image</th>
+                        <th>Sub category</th>
+                        <th>Actions</th> <!-- Added Actions column -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <% categoryList.forEach(category=>{ %>
+                    
+                    
+                    <tr>
+                    
+                        
+                        <td><%= category.categoryName %></td>
+                        <td>
+                            <img src="/uploads/categorys/<%=category.image%>" alt="<%=category.categoryName%>">
+                            
+                        </td>
+                        <td>
+                            <ul style="list-style-type: disc !important">
+                                <% category.subCategory.forEach(subcategory => { %>
+                                    <li>-><%= subcategory %></li>
+                                <% }) %>
+                            </ul>
+                            
+                        </td>
+                       
+                        <td>
+                            <a href="/admin/edit-category/<%=category._id%>" class="edit-btn" title="Edit Order">
+                                <i class='bx bx-edit'></i>
+                            </a>
+                            <a href="/admin/delete/<%=category._id%>" class="delete-btn" title="Delete Order">
+                                <i class='bx bx-trash'></i>
+                            </a>
+                        </td>
+                    </tr>
+               <% })%>
+                    <!-- Add more rows as needed -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+<!-- MAIN -->
+
+		<!-- MAIN -->
+	</section>
+	<!-- CONTENT -->
+	
+
+	<script src="/js/admin.js"></script>
+</body>
+</html>

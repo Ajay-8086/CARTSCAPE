@@ -1,28 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
+<%-include('../partials/adminDashHeader.ejs') %>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Category</title>
+    <div class="addingcategories">
+        <form action="/add-Category" id="categoryForm" class="category" enctype="multipart/form-data">
+            <h2 class="category-head">Add Category</h2>
+            <p class="errorMg" style="color: red !important; text-align: center;"></p>  
+            <img id="imagePreview" src="#" alt="Image Preview">
+            <label for="imageInput" class="category-name">Category Image:</label>
+            <input type="file" id="imageInput" name="categoryImage" accept="image/*" onchange="previewImage(this)">
+            <label for="categoryName" class="category-name">Category Name:</label>
+            <input type="text" id="categoryName" name="categoryName" placeholder="Enter category name" class="categoryInput" required>
+            <label for="subCategoyName" class="category-name">Subcategory Name:</label>
+           <div class="subcategory-division">
+            <input type="text" id="subCategoryName" name="subCategoryName" placeholder="Enter subcategory name" class="categoryInput" required>
+            <button type="button" id="subcategoryBtn" class="add_category">Add</button>
+           </div> 
+           
 
-    <style>
-        
-    </style>
-</head>
 
-<body>
-<div class="addingcategories">
-    
-    <form action="/add-Category" method="post" class="category">
-        <h2 class="category-head">Add Category</h2>
-        <label for="categoryName"  class="category-name">Category Name:</label>
-        <input type="text" id="categoryName" name="categoryName" placeholder="Enter category name" class="categoryInput" required>
+            <button type="submit" class="add_category" id="addBtn">Add Category</button>
+        </form>
+    </div>
 
-        <button type="submit" class="add_category">Add Category</button>
-    </form>
-</div>
+    <script>
+        function previewImage(input) {
+            var preview = document.getElementById('imagePreview');
+            var file = input.files[0];
+            var reader = new FileReader();
 
+            reader.onloadend = function () {
+                preview.src = reader.result;
+            }
+
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = "";
+            }
+        }
+    </script>
+    <script src="/js/admin.js"></script>
+    <script src="/js/addCategory.js"></script>
 </body>
 
 </html>

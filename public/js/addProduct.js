@@ -1,10 +1,9 @@
-const submitBtn = document.getElementById('submitbtn')
 const addProductForm = document.getElementById('addProductForm')
+const submitBtn = document.getElementById('submitbtn')
 submitBtn.addEventListener('click',async(event)=>{
     event.preventDefault()
     const productName = document.getElementById('productName').value
     const description = document.getElementById('productDescription').value
-    console.log(description);
     const price = document.getElementById('productPrice').value
     const stock = document.getElementById('productStock').value
     const category = document.getElementById('productCategory').value
