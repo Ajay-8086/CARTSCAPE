@@ -1,6 +1,7 @@
 const adminModel = require('../models/admin')
 const productModel = require('../models/product')
 const userModel = require('../models/customer')
+const axios = require('axios'); 
 const categoryModel = require('../models/category')
 const bcrypt = require('bcrypt')
 const dotenv = require('dotenv');
@@ -210,6 +211,23 @@ module.exports={
         } catch (error) {
             console.error('Error:', error);
             res.status(500).json({ error: 'Internal server error' });
+        }
+    },
+    deleteCategory:async(req,res)=>{
+        const categoryId = req.params.categoryId
+        console.log(categoryId);
+        try {
+            const categoryExist = await categoryModel.findOne({_id:categoryId})
+            if(!categoryExist){
+                res.status(400).json({error:'category not found'})
+            }
+           const deleted =  await categoryModel.deleteOne({_id:categoryId})
+            console.log(deleted);
+            res.status(200).json({success:true,message:'category deleted successfully'})
+
+        } catch (error) {
+            console.log(error.message);
+            res.status(500).json({error:'Internal server error'})
         }
     }
     

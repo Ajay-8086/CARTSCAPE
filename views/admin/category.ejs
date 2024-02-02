@@ -34,7 +34,7 @@
                     <% categoryList.forEach(category=>{ %>
                     
                     
-                    <tr>
+                    <tr class="tr_td<%= category._id%>">
                     
                         
                         <td><%= category.categoryName %></td>
@@ -52,10 +52,7 @@
                         </td>
                        
                         <td>
-                            <a href="/admin/edit-category/<%=category._id%>" class="edit-btn" title="Edit Order">
-                                <i class='bx bx-edit'></i>
-                            </a>
-                            <a href="/admin/delete/<%=category._id%>" class="delete-btn" title="Delete Order">
+                            <a href="#"  data-category-id = "<%=category._id%>"  class="delete-btn" title="Delete Order" style="color: red;">
                                 <i class='bx bx-trash'></i>
                             </a>
                         </td>
@@ -72,8 +69,42 @@
 		<!-- MAIN -->
 	</section>
 	<!-- CONTENT -->
+    <% categoryList.forEach(category=>{ %>
 	
+    <script >
 
+        async function deleteCategory(categoryId){
+            const response = await axios.delete(`/admin/delete/${categoryId}`);
+            
+           try {
+            if (response.status >= 200 && response.status < 300){
+                document.querySelector('.tr_td<%= category._id%>').remove()
+                console.log('success');
+            }else{
+                console.log('error');
+            }
+           } catch (error) {
+            console.log(error.message);
+           }
+        }
+        
+
+    
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', async (event) => {
+              event.preventDefault();
+          
+              
+              const categoryId = event.currentTarget.getAttribute('data-category-id');
+          
+              if (categoryId) {
+                await deleteCategory(categoryId);
+              }
+            });
+          });
+        </script>
+
+        <% })%>
 	<script src="/js/admin.js"></script>
 </body>
 </html>

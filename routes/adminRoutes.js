@@ -19,7 +19,8 @@ const{
     deleteUser,
     getCategoryList,
     getAddCategory,
-    postAddCategory
+    postAddCategory,
+    deleteCategory
 
 
 }=require('../controller/admincontoller')
@@ -40,6 +41,7 @@ router.get('/admin/signup',getSignup)
       .get('/admin/category',getCategoryList)
       .get('/admin/addcategory',getAddCategory)
       .post('/admin/addcategory',postAddCategory)
+      .delete('/admin/delete/:categoryId',deleteCategory)
     
 
 
