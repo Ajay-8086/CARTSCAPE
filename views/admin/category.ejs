@@ -2,6 +2,7 @@
 <main>
     <div class="table-data">
         <div class="order">
+            <p id="errorMsg"  style="color: green; text-align: center;" ></p>
             <div class="head">
                 <h3>Categories</h3>
                
@@ -14,7 +15,7 @@
                 </a>
                 <i class='bx bx-filter'></i>
                 <a href="/admin/addCategory">
-                    <i class='bx bxs-plus-circle'></i>
+                    <i class='bx bxs-plus-circle' style="font-size: larger;"></i>
                 </a>
             </div>
             
@@ -39,7 +40,7 @@
                         
                         <td><%= category.categoryName %></td>
                         <td>
-                            <img src="/uploads/categorys/<%=category.image%>" alt="<%=category.categoryName%>">
+                            <img src="/uploads/category/<%=category.categoryimage%>" alt="<%=category.categoryName%>">
                             
                         </td>
                         <td>
@@ -69,7 +70,7 @@
 		<!-- MAIN -->
 	</section>
 	<!-- CONTENT -->
-    <% categoryList.forEach(category=>{ %>
+    
 	
     <script >
 
@@ -77,19 +78,31 @@
             const response = await axios.delete(`/admin/delete/${categoryId}`);
             
            try {
-            if (response.status >= 200 && response.status < 300){
-                document.querySelector('.tr_td<%= category._id%>').remove()
-                console.log('success');
+            if (response.status >= 200 && response.status <= 300){
+                document.querySelector('.tr_td'+categoryId).remove()
+                errorMsg.style.visibility='visible'
+                errorMsg.innerHTML = response.data.message
+                setTimeout(() => {
+                    errorMsg.innerHTML = ''
+                }, 1000);
+               
             }else{
+                errorMsg.style.visibility = 'visible'
+                errorMsg.innerHTML = response.data.message
+                setTimeout(() => {
+                    errorMsg.innerHTML = ''
+                }, 1000);
                 console.log('error');
             }
            } catch (error) {
-            console.log(error.message);
+            console.log('Error deleting user', error);
+            errorMsg.style.visibility = 'visible';
+            errorMsg.innerHTML = 'An error occurred while deleting the user.';
            }
         }
         
 
-    
+    const errorMsg = document.getElementById('errorMsg')
         document.querySelectorAll('.delete-btn').forEach(button => {
             button.addEventListener('click', async (event) => {
               event.preventDefault();
@@ -104,7 +117,7 @@
           });
         </script>
 
-        <% })%>
+       
 	<script src="/js/admin.js"></script>
 </body>
 </html>

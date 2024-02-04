@@ -25,9 +25,9 @@ submitBtn.addEventListener('click', async (event) => {
         subCategories.push(subCategoryInput);
     }
     const categoryName = document.getElementById('categoryName').value
-    const categoryimage = document.getElementById('imageInput').value;
+    const categoryimage = document.getElementById('imageInput').files[0];
     console.log(categoryName);
-    if (categoryName==='') {
+    if (!categoryName || !categoryimage) {
         errorMsg.style.visibility = 'visible';
        
         errorMsg.innerHTML = 'Please Fill all Fields';
@@ -36,30 +36,34 @@ submitBtn.addEventListener('click', async (event) => {
         }, 3000);
     } else {
         try {
-            const response = await fetch('/admin/addcategory', {
-                method: 'POST',
+            console.log(subCategories);
+            const formData = new FormData()
+            formData.append('subCategory',JSON.stringify(subCategories));
+            formData.append('categoryName',JSON.stringify(categoryName));
+            formData.append('categoryimage',categoryimage)
+            const response = await axios.post('/admin/addcategory', formData, {
                 headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ subCategory: subCategories, categoryName ,categoryimage}),
-            });
-            if(!response.ok){
-                console.log('error');
-            }else{
-                const result = await response.json();
-                errorMsg.style.visibility = 'visible'
-                errorMsg.classList.add('success')
-                errorMsg.innerHTML = 'Category added'
-                setTimeout(() => {
-                    
-                window.location.href = '/admin/category'
-                }, 1000);
+                  'Content-Type': 'multipart/form-data'  
+                }
+              });
+        
+            if (response.status === 200) {  
+              errorMsg.style.visibility = 'visible';
+              errorMsg.classList.add('success');
+              errorMsg.innerHTML = 'Category added';
+        
+              setTimeout(() => {
+                window.location.href = '/admin/category';
+              }, 1000);
+            } else {
+              console.log('Error adding category');
+              
             }
-
-        } catch (err) {
-            console.log(err.errorMsg);
+          } catch (err) {
+            console.error(err);
+          }
         }
-    }
-});
+    });
+
 
 

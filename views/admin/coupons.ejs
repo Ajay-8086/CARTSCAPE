@@ -1,0 +1,76 @@
+<%-include('../partials/adminDashHeader.ejs') %>
+<main>
+    <div class="table-data">
+        <div class="order">
+            <div class="head">
+                <h3>Coupons</h3>
+               
+                <a href="#" class="pagination-icon" onclick="changePage(-1)">
+                    <i class='bx bxs-chevron-left'></i>
+                </a>
+                <input type="number" id="pageNumberInput" value="1" min="1" max="10" onkeydown="jumpOnEnter(event)"> <!-- Set max value as needed -->
+                <a href="" class="pagination-icon" onclick="changePage(1)">
+                    <i class='bx bxs-chevron-right'></i>
+                </a>
+                <i class='bx bx-filter'></i>
+                <a href="/admin/addcoupon">
+                    <i class='bx bxs-plus-circle'></i>
+                </a>
+            </div>
+            
+            
+            
+            <table>
+                <thead>
+                    <tr>
+                        
+                        <th>CouponCode</th>
+                        <th>CouponName</th>
+                        <th>Discount</th>
+                        <th>Valid From</th>
+                        <th>Valid To</th>
+                        
+                        <th>Actions</th> <!-- Added Actions column -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <% coupons.forEach(coupon=>{ %>
+                    
+                    
+                    <tr>
+                       
+                        <td>
+                           
+                            <p><%=coupon.couponCode%></p>
+                        </td>
+                        <td><%= coupon.couponName %></td>
+                        <td><%= coupon.discount %></td>
+                        <td><%= coupon.validFrom %></td>
+                        <td><%= coupon.validTo %></td>
+                        
+                        <td>
+                            <a href="/admin/edit-coupon/<%=coupon._id%>" class="edit-btn" title="Edit Order">
+                                <i class='bx bx-edit'></i>
+                            </a>
+                            <a href="/admin/delete/<%=coupon._id%>" class="delete-btn" title="Delete Order">
+                                <i class='bx bx-trash'></i>
+                            </a>
+                        </td>
+                    </tr>
+               <% })%>
+                    <!-- Add more rows as needed -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+<!-- MAIN -->
+
+		<!-- MAIN -->
+	</section>
+	<!-- CONTENT -->
+	
+
+	<script src="/js/admin.js"></script>
+</body>
+</html>

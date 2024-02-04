@@ -8,8 +8,8 @@ const storage = multer.diskStorage({
         uploadPath = 'public/uploads/dump';
       }else
       uploadPath = 'public/uploads/products';
-    } else {
-      uploadPath = 'public/uploads/product';
+    } else if(req.uploadType === 'category') {
+      uploadPath = 'public/uploads/category';
     }
 
     cb(null, uploadPath);

@@ -1,8 +1,10 @@
 const adminModel = require('../models/admin')
 const productModel = require('../models/product')
-const userModel = require('../models/customer')
-const axios = require('axios'); 
+const userModel = require('../models/customer') 
 const categoryModel = require('../models/category')
+const couponModel = require('../models/coupon')
+const fs = require('fs')
+const path = require('path')
 const bcrypt = require('bcrypt')
 const dotenv = require('dotenv');
 const moment = require('moment')
@@ -49,7 +51,8 @@ module.exports={
         res.render('admin/verify',{error:error[0]})
     },
     postAdminVerify:async(req,res)=>{
-        const{key,email} = req.body
+        try {
+            const{key,email} = req.body
        
         const adminKey = process.env.ADMINKEY
        
@@ -66,6 +69,9 @@ module.exports={
         }else{
             req.flash('error',{ key: 'Incorrect key' })
             res.status(401).redirect('/admin/verify')
+        }
+        } catch (error) {
+            res.status(500).json({error:'Internal server error'})
         }
     },
     getLogin:(req,res)=>{
@@ -100,14 +106,23 @@ module.exports={
 
 
     getProducts:async(req,res)=>{
-        const products = await productModel.find({})
+        try {
+            const products = await productModel.find({})
         res.render('admin/products',{products})
+        } catch (error) {
+            res.status(500).json({error:'Internal server error'})
+        }
     },
 
 
-    getAddProduct:(req,res)=>{
+    getAddProduct:async(req,res)=>{
+        try {
+            const  categoryList = await categoryModel.find({})
+            res.render('admin/addProduct',{categoryList})
+        } catch (error) {
+            res.status(500).json({error:'Internal server error'})
+        }
         
-        res.render('admin/addProduct')
     },
 
     postAddProduct:async (req,res)=>{
@@ -162,21 +177,32 @@ module.exports={
     },
     deleteUser:async(req,res)=>{
        try {
-        const userId = req.params.userId
-        await userModel.deleteOne({_id:userId})
-        res.status(200).redirect('/admin/users')
+       const userId = req.params.userId
+       
+       
+       const deleted= await userModel.deleteOne({_id:userId})
+       
+       
+       if(deleted){
+           
+           res.status(200).json({success:true,message:'user deleted successfully'})
+        }
+        else{
+          res.status(400).json({error:'user not deleted'})
+       }
        } catch (error) {
         console.log('Server error');
-        res.status(500).send('Internal server error')
+        res.status(500).json({error:'Internal server error'})
        }
     },
-    
+           
 
     // CATEGORY MANAGEMENT ------------------------------------------------------------------------>
 
     getCategoryList:async(req,res)=>{
         try {
            const categoryList = await categoryModel.find({})
+        //    console.log(categoryList[0].subCategory[0]);
            res.render('admin/category',{categoryList})
         } catch (error) {
             console.log('server error');
@@ -188,9 +214,10 @@ module.exports={
     },
     postAddCategory: async (req, res) => {
         try {
-            const { subCategory, categoryName, categoryimage } = req.body;
+            const { subCategory, categoryName } = req.body;
+            const abc = JSON.parse(subCategory)
+            const categoryimage = req.file.filename
             const categoryExist = await categoryModel.findOne({ categoryName });
-    
             if (categoryExist) {
                 const subCategoryExist = subCategory.find(element => element === categoryExist.subCategory);
     
@@ -204,7 +231,7 @@ module.exports={
                 await categoryModel.create({
                     categoryName,
                     categoryimage,
-                    subCategory
+                    subCategory:abc
                 });
                 res.status(200).json({ message: 'Category created successfully' });
             }
@@ -215,21 +242,53 @@ module.exports={
     },
     deleteCategory:async(req,res)=>{
         const categoryId = req.params.categoryId
-        console.log(categoryId);
+        const existingCategory = await categoryModel.findOne({_id:categoryId})
         try {
-            const categoryExist = await categoryModel.findOne({_id:categoryId})
-            if(!categoryExist){
-                res.status(400).json({error:'category not found'})
+            const oldImagePath = path.join(__dirname,'../public/uploads/category',existingCategory.categoryimage)
+            fs.unlinkSync(oldImagePath)
+            const deleted =  await categoryModel.deleteOne({_id:categoryId})
+            if(deleted.deletedCount==0){
+                res.status(400).json({message:'category not found'})
             }
-           const deleted =  await categoryModel.deleteOne({_id:categoryId})
-            console.log(deleted);
-            res.status(200).json({success:true,message:'category deleted successfully'})
+
+            res.status(200).json({message:'category deleted successfully'})
 
         } catch (error) {
             console.log(error.message);
             res.status(500).json({error:'Internal server error'})
         }
-    }
+    },
+    
+
+    // Coupon management ------------------------------------------------------------------------->
+
+    getCoupons:async(req,res)=>{
+       try {
+        const coupons = await couponModel.find({})
+        res.status(200).render('admin/coupons',{coupons})
+       } catch (error) {
+        console.log(error.message);
+        res.status(500).json({error:'Internal server error'})
+       }
+    },
+    getAddCoupon:(req,res)=>{
+        res.status(200).render('admin/addCoupon')
+    },
+    postAddCoupon:async(req,res)=>{
+        try {
+            const {couponCode,couponName,discount,validFrom,validTo} = req.body
+            const newCoupon = await couponModel(
+            {couponCode,couponName,discount,validFrom,validTo} 
+        )
+        await newCoupon.save()
+        res.status(200).redirect('/admin/dashboard')
+        } catch (error) {
+            console.log('error');
+        }
+
+    },
+
+
     
     
     

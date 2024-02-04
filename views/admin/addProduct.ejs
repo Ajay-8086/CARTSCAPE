@@ -77,8 +77,12 @@
                         <p class="mb-0">subCategory</p>
                         <div class="form-outline">
                           <select name="subcategory" id="subCategory" class="form-control">
-  
-                            <option value="red">Red</option>
+                            <% categoryList.forEach((category)=>{ %>
+                              <%category.subCategory.forEach((sub)=>{ %>
+
+                                <option value="red"><%= sub %></option>
+                             <% }) %>
+                            <% }) %>
                           </select>
                         </div>
                     </div>
@@ -98,9 +102,11 @@
                       <p class="mb-0">category</p>
                       <div class="form-outline">
                         <select name="category" id="productCategory" class="form-control">
+                          <% categoryList.forEach((category)=>{ %>
 
-                          <option value="red">Red</option>
-
+                         
+                          <option value="<%= category.categoryName %>"><%= category.categoryName %></option>
+                       <% }) %>
                         </select>
                       </div>
                     </div>

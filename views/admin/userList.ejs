@@ -1,53 +1,48 @@
-
 <%-include('../partials/adminDashHeader.ejs') %>
-		<!-- MAIN -->
-		<!-- MAIN -->
+<!-- MAIN -->
 <main>
     <div class="table-data">
         <div class="order">
+            <p id="errorMsg"  style="color: green; text-align: center;" ></p>
             <div class="head">
                 <h3>User</h3>
                 <a href="#" class="pagination-icon" onclick="changePage(-1)">
                     <i class='bx bxs-chevron-left'></i>
                 </a>
-                <input type="number" id="pageNumberInput" value="1" min="1" max="10" onkeydown="jumpOnEnter(event)"> <!-- Set max value as needed -->
+                <input type="number" id="pageNumberInput" value="1" min="1" max="10" onkeydown="jumpOnEnter(event)">
+                <!-- Set max value as needed -->
                 <a href="#" class="pagination-icon" onclick="changePage(1)">
                     <i class='bx bxs-chevron-right'></i>
                 </a>
                 <i class='bx bx-filter'></i>
-                
             </div>
-            
-            
-            
+
             <table>
                 <thead>
                     <tr>
                         <th>User</th>
                         <th>Date Order</th>
-                        
-                        <th>Actions</th> <!-- Added Actions column -->
+                        <th>Verified</th>
+                        <th>Actions</th>
+                        <!-- Added Actions column -->
                     </tr>
                 </thead>
                 <tbody>
                     <% users.forEach(user=>{ %>
-
-                   
-                    <tr>
+                    <tr class="tr_td<%= user._id%>">
                         <td>
                             <img src="<%= user.image %>" alt="<%= user.name %>">
                             <p><%= user.name %></p>
                         </td>
                         <td>01-10-2021</td>
-                        
+                        <td><%= user.verified %></td>
                         <td>
-                           
-                            <a href="/admin/users/<%= user._id %>" class="delete-btn" title="Delete Order">
+                            <a href="#" data-category-id="<%=user._id%>" class="delete-btn" title="Delete Order" style="color: red;">
                                 <i class='bx bx-trash'></i>
                             </a>
                         </td>
                     </tr>
-               <% }) %>
+                    <% }) %>
                     <!-- Add more rows as needed -->
                 </tbody>
             </table>
@@ -56,11 +51,42 @@
 </main>
 <!-- MAIN -->
 
-		<!-- MAIN -->
-	</section>
-	<!-- CONTENT -->
-	
+<!-- Script for Deleting Users -->
+<script>
+    async function deleteUser(userId) {
+        const response = await axios.delete(`/admin/users/${userId}`)
+        try {
+            if (response.status >= 200 && response.status <= 300) {
+            
+                document.querySelector('.tr_td' + userId).remove();
+                errorMsg.style.visibility = 'visible'
+                errorMsg.innerHTML = response.data.message
+                setTimeout(()=>{
+                    errorMsg.innerHTML =''
+                },1000)
+            } else {
+                errorMsg.style.visibility = 'visible'
+                errorMsg.innerHTML = response.data.error
+            }
+        } catch (error) {
+            console.log('Error deleting user', error);
+            errorMsg.style.visibility = 'visible';
+            errorMsg.innerHTML = 'An error occurred while deleting the user.';
+        }
+    }
+    
+    const errorMsg = document.getElementById('errorMsg')
+    document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', async (event) => {
+            event.preventDefault();
+            const userId = event.currentTarget.getAttribute('data-category-id');
+            if (userId) {
+                await deleteUser(userId);
+            }
+        });
+    });
+</script>
 
-	<script src="/js/admin.js"></script>
+<script src="/js/admin.js"></script>
 </body>
 </html>

@@ -110,9 +110,13 @@ module.exports = {
     getForgetOtp: (req, res) => res.render('user/forgotOtp'),
 
     resendOtp: async (req, res) => {
+      try {
         const email = req.session.otp_email;
         await sendMail(email, `Your OTP for verification is ${generateOTP}`);
         res.redirect('/forget/otp/verify');
+      } catch (error) {
+        res.atatus(500).send('Internal server error')
+      }
     },
 
     postForgetOtp: (req, res) => {
