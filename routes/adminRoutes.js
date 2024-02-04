@@ -24,8 +24,8 @@ const{
     getCoupons,
     getAddCoupon,
     postAddCoupon,
-    // getUpdateCoupon,
-    // postUpdateCoupon
+    getUpdateCoupon,
+    postUpdateCoupon
 
 
 }=require('../controller/admincontoller')
@@ -50,8 +50,8 @@ router.get('/admin/signup',getSignup)
       .get('/admin/coupons',getCoupons)
       .get('/admin/addcoupon',getAddCoupon)
       .post('/admin/addcoupon',postAddCoupon)
-    //   .get('/admin/edit-coupon/:couponId',getUpdateCoupon)
-    //   .post('/admin/edit-coupon/:couponId',postUpdateCoupon)
+      .get('/admin/edit-coupon/:couponId',getUpdateCoupon)
+      .post('/admin/edit-coupon/:couponId',postUpdateCoupon)
     
 
 

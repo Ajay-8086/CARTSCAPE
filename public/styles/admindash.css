@@ -601,9 +601,11 @@ body {
 }
 
 .success{
-	color: green !important;
+	color: rgb(5, 226, 5) !important
 }
-
+.error{
+	color: red !important;
+}
 /* add category styles  */
 
 .category_img_section_center{

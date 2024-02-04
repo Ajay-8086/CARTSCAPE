@@ -16,6 +16,7 @@
         <main>
             <div class="table-data">
                 <div class="order">
+                    <p class="msg" style="text-align: center;"></p>
                     <div class="head">
                         <h3>Add Coupon</h3>
                     </div>
@@ -23,7 +24,7 @@
 
 
 
-                        <form action="/admin/edit-coupon/<%=coupon._id%>" method="post" onsubmit="return validateForm()">
+                        <form action="/admin/edit-coupon/<%=coupon[0]._id%>" method="post" id="formdata">
                             <div class="form-group">
                                 <label for="coupon-code">Coupon Code</label>
                                 <input type="text" class="form-control" id="coupon-code"  name="couponCode" required value="<%=coupon[0].couponCode%>">
@@ -50,7 +51,7 @@
                                 <small id="valid-to-error" class="text-danger"></small>
                             </div>
                             <h1></h1>
-                            <button type="submit" class="btn" style="background-color: #00224e; color: white;">Edit Coupon</button>
+                            <button type="submit" class="btn" style="background-color: #00224e; color: white;" id="submitBtn">Edit Coupon</button>
                         </form>
 
                     </div>
@@ -60,8 +61,40 @@
         <!-- MAIN -->
     </section>
     <!-- CONTENT -->
-   
-<script src="/js/admin.js"></script>
-    </body>
+   <!-- Your HTML and EJS code -->
 
-    </html>
+<script src="/js/admin.js"></script>
+<script>
+    const submit = document.getElementById('submitBtn');
+    const form = document.getElementById('formdata');
+    
+    submit.addEventListener('click', async (event) => {
+        event.preventDefault();
+        const msg = document.querySelector('.msg');
+        
+        try {
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            const response = await axios.post('/admin/edit-coupon/<%=coupon[0]._id%>', data);
+            console.log('fdsafdsa',response);
+
+            if (response.status === 200) {
+                msg.style.visibility = 'visible';
+                msg.classList.add('success');
+                msg.innerHTML = response.data.msg;
+
+                setTimeout(() => {
+                    msg.innerHTML = '';
+                    window.location.href = '/admin/coupons';
+                }, 1000);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            msg.style.visibility = 'visible';
+            msg.classList.add('error');
+            msg.innerHTML = response.data.msg;
+        }
+    });
+</script>
+</body>
+</html>

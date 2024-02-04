@@ -287,6 +287,33 @@ module.exports={
         }
 
     },
+    getUpdateCoupon:async(req,res)=>{
+        try {
+            const id = req.params.couponId
+        const coupon = await couponModel.find({_id:id})
+        res.status(200).render('admin/updateCoupons',{coupon})
+        } catch (error) {
+            console.log(error.message);
+            res.status(500).json({error:'Internal server error'})
+        }
+    },
+    postUpdateCoupon:async(req,res)=>{
+        try {
+           
+            const id = req.params.couponId
+           
+        const {couponCode,couponName,discount,validFrom,validTo} = req.body
+        
+        const updateCoupon = await couponModel.findByIdAndUpdate(id,{$set:{couponCode,couponName,discount,validFrom,validTo}})
+        if(updateCoupon){
+            res.status(200).json({msg:'coupon updated successfully'})
+        }else{
+            res.status(400).json({msg:'product updating failed'})
+        }
+        } catch (error) {
+            res.status(500).json({msg:'internal server error'})
+        }
+    }
 
 
     
