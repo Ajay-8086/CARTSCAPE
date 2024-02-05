@@ -30,6 +30,8 @@ const{
     getBanner,
     getAddBanner,
     postAddBanner,
+    getUpdateBanner,
+    postUpdateBanner,
     deleteBanner
     
 
@@ -64,6 +66,8 @@ router.get('/admin/signup',getSignup)
       .get('/admin/banners',getBanner)
       .get('/admin/addbanner',getAddBanner)
       .post('/admin/addbanner',setUploadType('banner'),upload.single('bannerImage'),postAddBanner)
+      .get('/admin/edit-banner/:bannerId',getUpdateBanner)
+      .post('/admin/edit-banner/:bannerId',setUploadType('banner'),upload.single('bannerImage'),postUpdateBanner)
       .delete('/admin/delete-banner/:bannerId',deleteBanner)
       
 

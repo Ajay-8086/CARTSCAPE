@@ -373,6 +373,40 @@ module.exports={
         }
 
     },
+    getUpdateBanner:async(req,res)=>{
+        try {
+            const id = req.params.bannerId
+            const banner = await bannerModel.findById(id)
+            res.render('admin/updateBanner',{banner})
+        } catch (error) {
+            
+        }
+    },
+    postUpdateBanner:async(req,res)=>{
+        try {
+            const id = req.params.bannerId
+                const banner = await bannerModel.findOne({_id:id})
+             const {bannerName,bannerHeading,specialPrice,validFrom,validTo}=req.body
+             const image = req.file?.filename;
+             const previousImage = banner.bannerImage 
+             const newImage= image??previousImage
+             const upadateBanner = await bannerModel.findByIdAndUpdate(id,{$set:{bannerName,bannerHeading,specialPrice,validFrom,validTo,bannerImage:newImage}})
+             if(upadateBanner){
+                if(image){
+                    const oldImagePath = path.join(__dirname,'../public/uploads/banners',upadateBanner.bannerImage)
+                fs.unlinkSync(oldImagePath)
+                }
+                res.status(200).json({message:'product updater successfully'})
+             }
+             else{
+                res.status(400).json({message:'error occured'})
+             }
+             
+        } catch (error) {
+            res.status(500).send("Internal server error")
+        }
+    }
+    
     
     
 }
