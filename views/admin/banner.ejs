@@ -42,6 +42,9 @@
                         <td><%=banner.validTo%></td>
                         
                         <td>
+                            <a href="/admin/update-banner/<%=banner._id%>" class="delete-btn" title="Delete Order">
+                                <i class='bx bx-edit'></i>
+                            </a>
                             <a href="#" data-category-id="<%=banner._id%>" class="delete-btn" title="Delete Order" style="color: red;" onclick="deletion(event)">
                                 <i class='bx bx-trash'></i>
                             </a>
@@ -57,7 +60,45 @@
 <!-- MAIN -->
 
 <!-- Script for Deleting Users -->
-
+<script>
+    async function deleteBanner(bannerId) {
+        console.log(bannerId);
+        const response = await axios.delete(`/admin/delete-banner/${bannerId}`)
+        try {
+            if (response.status >= 200 && response.status <= 300) {
+            
+                document.querySelector('.tr_td' + bannerId).remove();
+                errorMsg.style.visibility = 'visible'
+                errorMsg.innerHTML = response.data.message
+                setTimeout(()=>{
+                    errorMsg.innerHTML =''
+                },1000)
+            } else {
+                errorMsg.style.visibility = 'visible'
+                errorMsg.innerHTML = response.data.error
+            }
+        } catch (error) {
+            console.log('Error deleting user', error);
+            errorMsg.style.visibility = 'visible';
+            errorMsg.innerHTML = 'An error occurred while deleting the user.';
+        }
+    }
+    
+  
+    const errorMsg = document.getElementById('errorMsg')
+        async function deletion (event) {
+              event.preventDefault();
+          
+              
+              const bannerId = event.currentTarget.getAttribute('data-category-id');
+          
+              if (bannerId) {
+                await deleteBanner(bannerId);
+              }
+           
+          };
+  
+</script>
 
 <script src="/js/admin.js"></script>
 </body>

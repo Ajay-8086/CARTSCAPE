@@ -357,10 +357,22 @@ module.exports={
         }
 
     },
-  
+    deleteBanner:async(req,res)=>{
+        try {
+            const id = req.params.bannerId
+            const deleteBanner = await bannerModel.findByIdAndDelete(id)
+            if(deleteBanner){
+                const oldImagePath = path.join(__dirname,'../public/uploads/banners',deleteBanner.bannerImage)
+                fs.unlinkSync(oldImagePath)
+                res.status(200).json({message:'Coupon deleted successfully'})
+            }else{
+                res.status(400).json({message:'Can not delete the coupon'})
+            }
+        } catch (error) {
+            res.status(500).json({message:'Internal server error'})
+        }
 
-
-    
+    },
     
     
 }
