@@ -53,7 +53,10 @@
                         </td>
                        
                         <td>
-                            <a href="#"  data-category-id = "<%=category._id%>"  class="delete-btn" title="Delete Order" style="color: red;">
+                            <a href="/admin/edit-category/<%=category._id%>" class="edit-btn" title="Edit Order">
+                                <i class='bx bx-edit'></i>
+                            </a>
+                            <a href="#"  data-category-id = "<%=category._id%>" onclick="deletion(event)"  class="delete-btn" title="Delete Order" style="color: red;">
                                 <i class='bx bx-trash'></i>
                             </a>
                         </td>
@@ -97,14 +100,13 @@
            } catch (error) {
             console.log('Error deleting user', error);
             errorMsg.style.visibility = 'visible';
-            errorMsg.innerHTML = 'An error occurred while deleting the user.';
+            errorMsg.innerHTML = 'error';
            }
         }
         
 
     const errorMsg = document.getElementById('errorMsg')
-        document.querySelectorAll('.delete-btn').forEach(button => {
-            button.addEventListener('click', async (event) => {
+        async function deletion (event) {
               event.preventDefault();
           
               
@@ -113,8 +115,8 @@
               if (categoryId) {
                 await deleteCategory(categoryId);
               }
-            });
-          });
+           
+          };
         </script>
 
        

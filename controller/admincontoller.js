@@ -3,6 +3,7 @@ const productModel = require('../models/product')
 const userModel = require('../models/customer') 
 const categoryModel = require('../models/category')
 const couponModel = require('../models/coupon')
+const bannerModel = require('../models/banner')
 const fs = require('fs')
 const path = require('path')
 const bcrypt = require('bcrypt')
@@ -216,7 +217,7 @@ module.exports={
         try {
             const { subCategory, categoryName } = req.body;
             const abc = JSON.parse(subCategory)
-            const categoryimage = req.file.filename
+            const categoryimage = req.file?.filename
             const categoryExist = await categoryModel.findOne({ categoryName });
             if (categoryExist) {
                 const subCategoryExist = subCategory.find(element => element === categoryExist.subCategory);
@@ -245,7 +246,9 @@ module.exports={
         const existingCategory = await categoryModel.findOne({_id:categoryId})
         try {
             const oldImagePath = path.join(__dirname,'../public/uploads/category',existingCategory.categoryimage)
-            fs.unlinkSync(oldImagePath)
+            if(oldImagePath){
+                fs.unlinkSync(oldImagePath)
+            }
             const deleted =  await categoryModel.deleteOne({_id:categoryId})
             if(deleted.deletedCount==0){
                 res.status(400).json({message:'category not found'})
@@ -281,7 +284,7 @@ module.exports={
             {couponCode,couponName,discount,validFrom,validTo} 
         )
         await newCoupon.save()
-        res.status(200).redirect('/admin/dashboard')
+        res.status(200).redirect('/admin/coupons')
         } catch (error) {
             console.log('error');
         }
@@ -313,7 +316,48 @@ module.exports={
         } catch (error) {
             res.status(500).json({msg:'internal server error'})
         }
-    }
+    },
+    deleteCoupon:async(req,res)=>{
+        try {
+            const id = req.params.couponId
+            const deleteCoupon = await couponModel.findByIdAndDelete(id)
+            if(deleteCoupon){
+                res.status(200).json({message:'Coupon deleted successfully'})
+            }else{
+                res.status(400).json({message:'Can not delete the coupon'})
+            }
+        } catch (error) {
+            res.status(500).json({message:'Internal server error'})
+        }
+
+    },
+
+    //BANNER MANAGEMENT----------------------------------------------------------------------------------->
+    getBanner:async(req,res)=>{
+        try {
+            const banners = await bannerModel.find({})
+            res.status(200).render('admin/banner',{banners})
+        } catch (error) {
+           res.status(500).send('Internal server error') 
+        }
+    },
+    getAddBanner:(req,res)=>{
+        res.render('admin/addBanner')
+    },
+    postAddBanner:async(req,res)=>{
+        try {
+            const {bannerName,bannerHeading,specialPrice,validFrom,validTo}=req.body
+            const bannerImage = req.file?.filename;
+         const newBanner=    await bannerModel({bannerName,bannerHeading,specialPrice,validFrom,validTo, bannerImage})
+         await newBanner.save()
+            res.status(200).json({message:"Banner added successfully"})
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({message:'Internal server error'})
+        }
+
+    },
+  
 
 
     

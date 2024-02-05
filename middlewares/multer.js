@@ -10,6 +10,8 @@ const storage = multer.diskStorage({
       uploadPath = 'public/uploads/products';
     } else if(req.uploadType === 'category') {
       uploadPath = 'public/uploads/category';
+    }else if(req.uploadType === 'banner'){
+      uploadPath = 'public/uploads/banners';
     }
 
     cb(null, uploadPath);

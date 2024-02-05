@@ -25,7 +25,13 @@ const{
     getAddCoupon,
     postAddCoupon,
     getUpdateCoupon,
-    postUpdateCoupon
+    postUpdateCoupon,
+    deleteCoupon,
+    getBanner,
+    getAddBanner,
+    postAddBanner,
+    
+
 
 
 }=require('../controller/admincontoller')
@@ -46,13 +52,19 @@ router.get('/admin/signup',getSignup)
       .get('/admin/category',getCategoryList)
       .get('/admin/addcategory',getAddCategory)
       .post('/admin/addcategory',setUploadType('category'),upload.single('categoryimage'),postAddCategory)
+
       .delete('/admin/delete/:categoryId',deleteCategory)
       .get('/admin/coupons',getCoupons)
       .get('/admin/addcoupon',getAddCoupon)
       .post('/admin/addcoupon',postAddCoupon)
       .get('/admin/edit-coupon/:couponId',getUpdateCoupon)
       .post('/admin/edit-coupon/:couponId',postUpdateCoupon)
-    
+      .delete('/admin/delete-coupon/:couponId',deleteCoupon)
+      .get('/admin/banners',getBanner)
+      .get('/admin/addbanner',getAddBanner)
+      .post('/admin/addbanner',setUploadType('banner'),upload.single('bannerImage'),postAddBanner)
+      
+
 
 
 

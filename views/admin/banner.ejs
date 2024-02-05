@@ -1,0 +1,64 @@
+<%-include('../partials/adminDashHeader.ejs') %>
+<!-- MAIN -->
+<main>
+    <div class="table-data">
+        <div class="order">
+            <p id="errorMsg"  style="color: green; text-align: center;" ></p>
+            <div class="head">
+                <h3>User</h3>
+                <a href="#" class="pagination-icon" onclick="changePage(-1)">
+                    <i class='bx bxs-chevron-left'></i>
+                </a>
+                <input type="number" id="pageNumberInput" value="1" min="1" max="10" onkeydown="jumpOnEnter(event)">
+                <!-- Set max value as needed -->
+                <a href="#" class="pagination-icon" onclick="changePage(1)">
+                    <i class='bx bxs-chevron-right'></i>
+                </a>
+                <i class='bx bx-filter'></i>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Banner</th>
+                        <th>BannerHeading</th>
+                        <th>SpecialPrice</th>
+                        <th>ValidFron</th>
+                        <th>ValidTo</th>
+                        <th>Actions</th>
+                        <!-- Added Actions column -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <% banners.forEach(banner=>{ %>
+                    <tr class="tr_td<%= banner._id%>">
+                        <td>
+                            <img src="/uploads/banners/<%= banner.bannerImage %>" alt="<%= banner.bannerName %>">
+                            <p><%= banner.name %></p>
+                        </td>
+                        <td><%=banner.bannerHeading%></td>
+                        <td><%=banner.specialPrice%></td>
+                        <td><%=banner.validFrom%></td>
+                        <td><%=banner.validTo%></td>
+                        
+                        <td>
+                            <a href="#" data-category-id="<%=banner._id%>" class="delete-btn" title="Delete Order" style="color: red;" onclick="deletion(event)">
+                                <i class='bx bx-trash'></i>
+                            </a>
+                        </td>
+                    </tr>
+                    <% }) %>
+                    <!-- Add more rows as needed -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+<!-- MAIN -->
+
+<!-- Script for Deleting Users -->
+
+
+<script src="/js/admin.js"></script>
+</body>
+</html>
