@@ -56,7 +56,7 @@
                             <a href="/admin/edit-category/<%=category._id%>" class="edit-btn" title="Edit Order">
                                 <i class='bx bx-edit'></i>
                             </a>
-                            <a href="#"  data-category-id = "<%=category._id%>" onclick="deletion(event)"  class="delete-btn" title="Delete Order" style="color: red;">
+                            <a href="#"  data-category-id ="<%=category._id%>" onclick="deletion(event)"  class="delete-btn" title="Delete Order" style="color: red;">
                                 <i class='bx bx-trash'></i>
                             </a>
                         </td>
@@ -78,7 +78,7 @@
     <script >
 
         async function deleteCategory(categoryId){
-            const response = await axios.delete(`/admin/delete/${categoryId}`);
+            const response = await axios.delete(`/admin/delete-category/${categoryId}`);
             
            try {
             if (response.status >= 200 && response.status <= 300){

@@ -11,7 +11,7 @@
           <div class="card-body">
            <p class="errorMg" style="color: red !important;"></p>
           
-            <form id="addProductForm" enctype="multipart/form-data">
+            <form action="/admin/edit-product/<%=product[0]._id %>" id="addProductForm" enctype="multipart/form-data"  method="post">
               <div class="card shadow-0 ">
                 <div class="p-4" style="background-color:#f5f5f7;">
                   <h5 class="card-title mb-3" style="background-color:#f5f5f7;">Product details</h5>
@@ -23,8 +23,8 @@
                     <div class="form-outline">
 
                       <img id="imagePreview" class="mt-2"
-                        style="max-width: 100px; height: 100px; object-fit: cover;" src="#" alt="Image Preview">
-                        <input required type="file" name="image[]"  multiple  class="form-control-file" accept="image/*" onchange="previewImage(this)">
+                        style="max-width: 100px; height: 100px; object-fit: cover;" src="/uploads/products/<%=product[0].image[0] %>" alt="Image Preview">
+                        <input  type="file" name="image[]"  multiple  class="form-control-file" accept="image/*" onchange="previewImage(this)">
 
                     </div>
                   </div>
@@ -37,7 +37,7 @@
                       <p class="mb-0">product name</p>
                       <div class="form-outline">
                         <input required type="text" name="name" class="form-control" id="productName"
-                          placeholder="Enter Product Name">
+                        value="<%=product[0].name%>">
                       </div>
                     </div>
 
@@ -46,7 +46,7 @@
                     <div class="col-sm-8 mb-3">
                       <p class="mb-0">Discription</p>
                       <div class="form-outline">
-                          <textarea name="description"   class="form-control" id="productDescription" placeholder="Enter Description"></textarea>
+                          <textarea name="description"   class="form-control" id="productDescription" ><%=product[0].description%></textarea>
                       </div>
                     </div>
 
@@ -56,7 +56,7 @@
                       <p class="mb-0">product price</p>
                       <div class="form-outline">
                         <input required type="number" name="price" class="form-control" id="productPrice"
-                          placeholder="Enter Product Price">
+                           value="<%=product[0].price%>">
                       </div>
                       <p class="mb-0" id="PriceWarning" style="display: none; color: red;">price should be positive
                         value</p>
@@ -66,7 +66,7 @@
                       <p class="mb-0">Add Stock</p>
                       <div class="form-outline">
                         <input required type="number" name="stock" class="form-control" id="productStock"
-                          placeholder="Enter Product Stock">
+                           value="<%=product[0].stock%>">
                       </div>
                       <p class="mb-0" id="PriceStock" style="display: none; color: red;">stock should be positive
                         value</p>
@@ -79,8 +79,8 @@
                           <select name="subcategory" id="subCategory" class="form-control">
                             <% categoryList.forEach((category)=>{ %>
                               <%category.subCategory.forEach((sub)=>{ %>
-
-                                <option value="red"><%= sub %></option>
+                                <option  selected><%=product[0].subcategory%></option>
+                                <option ><%= sub %></option>
                              <% }) %>
                             <% }) %>
                           </select>
@@ -90,8 +90,8 @@
                     <div class="col-sm-3 mb-3">
                       <p class="mb-0">Add Discount(%)</p>
                       <div class="form-outline">
-                        <input required type="number" name="discount" class="form-control" id="productDiscount"
-                          placeholder="Enter Product Discount">
+                        <input required type="number" name="discound" class="form-control" id="productDiscount" value="<%=product[0].discount%>"
+                          >
                       </div>
                       <p class="mb-0" id="PriceDiscount" style="display: none; color: red;">Discount Less than 90% And
                         above 0% </p>
@@ -103,6 +103,8 @@
                       <div class="form-outline">
                         <select name="category" id="productCategory" class="form-control">
                           <% categoryList.forEach((category)=>{ %>
+
+                            <option value="<%= product.subcategory %>" selected><%= product[0].category %></option>
                           <option value="<%= category.categoryName %>"><%= category.categoryName %></option>
                        <% }) %>
                         </select>
@@ -127,7 +129,10 @@
                         <div class="form-outline">
                           <select name="size" id="productSize" class="form-control">
   
-                            <option value="red">Red</option>
+                            <option value="red">small</option>
+                            <option value="red">medium</option>
+                            <option value="red">large</option>
+                            <option value="red">XL</option>
                           </select>
                         </div>
                       </div>
@@ -148,6 +153,8 @@
     </div>
     <script src="/js/admin.js"></script>
     <script>
+        const submitBtn = document.getElementById('submitbtn')
+
        function previewImage(input) {
             var preview = document.getElementById('imagePreview');
             var file = input.files[0];

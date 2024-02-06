@@ -62,7 +62,6 @@
 <!-- Script for Deleting Users -->
 <script>
     async function deleteBanner(bannerId) {
-        console.log(bannerId);
         const response = await axios.delete(`/admin/delete-banner/${bannerId}`)
         try {
             if (response.status >= 200 && response.status <= 300) {

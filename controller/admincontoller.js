@@ -128,10 +128,8 @@ module.exports={
 
     postAddProduct:async (req,res)=>{
         try {
-            const {name,price,stock,discount,description,colors} =req.body
-            // console.log(req.body);
+            const {name,price,stock,discount,description,colors,subcategory,category} =req.body
             const productExist = await productModel.findOne({name})
-            console.log(productExist);
             if (!req.files || req.files.length === 0) {
                 
                 return res.status(400).json({error:'No files uploaded'});
@@ -148,7 +146,7 @@ module.exports={
    
            const  image= req.files.map((file) => file.filename)
         const productAdded = moment().format('DD/MM/YYYY')
-        const newProduct = await productModel({name,price,stock,discount,description,image,colors,productAdded })
+        const newProduct = await productModel({name,price,stock,discount,description,image,colors,productAdded ,category,subcategory})
         await newProduct.save()
         res.status(200).json({success:true})
         } catch (error) {
@@ -162,11 +160,65 @@ module.exports={
     deleteProduct:async(req,res)=>{
         try {
             const product_id = req.params.id
-            await productModel.deleteOne({_id:product_id})
-            res.status(200).redirect('/admin/product')
+         const deletedProduct =    await productModel.findByIdAndDelete(product_id)
+            if(deletedProduct){
+                deletedProduct.image.forEach((img)=>{
+
+                    const oldImagePath =  path.join(__dirname,'../public/uploads/products',img)
+                    if (fs.existsSync(oldImagePath)) {
+                        fs.unlinkSync(oldImagePath);
+                    }
+
+                })
+                res.status(200).json({success:true,message:'product deleted successfully'})
+            }
+            else {
+                res.status(404).json({ success: false, message: 'Product not found' });
+            }
         } catch (error) {
             console.log('Error while deleting the product');
-            res.status(500).send('intenal server error')
+            res.status(500).json({message:'Internal server'})
+        }
+    },
+    getUpdateProduct:async(req,res)=>{
+      try {
+        const id = req.params.productId
+        const product = await productModel.find({_id:id})
+        const categoryList = await categoryModel.find({})
+        res.status(200).render('admin/updateProduct',{product,categoryList})
+      } catch (error) {
+        res.status(500).send('internal server error')
+      }
+
+    },
+    postUpdateProduct:async(req,res)=>{
+        try {
+            
+            const id  = req.params.productId
+            const productDetails = await productModel.findById(id)
+            const {name,price,stock,discount,description,colors,subcategory,category} = req.body
+
+            let newFields = {name,price,stock,discount,description,colors,subcategory,category}
+                if(req.files.length>0){
+                   
+                    productDetails.image.forEach((img)=>{
+                        const oldImagePath =  path.join(__dirname,'../public/uploads/products',img)
+                            fs.unlinkSync(oldImagePath)
+                        
+                    })
+                    const  image= req.files.map((file) => file.filename)
+                    newFields.image = image
+                }else{
+                    newFields.image = productDetails.image
+                }
+         
+             await productModel.findByIdAndUpdate(id,{$set:newFields})
+ 
+            res.status(200).redirect('/admin/product')
+            
+        } catch (error) {
+            console.log('Server error');
+            res.status(500).send('Internal server error')
         }
     },
 
@@ -203,7 +255,6 @@ module.exports={
     getCategoryList:async(req,res)=>{
         try {
            const categoryList = await categoryModel.find({})
-        //    console.log(categoryList[0].subCategory[0]);
            res.render('admin/category',{categoryList})
         } catch (error) {
             console.log('server error');
@@ -263,7 +314,7 @@ module.exports={
     },
     
 
-    // Coupon management ------------------------------------------------------------------------->
+    //  COUPON MANAGEMENT ------------------------------------------------------------------------->
 
     getCoupons:async(req,res)=>{
        try {
@@ -279,9 +330,9 @@ module.exports={
     },
     postAddCoupon:async(req,res)=>{
         try {
-            const {couponCode,couponName,discount,validFrom,validTo} = req.body
+            const {couponCode,couponName,discount,purchaseAbove,validFrom,validTo} = req.body
             const newCoupon = await couponModel(
-            {couponCode,couponName,discount,validFrom,validTo} 
+            {couponCode,couponName,discount,purchaseAbove,validFrom,validTo} 
         )
         await newCoupon.save()
         res.status(200).redirect('/admin/coupons')
@@ -305,9 +356,9 @@ module.exports={
            
             const id = req.params.couponId
            
-        const {couponCode,couponName,discount,validFrom,validTo} = req.body
+        const {couponCode,couponName,discount,purchaseAbove,validFrom,validTo} = req.body
         
-        const updateCoupon = await couponModel.findByIdAndUpdate(id,{$set:{couponCode,couponName,discount,validFrom,validTo}})
+        const updateCoupon = await couponModel.findByIdAndUpdate(id,{$set:{couponCode,couponName,discount,purchaseAbove,validFrom,validTo}})
         if(updateCoupon){
             res.status(200).json({msg:'coupon updated successfully'})
         }else{
@@ -387,7 +438,7 @@ module.exports={
             const id = req.params.bannerId
                 const banner = await bannerModel.findOne({_id:id})
              const {bannerName,bannerHeading,specialPrice,validFrom,validTo}=req.body
-             const image = req.file?.filename;
+             const image = req.file?.filename;          
              const previousImage = banner.bannerImage 
              const newImage= image??previousImage
              const upadateBanner = await bannerModel.findByIdAndUpdate(id,{$set:{bannerName,bannerHeading,specialPrice,validFrom,validTo,bannerImage:newImage}})
@@ -406,7 +457,7 @@ module.exports={
             res.status(500).send("Internal server error")
         }
     }
-    
+
     
     
 }

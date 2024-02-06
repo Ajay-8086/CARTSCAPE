@@ -5,6 +5,7 @@ const adminRouter = require('./routes/adminRoutes')
 const flash = require('connect-flash');
 const dotenv = require('dotenv');
 const session = require('express-session')
+const morgan = require('morgan')
 
 
 dotenv.config();
@@ -30,7 +31,8 @@ app.use(session({
     resave:true,
     saveUninitialized:true
 }))
-
+// const customFormat = ':method :url :status - :response-time ms';
+// app.use(morgan(customFormat));
 app.use('/',userRouter)
 app.use('/',adminRouter)
 

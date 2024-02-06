@@ -2,6 +2,7 @@
 <main>
     <div class="table-data">
         <div class="order">
+            <p id="errorMsg"   text-align: center;" ></p>
             <div class="head">
                 <h3>Products</h3>
                
@@ -36,10 +37,10 @@
                     <% products.forEach(product=>{ %>
                     
                     
-                    <tr>
+                    <tr class="table-row<%=product._id%>">
                        
                         <td>
-                            <img src="/uploads/products/<%=product.image%>" alt="<%=product.name%>">
+                            <img src="/uploads/products/<%=product.image[0]%>" alt="<%=product.name%>">
                             <p><%=product.name%></p>
                         </td>
                         <td><%= product.stock %></td>
@@ -50,8 +51,8 @@
                             <a href="/admin/edit-product/<%=product._id%>" class="edit-btn" title="Edit Order">
                                 <i class='bx bx-edit'></i>
                             </a>
-                            <a href="/admin/delete/<%=product._id%>" class="delete-btn" title="Delete Order">
-                                <i class='bx bx-trash'></i>
+                            <a href="#" class="delete-btn" data-category-id="<%=product._id%>" onclick="deletion (event)" title="Delete Order">
+                                <i class='bx bx-trash' style="color: red;"></i>
                             </a>
                         </td>
                     </tr>
@@ -70,5 +71,43 @@
 	
 
 	<script src="/js/admin.js"></script>
+    <script>
+        async function deleteProduct(id){
+            const response = await axios.delete(`/admin/delete/${id}`)
+            try {
+                if(response.status >=200){
+                    document.querySelector('.table-row'+id).remove();
+                    errorMsg.style.visibility = 'visible'
+                    errorMsg.classList.add('success');
+                errorMsg.innerHTML = response.data.message
+                setTimeout(()=>{
+                    errorMsg.innerHTML =''
+                },1000)
+            } else {
+                errorMsg.style.visibility = 'visible'
+                errorMsg.classList.add('success');
+                errorMsg.innerHTML = response.data.error
+            }
+            } catch (error) {
+                errorMsg.classList.add('success');
+            errorMsg.style.visibility = 'visible';
+            errorMsg.innerHTML = 'An error occurred while deleting the user.';
+            }
+
+        }
+        const errorMsg = document.getElementById('errorMsg')
+        async function deletion (event) {
+              event.preventDefault();
+          
+              
+              const id = event.currentTarget.getAttribute('data-category-id');
+              console.log(id);
+          
+              if (id) {
+                await deleteProduct(id);
+              }
+           
+          };
+    </script>
 </body>
 </html>

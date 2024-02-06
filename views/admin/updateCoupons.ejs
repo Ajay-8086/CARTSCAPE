@@ -41,6 +41,11 @@
                                 <small id="discount-error" class="text-danger"></small>
                             </div>
                             <div class="form-group">
+                                <label for="discount">purchase above</label>
+                                <input type="number" class="form-control" id="discount" placeholder="Enter Discount Percentage" name="purchaseAbove" required value="<%=coupon[0].purchaseAbove%>">
+                                <small id="discount-error" class="text-danger"></small>
+                            </div>
+                            <div class="form-group">
                                 <label for="valid-from">Valid From</label>
                                 <input type="date" class="form-control" id="valid-from" name="validFrom" required value="<%=coupon[0].validFrom%>">
                                 <small id="valid-from-error" class="text-danger"></small>
@@ -76,12 +81,12 @@
             const formData = new FormData(form);
             const data = Object.fromEntries(formData.entries());
             const response = await axios.post('/admin/edit-coupon/<%=coupon[0]._id%>', data);
-            console.log('fdsafdsa',response);
+           
 
             if (response.status === 200) {
                 msg.style.visibility = 'visible';
                 msg.classList.add('success');
-                msg.innerHTML = response.data.msg;
+                msg.innerHTML = response.data.message;
 
                 setTimeout(() => {
                     msg.innerHTML = '';
@@ -92,7 +97,7 @@
             console.error('Error:', error);
             msg.style.visibility = 'visible';
             msg.classList.add('error');
-            msg.innerHTML = response.data.msg;
+            msg.innerHTML = response.data.message;
         }
     });
 </script>

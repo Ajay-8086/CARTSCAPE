@@ -32,7 +32,9 @@ const{
     postAddBanner,
     getUpdateBanner,
     postUpdateBanner,
-    deleteBanner
+    deleteBanner,
+    getUpdateProduct,
+    postUpdateProduct
     
 
 
@@ -49,14 +51,15 @@ router.get('/admin/signup',getSignup)
       .get('/admin/addproduct',getAddProduct)
       .post('/admin/addproduct',setUploadType('products'),upload.array('image[]',999),postAddProduct)
       .get('/admin/product',getProducts)
-      .get('/admin/delete/:id',deleteProduct)
+      .delete('/admin/delete/:id',deleteProduct)
+      .get('/admin/edit-product/:productId',getUpdateProduct)
+      .post('/admin/edit-product/:productId',setUploadType('products'),upload.array('image[]',999),                 postUpdateProduct)
       .get('/admin/users',getUserList)
       .delete('/admin/users/:userId',deleteUser)
       .get('/admin/category',getCategoryList)
       .get('/admin/addcategory',getAddCategory)
       .post('/admin/addcategory',setUploadType('category'),upload.single('categoryimage'),postAddCategory)
-
-      .delete('/admin/delete/:categoryId',deleteCategory)
+      .delete('/admin/delete-category/:categoryId',deleteCategory)
       .get('/admin/coupons',getCoupons)
       .get('/admin/addcoupon',getAddCoupon)
       .post('/admin/addcoupon',postAddCoupon)
