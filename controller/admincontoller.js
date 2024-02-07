@@ -4,7 +4,6 @@ const userModel = require('../models/customer')
 const categoryModel = require('../models/category')
 const couponModel = require('../models/coupon')
 const bannerModel = require('../models/banner')
-const pagination = require('../utils/pagination')
 const fs = require('fs')
 const path = require('path')
 const bcrypt = require('bcrypt')
@@ -109,10 +108,13 @@ module.exports={
 
     getProducts:async(req,res)=>{
         try {
-            const { startIndex, endIndex } = req.pagination;
-        const products = await productModel.find({}).skip(startIndex).limit(endIndex - startIndex);
-            const paginationInfo = await pagination(productModel,req)
-        res.render('admin/products', { products, paginationInfo });
+            const pageNumber = parseInt(req.query.page) || 1;
+            const options = {
+                page: pageNumber,
+                limit: 10 
+            };
+            const result = await productModel.paginate({}, options);  
+            res.render('admin/products', { products: result.docs, paginationInfo: result })
         } catch (error) {
             res.status(500).json({ error: 'Internal server error' });
         }
@@ -229,8 +231,17 @@ module.exports={
     // USER MANAGEMENT -------------------------------------------------------------------------->
 
     getUserList:async(req,res)=>{
-        const users = await userModel.find({})
-        res.render('admin/userList',{users})
+        try {
+            const pageNumber = parseInt(req.query.page) || 1;
+            const options = {
+                page: pageNumber,
+                limit: 10 
+            };
+            const result = await userModel.paginate({}, options); 
+        res.render('admin/userList', { users:result.docs, paginationInfo:result });
+        } catch (error) {
+            res.status(500).send('internal server error')
+        }
     },
     deleteUser:async(req,res)=>{
        try {
@@ -258,8 +269,14 @@ module.exports={
 
     getCategoryList:async(req,res)=>{
         try {
-           const categoryList = await categoryModel.find({})
-           res.render('admin/category',{categoryList})
+
+            const pageNumber = parseInt(req.query.page) || 1;
+            const options = {
+                page: pageNumber,
+                limit: 10 
+            };
+            const result = await categoryModel.paginate({}, options); 
+           res.render('admin/category', { categoryList:result.docs, paginationInfo:result });
         } catch (error) {
             console.log('server error');
             res.status(500).send('Internal server error')
@@ -316,14 +333,27 @@ module.exports={
             res.status(500).json({error:'Internal server error'})
         }
     },
+    getUpdateCategory:async(req,res)=>{
+        const categoryId = req.params.categoryId
+        const categoryList  = await categoryModel.find({_id:categoryId})
+        res.rendr('admin/updateCategory',{categoryList})
+    },
+    postUpdateCategory:(req,res)=>{
+
+    },
     
 
     //  COUPON MANAGEMENT ------------------------------------------------------------------------->
 
     getCoupons:async(req,res)=>{
        try {
-        const coupons = await couponModel.find({})
-        res.status(200).render('admin/coupons',{coupons})
+        const pageNumber = parseInt(req.query.page) || 1;
+        const options = {
+            page: pageNumber,
+            limit: 10 
+        };
+        const result = await couponModel.paginate({}, options); 
+        res.render('admin/coupons', { coupons:result.docs, paginationInfo:result });
        } catch (error) {
         console.log(error.message);
         res.status(500).json({error:'Internal server error'})
@@ -390,8 +420,13 @@ module.exports={
     //BANNER MANAGEMENT----------------------------------------------------------------------------------->
     getBanner:async(req,res)=>{
         try {
-            const banners = await bannerModel.find({})
-            res.status(200).render('admin/banner',{banners})
+            const pageNumber = parseInt(req.query.page) || 1;
+            const options = {
+                page: pageNumber,
+                limit: 10 
+            };
+            const result = await bannerModel.paginate({}, options); 
+            res.render('admin/banner', { banners:result.docs, paginationInfo:result });
         } catch (error) {
            res.status(500).send('Internal server error') 
         }

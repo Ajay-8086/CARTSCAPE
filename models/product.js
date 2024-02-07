@@ -1,3 +1,4 @@
+const mongoosePaginate = require('mongoose-paginate-v2');
 const mongoose = require('mongoose')
 const product = new mongoose.Schema({
     name:{type:String, unique:true},
@@ -13,6 +14,7 @@ const product = new mongoose.Schema({
     subcategory:{type:String}
 
 })
+product.plugin(mongoosePaginate);
 
 const productModel = mongoose.model('products',product)
 

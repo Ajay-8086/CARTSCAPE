@@ -1,0 +1,35 @@
+<%-include('../partials/adminDashHeader.ejs') %>
+
+<div class="addingcategories">
+        <form id="categoryForm" class="category">
+            <h2 class="category-head">Add Category</h2>
+            <p class="errorMg" style="color: red !important; text-align: center;"></p>
+
+        <div class="category_img_section_center">
+            <div class="add_category_img_preview">
+                <img id="imagePreview" src="#" alt="Image Preview" width="100%" height="100%">
+
+                
+            </div>
+            
+            <div class="add_category_img_choose">
+                Choose File
+                <input type="file" id="imageInput" name="categoryImage" accept="image/*" onchange="previewImage(this)" style="width: 100%;height: 100%;position: absolute; opacity: 0;">
+
+            </div>
+
+        </div>
+
+            <label for="categoryName" class="category-name">Category Name:</label>
+            <input type="text" id="categoryName" name="categoryName" placeholder="Enter category name" class="categoryInput" required>
+            <label for="subCategoyName" class="category-name">Subcategory Name:</label>
+           <div class="subcategory-division">
+            <input type="text" id="subCategoryName" name="subCategoryName" placeholder="Enter subcategory name" class="categoryInput" required>
+            <button type="button" id="subcategoryBtn" class="add_category">Add</button>
+           </div> 
+           
+
+
+            <button type="submit" class="add_category" id="addBtn">Add Category</button>
+        </form>
+    </div>

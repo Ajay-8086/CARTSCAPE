@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
 var customer = new mongoose.Schema({
   name: {
     type: String
@@ -20,7 +21,7 @@ var customer = new mongoose.Schema({
     default:false
   }
 });
-
+customer.plugin(mongoosePaginate)
 const customerModel = mongoose.model('customer',customer)
 
 module.exports = customerModel

@@ -6,17 +6,17 @@
             <div class="head">
                 <h3>Categories</h3>
                
-                <a href="#" class="pagination-icon" onclick="changePage(-1)">
+                <a href="/admin/category?page=<%= paginationInfo.prevPage%>" class="pagination-icon">
                     <i class='bx bxs-chevron-left'></i>
                 </a>
-                <input type="number" id="pageNumberInput" value="1" min="1" max="10" onkeydown="jumpOnEnter(event)"> <!-- Set max value as needed -->
-                <a href="" class="pagination-icon" onclick="changePage(1)">
-                    <i class='bx bxs-chevron-right'></i>
-                </a>
-                <i class='bx bx-filter'></i>
-                <a href="/admin/addCategory">
-                    <i class='bx bxs-plus-circle' style="font-size: larger;"></i>
-                </a>
+                <input type="number" id="pageNumberInput" value="<%= paginationInfo.page %>" min="1" max="<%= paginationInfo.totalPages %>" onkeydown="jumpOnEnter(event)">
+                
+                    <a href="/admin/category?page=<%= paginationInfo.nextPage%>" class="pagination-icon">
+                        <i class='bx bxs-chevron-right'></i>
+                    </a>
+                    <a href="/admin/addCategory">
+                        <i class='bx bxs-plus-circle' style="font-size: larger;"></i>
+                    </a>
             </div>
             
             
@@ -117,6 +117,20 @@
               }
            
           };
+
+          function jumpOnEnter(event) {
+        if (event.key === 'Enter') {
+            const pageNumber = parseInt(event.target.value);
+            const max = event.currentTarget.getAttribute('max');
+            if (!isNaN(pageNumber) ) {
+                if (pageNumber > max) { 
+                    window.location.href = `/admin/category?page=${max}`;
+                } else {
+                    window.location.href = `/admin/category?page=${pageNumber}`; 
+                }
+            }
+        }
+    }
         </script>
 
        
