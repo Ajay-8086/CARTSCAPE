@@ -1,4 +1,3 @@
-const addCategory = document.getElementById('categoryForm');
 const submitBtn = document.getElementById('addBtn');
 
 let subCategories = [];
@@ -36,7 +35,6 @@ submitBtn.addEventListener('click', async (event) => {
         }, 3000);
     } else {
         try {
-            console.log(subCategories);
             const formData = new FormData()
             formData.append('subCategory',JSON.stringify(subCategories));
             formData.append('categoryName',JSON.stringify(categoryName));

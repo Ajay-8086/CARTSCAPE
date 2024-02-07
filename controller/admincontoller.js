@@ -288,7 +288,8 @@ module.exports={
     postAddCategory: async (req, res) => {
         try {
             const { subCategory, categoryName } = req.body;
-            const abc = JSON.parse(subCategory)
+            const category = JSON.parse(categoryName)
+            const subcategory = JSON.parse(subCategory)
             const categoryimage = req.file?.filename
             const categoryExist = await categoryModel.findOne({ categoryName });
             if (categoryExist) {
@@ -302,9 +303,9 @@ module.exports={
                 }
             } else {
                 await categoryModel.create({
-                    categoryName,
+                    categoryName:category,
                     categoryimage,
-                    subCategory:abc
+                    subCategory:subcategory
                 });
                 res.status(200).json({ message: 'Category created successfully' });
             }
@@ -335,12 +336,31 @@ module.exports={
     },
     getUpdateCategory:async(req,res)=>{
         const categoryId = req.params.categoryId
-        const categoryList  = await categoryModel.find({_id:categoryId})
-        res.rendr('admin/updateCategory',{categoryList})
+        const category  = await categoryModel.find({_id:categoryId})
+        res.render('admin/updateCategory',{category})
     },
-    postUpdateCategory:(req,res)=>{
+    postUpdateCategory:async(req,res)=>{
+       try {
+        const categoryId = req.params.categoryId
+        const { subCategory, categoryName } = req.body;
+        const category = JSON.parse(categoryName)
+        const subcategories = JSON.parse(subCategory)
+        const categoryimage = req.file?.filename
+        if(categoryimage){
+            const existingCategory = await categoryModel.findOne({_id:categoryId})
+            const pathOfImage = path.join(__dirname,'../public/uploads/category',existingCategory.categoryimage)
+            fs.unlinkSync(pathOfImage)
+        }
+        const updatedCategory = await categoryModel.findByIdAndUpdate(categoryId,{$set:{categoryimage,category}})
+        updatedCategory.subCategory.push(...subcategories)
+        await updatedCategory.save()
+        res.status(200).json({message:'category added'})
+       } catch (error) {
+        res.status(500).json({error:'Internal server error'})
+       }
 
     },
+
     
 
     //  COUPON MANAGEMENT ------------------------------------------------------------------------->

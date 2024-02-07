@@ -24,6 +24,7 @@ const{
     deleteCategory,
     getUpdateCategory,
     postUpdateCategory,
+    // subCategoryDelete,
     getCoupons,
     getAddCoupon,
     postAddCoupon,
@@ -64,7 +65,8 @@ router.get('/admin/signup',getSignup)
       .post('/admin/addcategory',setUploadType('category'),upload.single('categoryimage'),postAddCategory)
       .delete('/admin/delete-category/:categoryId',deleteCategory)
       .get('/admin/edit-category/:categoryId',getUpdateCategory)
-      .post('/admin/edit-category/:categoryId',postUpdateCategory)
+      .patch('/admin/edit-category/:categoryId',setUploadType('category'),upload.single('categoryImage'),postUpdateCategory)
+    //   .get('/admin/subcategory/:id',subCategoryDelete)
       .get('/admin/coupons',getCoupons)
       .get('/admin/addcoupon',getAddCoupon)
       .post('/admin/addcoupon',postAddCoupon)
