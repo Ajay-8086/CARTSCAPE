@@ -6,13 +6,21 @@
             <div class="head">
                 <h3>Products</h3>
                
-                <a href="#" class="pagination-icon" onclick="changePage(-1)">
+                <a href="/admin/product?page=<%= paginationInfo.page - 1 %>" class="pagination-icon">
                     <i class='bx bxs-chevron-left'></i>
                 </a>
-                <input type="number" id="pageNumberInput" value="1" min="1" max="10" onkeydown="jumpOnEnter(event)"> <!-- Set max value as needed -->
-                <a href="" class="pagination-icon" onclick="changePage(1)">
-                    <i class='bx bxs-chevron-right'></i>
-                </a>
+                <input type="number" id="pageNumberInput" value="<%= paginationInfo.page %>" min="1" max="<%= paginationInfo.totalPage %>" onkeydown="jumpOnEnter(event)">
+                <% if (paginationInfo.page < paginationInfo.totalPage) { %>
+                    <a href="/admin/product?page=<%= paginationInfo.page + 1 %>" class="pagination-icon">
+                        <i class='bx bxs-chevron-right'></i>
+                    </a>
+                <% } else { %>
+                    
+                    <a class="pagination-icon disabled">
+                        <i class='bx bxs-chevron-right'></i>
+                    </a>
+                <% } %>
+                <!-- End Pagination controls -->
                 <i class='bx bx-filter'></i>
                 <a href="/admin/addproduct">
                     <i class='bx bxs-plus-circle'></i>
@@ -108,6 +116,19 @@
               }
            
           };
-    </script>
+          function jumpOnEnter(event) {
+        if (event.key === 'Enter') {
+            const pageNumber = parseInt(event.target.value);
+            const max = event.currentTarget.getAttribute('max');
+            if (!isNaN(pageNumber) ) {
+                if (pageNumber > max) { 
+                    window.location.href = `/admin/product?page=${max}`;
+                } else {
+                    window.location.href = `/admin/product?page=${pageNumber}`; 
+                }
+            }
+        }
+    }
+</script>
 </body>
 </html>

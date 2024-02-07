@@ -4,6 +4,7 @@ const userModel = require('../models/customer')
 const categoryModel = require('../models/category')
 const couponModel = require('../models/coupon')
 const bannerModel = require('../models/banner')
+const pagination = require('../utils/pagination')
 const fs = require('fs')
 const path = require('path')
 const bcrypt = require('bcrypt')
@@ -108,10 +109,12 @@ module.exports={
 
     getProducts:async(req,res)=>{
         try {
-            const products = await productModel.find({})
-        res.render('admin/products',{products})
+            const { startIndex, endIndex } = req.pagination;
+        const products = await productModel.find({}).skip(startIndex).limit(endIndex - startIndex);
+            const paginationInfo = await pagination(productModel,req)
+        res.render('admin/products', { products, paginationInfo });
         } catch (error) {
-            res.status(500).json({error:'Internal server error'})
+            res.status(500).json({ error: 'Internal server error' });
         }
     },
 
@@ -221,6 +224,7 @@ module.exports={
             res.status(500).send('Internal server error')
         }
     },
+
 
     // USER MANAGEMENT -------------------------------------------------------------------------->
 

@@ -4,7 +4,6 @@ const{sendVerificationCode,verifyOtp} = require('../middlewares/verification')
 const bcrypt = require('bcrypt');
 
 const generateOTP = Math.floor(1000 + Math.random() * 9000);
-
 module.exports = {
     home: (req, res) => res.render('user/userDashboard'),
 

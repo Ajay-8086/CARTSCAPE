@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router();
 const{setUploadType,upload}=require('../middlewares/multer')
+const paginationMiddleware = require('../middlewares/pagination')
 
 
 const{
@@ -34,7 +35,8 @@ const{
     postUpdateBanner,
     deleteBanner,
     getUpdateProduct,
-    postUpdateProduct
+    postUpdateProduct,
+    // getProductPagination
     
 
 
@@ -50,7 +52,7 @@ router.get('/admin/signup',getSignup)
       .get('/admin/dashboard',getDashboard)
       .get('/admin/addproduct',getAddProduct)
       .post('/admin/addproduct',setUploadType('products'),upload.array('image[]',999),postAddProduct)
-      .get('/admin/product',getProducts)
+      .get('/admin/product', paginationMiddleware(10),getProducts)
       .delete('/admin/delete/:id',deleteProduct)
       .get('/admin/edit-product/:productId',getUpdateProduct)
       .post('/admin/edit-product/:productId',setUploadType('products'),upload.array('image[]',999),                 postUpdateProduct)
@@ -72,6 +74,7 @@ router.get('/admin/signup',getSignup)
       .get('/admin/edit-banner/:bannerId',getUpdateBanner)
       .post('/admin/edit-banner/:bannerId',setUploadType('banner'),upload.single('bannerImage'),postUpdateBanner)
       .delete('/admin/delete-banner/:bannerId',deleteBanner)
+    //   .get('/admin/pagination/:page',getProductPagination)
       
 
 
