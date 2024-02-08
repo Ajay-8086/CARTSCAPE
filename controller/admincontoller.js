@@ -360,6 +360,17 @@ module.exports={
        }
 
     },
+    subCategoryDelete:async(req,res)=>{
+        try {
+            const categoryId =  req.query.catId
+            const subCategoryVal  = req.query.id
+             await categoryModel.updateOne({_id:categoryId},{$pull:{subCategory:subCategoryVal}})
+            res.status(200).redirect(`/admin/edit-category/${categoryId}`)
+        } catch (error) {
+            res.status(500).send('Internal server error')
+        }
+    
+    },
 
     
 

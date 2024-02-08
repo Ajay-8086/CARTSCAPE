@@ -27,8 +27,8 @@
             <div class="custom-dropdown">
                 <input type="text" class="add_sub_input" id="subcat_input" name="subCategory">
                 <ul class="subcategoryList" style="width: 100%;">
-                    <% category[0].subCategory.forEach((sub,index)=>{ %>
-                        <li><%=sub%> <a href="/admin/subcategory/<%=index%>"><i class="fa-solid fa-xmark" style="color: red;"></i></a> </li>
+                    <% category[0].subCategory.forEach((sub)=>{ %>
+                        <li><%=sub%> <a href="/admin/subcategory?catId=<%=category[0]._id%>&&id=<%=sub%>"><i class="fa-solid fa-xmark" style="color: red;"></i></a> </li>
                     <% }) %>
                 </ul>
             </div>
@@ -97,7 +97,7 @@
             }
             else{
                 msg.style.visibility = 'visible';
-                msg.innerHTML = response.data.message;
+                msg.innerHTML = response.data.error;
                 setTimeout(() => {
                     msg.innerHTML = ''
                     window.location.href = '/admin/edit-category/<%=category[0]._id%>'
