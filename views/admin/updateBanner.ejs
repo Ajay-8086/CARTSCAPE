@@ -15,14 +15,13 @@
         <main>
             <div class="table-data">
                 <div class="order">
-                    <p class="msg" style="text-align: center;"></p>
                     <div class="head">
                         <h3>Add Banner</h3>
                     </div>
                     <div class="container coupon-container">
-
-
-
+                        
+                        
+                        
                         <form action="#" id="bannerForm"   method="post" >
 
                             <div class="category_img_section_center">
@@ -34,10 +33,10 @@
                                 <div class="add_category_img_choose">
                                     Choose File
                                     <input type="file" id="imageInput" name="bannerImage" accept="image/*" onchange="previewImage(this)" style="width: 100%;height: 100%;position: absolute; opacity: 0;">
-                    
+                                    
                                 </div>
-                               
-                    
+                                
+                                
                             </div>
 
 
@@ -58,19 +57,20 @@
                                 <small id="coupon-code-error" class="text-danger"></small>
                             </div>
                             
-                        
+                            
                             <div class="form-group">
                                 <label for="valid-from">Valid From</label>
-                                <input type="date" class="form-control" id="valid-from" value="<%=banner.validFrom %>" name="validFrom" required>
+                                <input type="date" class="form-control" id="valid-from" min="" value="<%=banner.validFrom %>" name="validFrom" required>
                                 <small id="valid-from-error" class="text-danger"></small>
                             </div>
                             <div class="form-group">
                                 <label for="valid-to">Valid To</label>
-                                <input type="date" class="form-control" id="valid-to" value="<%=banner.validTo %>" name="validTo" required>
+                                <input type="date" class="form-control" min="" id="valid-to" value="<%=banner.validTo %>" name="validTo" required>
                                 <small id="valid-to-error" class="text-danger"></small>
                             </div>
                             <h1></h1>
                             <button type="submit" class="btn" style="background-color: #00224e; color: white;" id="addBtn">Add banner</button>
+                            <p class="msg" style="text-align: center;"></p>
                         </form>
 
                     </div>
@@ -100,7 +100,7 @@
             if (response.status === 200) {
                 msg.style.visibility = 'visible';
                 msg.classList.add('success');
-                msg.innerHTML = response.data;
+                msg.innerHTML = response.data.message;
 
                 setTimeout(() => {
                     msg.innerHTML = '';
@@ -111,7 +111,7 @@
             console.error('Error:', error);
             msg.style.visibility = 'visible';
             msg.classList.add('error');
-            msg.innerHTML = response.data;
+            msg.innerHTML = response.data.message;
         }
     })
 
@@ -130,6 +130,10 @@
                 preview.src = "";
             }
         }
+
+        let today = new Date().toISOString().split('T')[0];
+         document.getElementById("valid-from").setAttribute("min", today);
+         document.getElementById("valid-to").setAttribute("min", today);
 </script>
 </body>
 

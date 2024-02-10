@@ -1,42 +1,36 @@
-const mongoose = require('mongoose');
 const express = require('express');
+const dotenv = require('dotenv');
+dotenv.config();
 const userRouter = require('./routes/userRouter')
 const adminRouter = require('./routes/adminRoutes')
 const flash = require('connect-flash');
-const dotenv = require('dotenv');
 const session = require('express-session')
-const morgan = require('morgan')
-
-
-dotenv.config();
-
+const morgan = require('morgan');
+const dbConnection = require('./config/DB')
 const app = express();
 const port = process.env.PORT || 3000;
-const connection = process.env.URI;
-const secret = process.env.SECRET
-mongoose.connect(connection)
 
-app.use(express.urlencoded({extended:true}))
+app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
-
-app.set('view engine' , 'ejs')
-
-
-  
+app.set('view engine', 'ejs')
 app.use(express.static('public'))
-
 app.use(flash());
 app.use(session({
-    secret:secret,
-    resave:true,
-    saveUninitialized:true
+    secret: process.env.SECRET,
+    resave: true,
+    saveUninitialized: true
 }))
 // const customFormat = ':method :url :status - :response-time ms';
 // app.use(morgan(customFormat));
-app.use('/',userRouter)
-app.use('/',adminRouter)
 
+app.use('/admin', adminRouter)
+app.use('/', userRouter)
 
-app.listen(port,()=>{
-    console.log(`server running at ${port}`)
+dbConnection().then(()=>{
+    
+    app.listen(port, () => {
+        console.log(`server running at ${port}`)
+    })
+}).catch(()=>{
+    console.log('Error in connecting database');
 })

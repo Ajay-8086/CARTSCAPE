@@ -2,17 +2,17 @@ const addProductForm = document.getElementById('addProductForm')
 const submitBtn = document.getElementById('submitbtn')
 submitBtn.addEventListener('click',async(event)=>{
     event.preventDefault()
-    const productName = document.getElementById('productName').value
-    const description = document.getElementById('productDescription').value
-    const price = document.getElementById('productPrice').value
-    const stock = document.getElementById('productStock').value
-    const category = document.getElementById('productCategory').value
-    const discount = document.getElementById('productDiscount').value
-    const subCategory = document.getElementById('subCategory').value
-    const color = document.getElementById('productColors').value
-    const size = document.getElementById('productSize').value
+    const productName = document.getElementById('productName').value.trim()
+    const description = document.getElementById('productDescription').value.trim()
+    const price = document.getElementById('productPrice').value.trim()
+    const stock = document.getElementById('productStock').value.trim()
+    const category = document.getElementById('productCategory').value.trim()
+    const discount = document.getElementById('productDiscount').value.trim()
+    const subCategory = document.getElementById('subCategory').value.trim()
+    const color = document.getElementById('productColors').value.trim()
+    const size = document.getElementById('productSize').value.trim()
     const errorMsg = document.querySelector('.errorMg')
-    if(!productName || !description || !price || !stock || !category || !discount || !subCategory || !color || !size ){
+    if(productName =='' || description=='' || price=='' || stock=='' || category=='' || discount=='' || subCategory=='' || color=='' || size=='' ){
         errorMsg.style.visibility = 'visible'
         errorMsg.innerHTML = 'Please Fill all Fields'
         setTimeout(() => {
@@ -25,6 +25,7 @@ submitBtn.addEventListener('click',async(event)=>{
                 method: 'POST',
                 body: form,
             });
+            console.log(response);
             const result = await response.json()
             if(!response.ok){
                 errorMsg.style.visibility = 'visible'
@@ -35,7 +36,11 @@ submitBtn.addEventListener('click',async(event)=>{
                 }
                 else{
                     if(result.success){
-                        
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: "The user has  been blocked.",
+                            icon: "success"
+                          });
                         setTimeout(() => {
                             window.location.href = '/admin/product'
                         }, 1000);

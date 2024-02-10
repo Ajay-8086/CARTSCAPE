@@ -597,6 +597,13 @@ body {
 	cursor: pointer;
 	width: 100%;
 }
+.add_btn{
+	padding: 4px 10px;
+	background-color: #000;
+	color: #fff;
+	border-radius: 5px;
+	border: none;
+}
 
 .add_category:hover {
 	background-color: #00224e;
@@ -638,6 +645,19 @@ body {
 	align-items: center;
 }
 
+.custom-list-style li {
+	list-style-type: decimal !important; /* Add !important to override Bootstrap */
+	/* Add any other custom styles here */
+}
+
+.category-name{
+	display: flex;
+	justify-content: space-between;
+	width: 1100%;
+	/* align-items: baseline;	 */
+	/* justify-content: center; */
+	height: auto;
+}
 
 /* subcategory list in update category page style  */
 .custom-dropdown {

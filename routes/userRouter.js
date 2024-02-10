@@ -1,42 +1,29 @@
 const express = require('express')
 const router = express.Router()
+const authController = require('../controller/authController')
+const userController = require('../controller/userController')
 
+// USER MANAGEMENT =========================================================================================>
 
-const {
-    home,
-    getSignup,
-    getLogin,
-    postLogin,
-    postSignup,
-    getOtp,
-    postOtp,
-    getCart,
-    getWishList,
-    getForgotPassword,
-    postForgotPassword,
-    getForgetOtp,
-    postForgetOtp,
-    resendOtp,
-    getChangePassword,
-    postChangePassword
-} = require('../controller/userController')
+router.get('/',userController.home)
+router.get('/cart',userController.getCart)
+router.get('/wishlist',userController.getWishList)
 
-router.get('/',home)
-      .get('/signup',getSignup)
-      .get('/login',getLogin)
-      .get('/cart',getCart)
-      .get('/wishlist',getWishList)
-      .get('/verify-otp',getOtp)
-      .get('/forget/password',getForgotPassword)
-      .get('/forget/otp/verify',getForgetOtp)
-      .get('/change_password',getChangePassword)
-      .post('/login',postLogin)
-      .post('/change_password',postChangePassword)
-      .get('/resend_otpchange',resendOtp)
-      .post('/forget/otp/verify',postForgetOtp)
-      .post('/forget/password',postForgotPassword)
-      .post('/signup',postSignup)
-      .post('/verify-otp',postOtp)
+// USER AUTHENTICATION MANAGEMENT===========================================================================>
+
+router.get('/signup',authController.getSignup)
+router.get('/login',authController.getLogin)
+router.get('/verify-otp',authController.getOtp)
+router.get('/forget/password',authController.getForgotPassword)
+router.get('/forget/otp/verify',authController.getForgetOtp)
+router.get('/change_password',authController.getChangePassword)
+router.post('/login',authController.postLogin)
+router.post('/change_password',authController.postChangePassword)
+router.get('/resend_otpchange',authController.resendOtp)
+router.post('/forget/otp/verify',authController.postForgetOtp)
+router.post('/forget/password',authController.postForgotPassword)
+router.post('/signup',authController.postSignup)
+router.post('/verify-otp',authController.postOtp)
       
       
 module.exports = router

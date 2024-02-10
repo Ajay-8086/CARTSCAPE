@@ -15,7 +15,7 @@
                         <i class='bx bxs-chevron-right'></i>
                     </a>
                     <a href="/admin/addCategory">
-                        <i class='bx bxs-plus-circle' style="font-size: larger;"></i>
+                        <button class="add_btn">Add Category</button>
                     </a>
             </div>
             
@@ -36,7 +36,6 @@
                     
                     
                     <tr class="tr_td<%= category._id%>">
-                    
                         
                         <td><%= category.categoryName %></td>
                         <td>
@@ -44,9 +43,9 @@
                             
                         </td>
                         <td>
-                            <ul style="list-style-type: disc !important">
+                            <ul class="custom-list-style">
                                 <% category.subCategory.forEach(subcategory => { %>
-                                    <li>-><%= subcategory %></li>
+                                    <li><%= subcategory %></li>
                                 <% }) %>
                             </ul>
                             

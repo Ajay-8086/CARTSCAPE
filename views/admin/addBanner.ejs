@@ -62,12 +62,12 @@
                         
                             <div class="form-group">
                                 <label for="valid-from">Valid From</label>
-                                <input type="date" class="form-control" id="valid-from" name="validFrom" required>
+                                <input type="date" class="form-control" id="valid-from" min="" name="validFrom" required>
                                 <small id="valid-from-error" class="text-danger"></small>
                             </div>
                             <div class="form-group">
                                 <label for="valid-to">Valid To</label>
-                                <input type="date" class="form-control" id="valid-to" name="validTo" required>
+                                <input type="date" class="form-control" min="" id="valid-to" name="validTo" required>
                                 <small id="valid-to-error" class="text-danger"></small>
                             </div>
                             <h1></h1>
@@ -113,6 +113,10 @@
         console.log(error);
        }
           })
+
+          let today = new Date().toISOString().split('T')[0];
+         document.getElementById("valid-from").setAttribute("min", today);
+         document.getElementById("valid-to").setAttribute("min", today);
 </script>
     </body>
 

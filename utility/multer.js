@@ -4,20 +4,20 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     let uploadPath = 'public/uploads';
     if (req.uploadType === 'products') {
-      if(req.files.length>5){
+      if (req.files.length > 5) {
         uploadPath = 'public/uploads/dump';
-      }else
-      uploadPath = 'public/uploads/products';
-    } else if(req.uploadType === 'category') {
+      } else
+        uploadPath = 'public/uploads/products';
+    } else if (req.uploadType === 'category') {
       uploadPath = 'public/uploads/category';
-    }else if(req.uploadType === 'banner'){
+    } else if (req.uploadType === 'banner') {
       uploadPath = 'public/uploads/banners';
     }
 
     cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
-    cb(null,  file.originalname +'-'+Date.now()  );
+    cb(null, Date.now() + '-' + file.originalname );
   },
 });
 

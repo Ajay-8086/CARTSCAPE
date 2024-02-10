@@ -19,11 +19,11 @@ submitBtn.addEventListener('click', async (event) => {
     event.preventDefault();
     
     const errorMsg = document.querySelector('.errorMg');
-    let subCategoryInput = document.getElementById('subCategoryName').value
+    let subCategoryInput = document.getElementById('subCategoryName').value.trim()
     if(subCategoryInput){
         subCategories.push(subCategoryInput);
     }
-    const categoryName = document.getElementById('categoryName').value
+    const categoryName = document.getElementById('categoryName').value.trim()
     const categoryimage = document.getElementById('imageInput').files[0];
     console.log(categoryName);
     if (!categoryName || !categoryimage) {

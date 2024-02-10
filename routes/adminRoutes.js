@@ -1,85 +1,68 @@
 const express = require('express')
 const router = express.Router();
-const{setUploadType,upload}=require('../middlewares/multer')
+const productController = require('../controller/productController')
+const couponController = require('../controller/couponController')
+const bannerController = require('../controller/bannerController')
+const categoryController = require('../controller/categoryController')
+const authController = require('../controller/authController')
+const{setUploadType,upload}=require('../utility/multer')
+const adminController=require('../controller/admincontoller')
 
+//ADMIN DASHBOARD==============================================================================================>
 
+router.get('/dashboard',adminController.getDashboard)
 
-const{
-    getSignup,
-    postSignup,
-    getLogin,
-    postLogin,
-    getAdminVerify,
-    postAdminVerify,
-    getDashboard,
-    getAddProduct,
-    postAddProduct,
-    getProducts,
-    deleteProduct,
-    getUserList,
-    deleteUser,
-    getCategoryList,
-    getAddCategory,
-    postAddCategory,
-    deleteCategory,
-    getUpdateCategory,
-    postUpdateCategory,
-    subCategoryDelete,
-    getCoupons,
-    getAddCoupon,
-    postAddCoupon,
-    getUpdateCoupon,
-    postUpdateCoupon,
-    deleteCoupon,
-    getBanner,
-    getAddBanner,
-    postAddBanner,
-    getUpdateBanner,
-    postUpdateBanner,
-    deleteBanner,
-    getUpdateProduct,
-    postUpdateProduct,
-    
+//AUTHENTICATIONS===============================================================================================>
 
+        router.get('/signup',authController.getSignup)
+        router.post('/signup',authController.postSignup)
+        router.get('/verify',authController.getAdminVerify)
+        router.post('/verify',authController.postAdminVerify)
+        router.get('/login',authController.getLogin)
+        router.post('/login',authController.postLogin)
 
+// PRODUCT ROUTES=============================================================================================>
 
-}=require('../controller/admincontoller')
+      router.get('/addproduct',productController.getAddProduct)
+      router.post('/addproduct',setUploadType('products'),upload.array('image',999),productController.postAddProduct)
+      router.get('/product',productController.getProducts)
+      router.delete('/delete/:id',productController.deleteProduct)
+      router.get('/edit-product/:productId',productController.getUpdateProduct)
+      router.post('/edit-product/:productId',setUploadType('products'),upload.array('image',999),                 productController.postUpdateProduct)
+      router.get('/singleproduct/:productId',productController.getSingleProduct)
 
-router.get('/admin/signup',getSignup)
-      .post('/admin/signup',postSignup)
-      .get('/admin/verify',getAdminVerify)
-      .post('/admin/verify',postAdminVerify)
-      .get('/admin/login',getLogin)
-      .post('/admin/login',postLogin)
-      .get('/admin/dashboard',getDashboard)
-      .get('/admin/addproduct',getAddProduct)
-      .post('/admin/addproduct',setUploadType('products'),upload.array('image[]',999),postAddProduct)
-      .get('/admin/product',getProducts)
-      .delete('/admin/delete/:id',deleteProduct)
-      .get('/admin/edit-product/:productId',getUpdateProduct)
-      .post('/admin/edit-product/:productId',setUploadType('products'),upload.array('image[]',999),                 postUpdateProduct)
-      .get('/admin/users',getUserList)
-      .delete('/admin/users/:userId',deleteUser)
-      .get('/admin/category',getCategoryList)
-      .get('/admin/addcategory',getAddCategory)
-      .post('/admin/addcategory',setUploadType('category'),upload.single('categoryimage'),postAddCategory)
-      .delete('/admin/delete-category/:categoryId',deleteCategory)
-      .get('/admin/edit-category/:categoryId',getUpdateCategory)
-      .patch('/admin/edit-category/:categoryId',setUploadType('category'),upload.single('categoryImage'),postUpdateCategory)
-      .get('/admin/subcategory',subCategoryDelete)
-      .get('/admin/coupons',getCoupons)
-      .get('/admin/addcoupon',getAddCoupon)
-      .post('/admin/addcoupon',postAddCoupon)
-      .get('/admin/edit-coupon/:couponId',getUpdateCoupon)
-      .post('/admin/edit-coupon/:couponId',postUpdateCoupon)
-      .delete('/admin/delete-coupon/:couponId',deleteCoupon)
-      .get('/admin/banners',getBanner)
-      .get('/admin/addbanner',getAddBanner)
-      .post('/admin/addbanner',setUploadType('banner'),upload.single('bannerImage'),postAddBanner)
-      .get('/admin/edit-banner/:bannerId',getUpdateBanner)
-      .post('/admin/edit-banner/:bannerId',setUploadType('banner'),upload.single('bannerImage'),postUpdateBanner)
-      .delete('/admin/delete-banner/:bannerId',deleteBanner)
+//CATEGORY MANGEMENT =============================================================================================>
+
+      router.get('/category',categoryController.getCategoryList)
+      router.get('/addcategory',categoryController.getAddCategory)
+      router.post('/addcategory',setUploadType('category'),upload.single('categoryimage'),categoryController.postAddCategory)
+      router.delete('/delete-category/:categoryId',categoryController.deleteCategory)
+      router.get('/edit-category/:categoryId',categoryController.getUpdateCategory)
+      router.patch('/edit-category/:categoryId',setUploadType('category'),upload.single('categoryImage'),categoryController.postUpdateCategory)
+      router.get('/subcategory',categoryController.subCategoryDelete)
+
+//ADMIN USERMANGEMENT=============================================================================================>
+
+      router.get('/users',adminController.getUserList)
+      router.delete('/users/:userId',adminController.deleteUser)
       
+//BANNER MANAGEMENT===============================================================================================>
+
+      router.get('/banners',bannerController.getBanner)
+      router.get('/addbanner',bannerController.getAddBanner)
+      router.post('/addbanner',setUploadType('banner'),upload.single('bannerImage'),bannerController.postAddBanner)
+      router.get('/edit-banner/:bannerId',bannerController.getUpdateBanner)
+      router.post('/edit-banner/:bannerId',setUploadType('banner'),upload.single('bannerImage'),bannerController.postUpdateBanner)
+      router.delete('/delete-banner/:bannerId',bannerController.deleteBanner)
+      
+//COUPON MANAGEMENT===============================================================================================>
+
+      router.get('/coupons',couponController.getCoupons)
+      router.get('/addcoupon',couponController.getAddCoupon)
+      router.post('/addcoupon',couponController.postAddCoupon)
+      router.get('/edit-coupon/:couponId',couponController.getUpdateCoupon)
+      router.post('/edit-coupon/:couponId',couponController.postUpdateCoupon)
+      router.delete('/delete-coupon/:couponId',couponController.deleteCoupon)
 
 
 
