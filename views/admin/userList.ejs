@@ -70,11 +70,11 @@
             if (response.status >= 200 && response.status <= 300) {
             
                 document.querySelector('.tr_td' + userId).remove();
-                errorMsg.style.visibility = 'visible'
-                errorMsg.innerHTML = response.data.message
-                setTimeout(()=>{
-                    errorMsg.innerHTML =''
-                },1000)
+                Swal.fire({
+                                title: "Deleted!",
+                                text: "Your User has been blocked.",
+                                icon: "success"
+                });
             } else {
                 errorMsg.style.visibility = 'visible'
                 errorMsg.innerHTML = response.data.error
