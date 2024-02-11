@@ -23,7 +23,7 @@
                         <th>User</th>
                         <th>Name</th>
                         <th>Date Order</th>
-                        <th>Blocked</th>
+                        <th>Status</th>
                         <th>Actions</th>
                         <!-- Added Actions column -->
                     </tr>
@@ -36,10 +36,10 @@
                         </td>
                         <td><%= user.name %></td>
                         <td>01-10-2021</td>
-                        <td><%= user.blocked %></td>
+                        <td><%= !user.blocked?"Valid User":'Not valid' %></td>
                         <td>
                             <a href="#" data-category-id="<%=user._id%>" class="delete-btn" title="Block user" style="color: red;">
-                                <i class="fa-solid fa-lock"></i>
+                                <i class='bx bx-block'></i>
                             </a>
                         </td>
                     </tr>
@@ -65,7 +65,7 @@
   confirmButtonText: "Yes, block it!"
 }).then(async(result) => {
   if (result.isConfirmed) {
-    const response = await axios.delete(`/admin/users/${userId}`)
+    const response = await axios.patch(`/admin/users/${userId}`)
         try {
             if (response.status >= 200 && response.status <= 300) {
             
@@ -116,5 +116,4 @@
 </script>
 
 <script src="/js/admin.js"></script>
-</body>
-</html>
+<%-include('../partials/adminDashFooter.ejs') %>

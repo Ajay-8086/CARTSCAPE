@@ -171,7 +171,7 @@ module.exports = {
                 const user = new customerModel({ name, email, phone, password: hashPassword });
                             await user.save();
 
-                await sendVerificationCode(phone);
+               const saveData =  await sendVerificationCode(phone);
                 if (saveData) {
                     req.flash('error', { phone })
                     res.status(200).redirect('/verify-otp');

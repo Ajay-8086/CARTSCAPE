@@ -33,7 +33,7 @@ module.exports = {
 
     postAddProduct: async (req, res) => {
         try {
-            const { name, price, stock, discount, description, colors, subcategory, category } = req.body
+            const { name, price, stock, discount, description, colors, subcategory,size,category,returnPolicy } = req.body
             const productExist = await productModel.findOne({ name })
             if (!req.files || req.files.length === 0) {
                 return res.status(400).json({ error: 'No files uploaded' });
@@ -49,7 +49,8 @@ module.exports = {
 
             const image = req.files.map((file) => file.filename)
             const productAdded = moment().format('DD/MM/YYYY')
-            const newProduct = await productModel({ name, price, stock, discount, description, image, colors, productAdded, category, subcategory })
+
+            const newProduct = await productModel({ name, price, stock, discount, description, image, colors,size, productAdded, category, subcategory,returnPolicy })
             await newProduct.save()
             res.status(200).json({ success: 'product added successfully' })
         } catch (error) {
@@ -95,9 +96,9 @@ module.exports = {
         try {
             const id = req.params.productId;
             const productDetails = await productModel.findById(id);
-            const { name, price, stock, discount, description, colors, subcategory, category } = req.body;
+            const { name, price, stock, discount, description, colors,size, subcategory, category } = req.body;
     
-            let newFields = { name, price, stock, discount, description, colors, subcategory, category };
+            let newFields = { name, price, stock, discount, description, colors,size, subcategory, category };
     
             if (req.files.length > 0) {
                 productDetails.image.forEach((img) => {
@@ -122,7 +123,6 @@ module.exports = {
         try {
             const id = req.params.productId
             const productDetails = await productModel.findById(id)
-            // console.log(productDetails);
             res.status(200).render('admin/singleProductPage', { productDetails, url: 'product' })
         } catch (error) {
             res.status(500).send('Internal server eroor')

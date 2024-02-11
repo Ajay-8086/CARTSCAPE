@@ -44,8 +44,9 @@ router.get('/dashboard',adminController.getDashboard)
 //ADMIN USERMANGEMENT=============================================================================================>
 
       router.get('/users',adminController.getUserList)
-      router.delete('/users/:userId',adminController.deleteUser)
-      
+      router.patch('/users/:userId',adminController.blockUser)
+      router.get('/blocked-users',adminController.getBlockedUsers)
+      router.patch('/users-unblock/:userId',adminController.unBlockUser)
 //BANNER MANAGEMENT===============================================================================================>
 
       router.get('/banners',bannerController.getBanner)

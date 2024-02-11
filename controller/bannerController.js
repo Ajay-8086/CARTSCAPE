@@ -75,7 +75,7 @@ module.exports = {
                     const oldImagePath = path.join(__dirname, '../public/uploads/banners', upadateBanner.bannerImage)
                     fs.unlinkSync(oldImagePath)
                 }
-                res.status(200).json({ message: 'product updater successfully' })
+                res.status(200).json({ message: 'banner updater successfully' })
             }
             else {
                 res.status(400).json({ message: 'error occured' })

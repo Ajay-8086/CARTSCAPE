@@ -11,8 +11,9 @@ submitBtn.addEventListener('click',async(event)=>{
     const subCategory = document.getElementById('subCategory').value.trim()
     const color = document.getElementById('productColors').value.trim()
     const size = document.getElementById('productSize').value.trim()
+    const returnPolicy = document.getElementById('returnPolicy').checked
     const errorMsg = document.querySelector('.errorMg')
-    if(productName =='' || description=='' || price=='' || stock=='' || category=='' || discount=='' || subCategory=='' || color=='' || size=='' ){
+    if(productName =='' || description=='' || price=='' || stock=='' || category=='' || discount=='' || subCategory=='' || color=='' || size==''|| returnPolicy=='' ){
         errorMsg.style.visibility = 'visible'
         errorMsg.innerHTML = 'Please Fill all Fields'
         setTimeout(() => {
@@ -25,7 +26,7 @@ submitBtn.addEventListener('click',async(event)=>{
                 method: 'POST',
                 body: form,
             });
-            console.log(response);
+
             const result = await response.json()
             if(!response.ok){
                 errorMsg.style.visibility = 'visible'
@@ -35,13 +36,11 @@ submitBtn.addEventListener('click',async(event)=>{
                 }, 3000);
                 }
                 else{
+                    errorMsg.style.visibility = 'visible'
+                errorMsg.innerHTML = result.success
                     if(result.success){
-                        Swal.fire({
-                            title: "Deleted!",
-                            text: "The user has  been blocked.",
-                            icon: "success"
-                          });
                         setTimeout(() => {
+                            errorMsg.innerHTML = ''
                             window.location.href = '/admin/product'
                         }, 1000);
 

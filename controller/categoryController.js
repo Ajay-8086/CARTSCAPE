@@ -36,7 +36,7 @@ module.exports = {
                 const subCategoryExist = subCategory.find(element => element === categoryExist.subCategory);
 
                 if (subCategoryExist) {
-                    return res.status(400).json({ error: 'Category already exists' });
+                    return res.status(400).json({ error: 'SubCategory already exists' });
                 } else {
                     await categoryModel.updateOne({ categoryName }, { $push: { subCategory: { $each: subCategory } } });
                     res.status(200).json({ message: 'Subcategories added successfully' });

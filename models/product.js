@@ -11,7 +11,10 @@ const product = new mongoose.Schema({
     size: { type: Array, require },
     productAdded: { type: String, require },
     category: { type: String, require },
-    subcategory: { type: String, require }
+    subcategory: { type: String, require },
+    returnPolicy: {
+        type: String,
+    }
 
 })
 product.plugin(mongoosePaginate);

@@ -29,6 +29,7 @@
                     <thead>
                         <tr>
                             <th>No</th>
+                            <th>Product</th>
                             <th>Image</th>
                             <th>stock</th>
                             <th>price</th>
@@ -45,12 +46,11 @@
                                 <td id="indexing">
                                     <%=index+1%>
                                 </td>
+                                <td><%=product.name%></td>
                                 <td>
                                     <a href="/admin/singleproduct/<%=product._id%>"> <img
                                             src="/uploads/products/<%=product.image[0]%>" alt="<%=product.name%>"></a>
-                                    <p>
-                                        <%=product.name%>
-                                    </p>
+                                    
                                 </td>
                                 <td>
                                     <%= product.stock %>
@@ -133,6 +133,4 @@
             }
         }
     </script>
-    </body>
-
-    </html>
+<%-include('../partials/adminDashFooter.ejs') %>

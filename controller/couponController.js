@@ -56,7 +56,7 @@ module.exports = {
             if (updateCoupon) {
                 res.status(200).json({ msg: 'coupon updated successfully' })
             } else {
-                res.status(400).json({ msg: 'product updating failed' })
+                res.status(400).json({ msg: 'coupon updating failed' })
             }
         } catch (error) {
             res.status(500).json({ msg: 'internal server error' })

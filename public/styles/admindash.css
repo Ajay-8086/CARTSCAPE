@@ -19,7 +19,7 @@ li {
 	--lato: 'Lato', sans-serif;
 
 	--light: #F9F9F9;
-	--blue: #3C91E6;
+	--blue: #00224e;
 	--light-blue: #CFE8FF;
 	--grey: #eee;
 	--dark-grey: #AAAAAA;
@@ -243,7 +243,7 @@ body {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	background: var(--blue);
+	background: #000;
 	color: var(--light);
 	font-size: 18px;
 	border: none;
@@ -589,7 +589,7 @@ body {
 }
 
 .add_category {
-	background-color: #00224e;
+	background-color: #000000 ;
 	color: white;
 	padding: 10px 15px;
 	border: none;
@@ -632,7 +632,7 @@ body {
 }
 .add_category_img_choose{
 	position: relative;
-	background-color:#00224e ;
+	background-color:#000000 ;
 	color: white;
 	margin-top: 1rem;
 	border-radius: 5px;
@@ -700,8 +700,135 @@ body {
     display: block;
 }
 
-
-
+/* styles for select  */
+:root {
+    --theme-color: #00224e ;
+    --theme-color-hover: #00224e ;
+    --theme-color2: #000c7b;
+  }
+  /* Modal Box  */
+  
+  .modal-box {
+    width: 300px;
+    max-width: 500px;
+    /* margin: 100px auto; */
+  }
+  
+  /* Custom Multi Select */
+  .sd-multiSelect {
+    position: relative;
+  }
+  .sd-multiSelect .placeholder {
+    opacity: 1;
+    background-color: transparent;
+    cursor: pointer;
+  }
+  .sd-multiSelect .ms-offscreen {
+    height: 1px;
+    width: 1px;
+    opacity: 0;
+    overflow: hidden;
+    display: none;
+  }
+  
+  .sd-multiSelect .sd-CustomSelect {
+    width: 100% !important;
+  }
+  
+  .sd-multiSelect .ms-choice {
+    position: relative;
+    text-align: left !important;
+    width: 100%;
+    border: 1px solid #e3e3e3;
+    background: #ffff;
+    box-shadow: none;
+    font-size: 15px;
+    height: 35px;
+    font-weight: 500;
+    color: #212529;
+    line-height: 1.5;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  }
+  
+  .sd-multiSelect .ms-choice:after {
+    content: "\f107 ";
+    font-family: "FontAwesome";
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+  }
+  
+  .sd-multiSelect .ms-choice:focus {
+    border-color: var(--theme-color);
+  }
+  
+  .sd-multiSelect .ms-drop.bottom {
+    display: none;
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    padding: 10px;
+  }
+  
+  .sd-multiSelect .ms-drop li {
+    position: relative;
+    margin-bottom: 10px;
+  }
+  
+  .sd-multiSelect .ms-drop li input[type="checkbox"] {
+    padding: 0;
+    height: initial;
+    width: initial;
+    margin-bottom: 0;
+    display: none;
+    cursor: pointer;
+  }
+  
+  .sd-multiSelect .ms-drop li label {
+    cursor: pointer;
+    user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+  }
+  
+  .sd-multiSelect .ms-drop li label:before {
+    content: "";
+    -webkit-appearance: none;
+    background-color: transparent;
+    border: 2px solid var(--theme-color);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05),
+      inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
+    padding: 8px;
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+    cursor: pointer;
+    margin-right: 5px;
+  }
+  
+  .sd-multiSelect .ms-drop li input:checked + span:after {
+    content: "\2713";
+	font-family: Arial, sans-serif;
+    display: block;
+    position: absolute;
+    top: 1px;
+    left: 5px;
+    width: 10px;
+    height: 10px;
+    /* background: var(--theme-color); */
+	width: 20px; /* Adjust width as needed */
+	color:green;
+	font-weight: bolder;
+	/* text-align: center; */
+    border-width: 0 2px 2px 0;
+  }
+  
 
 
 
@@ -800,7 +927,7 @@ body {
 }
 
 .card-header {
-    background-color: #00224e;
+    background-color: #000000;
     color: white;
     padding: 15px;
     text-align: center;
@@ -825,11 +952,20 @@ label {
 .form-control {
     width: 100%;
     padding: 12px;
-    border: 1px solid #ddd;
-    background-color: #e7e6e6 !important;
+    border: 1px solid #e3e3e3 !important;
+    background-color: #fff !important;
     border-radius: 5px;
     box-sizing: border-box;
     transition: border-color 0.3s ease; /* Add transition for smoother effect */
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield; /* Firefox */
 }
 
 .form-control:focus {

@@ -1,0 +1,119 @@
+<%-include('../partials/adminDashHeader.ejs') %>
+<!-- MAIN -->
+<main>
+    <div class="table-data">
+        <div class="order">
+            <p id="errorMsg"  style="color: green; text-align: center;" ></p>
+            <div class="head">
+                <h3>User</h3>
+                
+                <a href="/admin/users?page=<%= paginationInfo.prevPage%>" class="pagination-icon">
+                    <i class='bx bxs-chevron-left'></i>
+                </a>
+                <input type="number" id="pageNumberInput" value="<%= paginationInfo.page %>" min="1" max="<%= paginationInfo.totalPages %>" onkeydown="jumpOnEnter(event)">
+                
+                    <a href="/admin/users?page=<%= paginationInfo.nextPage%>" class="pagination-icon">
+                        <i class='bx bxs-chevron-right'></i>
+                    </a>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Name</th>
+                        <th>Date Order</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                        <!-- Added Actions column -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <% users.forEach(user=>{ %>
+                    <tr class="tr_td<%= user._id%>">
+                        <td>
+                            <img src="<%= user.image %>" alt="<%= user.name %>">
+                        </td>
+                        <td><%= user.name %></td>
+                        <td>01-10-2021</td>
+                        <td><%= !user.blocked?"Valid User":'Not valid' %></td>
+                        <td>
+                            <a href="#" data-category-id="<%=user._id%>" class="delete-btn" title="Unblock user" style="color: red;">
+                                <i class="fa-solid fa-lock"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    <% }) %>
+                    <!-- Add more rows as needed -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+<!-- MAIN -->
+
+<!-- Script for Deleting Users -->
+<script>
+    async function deleteUser(userId) {
+        Swal.fire({
+  title: "Are you sure?",
+  text: "You won't be able to revert this!",
+  icon: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#3085d6",
+  cancelButtonColor: "#d33",
+  confirmButtonText: "Yes, Unblock it!"
+}).then(async(result) => {
+  if (result.isConfirmed) {
+    const response = await axios.patch(`/admin/users-unblock/${userId}`)
+        try {
+            if (response.status >= 200 && response.status <= 300) {
+            
+                document.querySelector('.tr_td' + userId).remove();
+                errorMsg.style.visibility = 'visible'
+                errorMsg.innerHTML = response.data.message
+                setTimeout(()=>{
+                    errorMsg.innerHTML =''
+                },1000)
+            } else {
+                errorMsg.style.visibility = 'visible'
+                errorMsg.innerHTML = response.data.error
+            }
+        } catch (error) {
+            console.log('Error deleting user', error);
+            errorMsg.style.visibility = 'visible';
+            errorMsg.innerHTML = 'An error occurred while deleting the user.';
+        }
+  }
+});
+       
+    }
+    
+    const errorMsg = document.getElementById('errorMsg')
+    document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', async (event) => {
+            event.preventDefault();
+            const userId = event.currentTarget.getAttribute('data-category-id');
+            if (userId) {
+                 await deleteUser(userId);
+            }
+        });
+    });
+
+    function jumpOnEnter(event) {
+        if (event.key === 'Enter') {
+            const pageNumber = parseInt(event.target.value);
+            const max = event.currentTarget.getAttribute('max');
+            if (!isNaN(pageNumber) ) {
+                if (pageNumber > max) { 
+                    window.location.href = `/admin/users?page=${max}`;
+                } else {
+                    window.location.href = `/admin/users?page=${pageNumber}`; 
+                }
+            }
+        }
+    }
+</script>
+
+<script src="/js/admin.js"></script>
+<%-include('../partials/adminDashFooter.ejs') %>
