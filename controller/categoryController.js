@@ -31,7 +31,8 @@ module.exports = {
             const category = JSON.parse(categoryName)
             const subcategory = JSON.parse(subCategory)
             const categoryimage = req.file?.filename
-            const categoryExist = await categoryModel.findOne({ categoryName });
+            const lowerCaseName = category.toLowerCase();
+            const categoryExist = await categoryModel.findOne({ categoryName:lowerCaseName });
             if (categoryExist) {
                 const subCategoryExist = subCategory.find(element => element === categoryExist.subCategory);
 
@@ -109,9 +110,9 @@ module.exports = {
             const categoryId = req.query.catId
             const subCategoryVal = req.query.id
             await categoryModel.updateOne({ _id: categoryId }, { $pull: { subCategory: subCategoryVal } })
-            res.status(200).redirect(`/admin/edit-category/${categoryId}`)
+            res.status(200).json({message:'the subcategory deleted successfully'})
         } catch (error) {
-            res.status(500).send('Internal server error')
+            res.status(500).json({messaage:'Internal server error'})
         }
 
     }

@@ -34,7 +34,8 @@ module.exports = {
     postAddProduct: async (req, res) => {
         try {
             const { name, price, stock, discount, description, colors, subcategory,size,category,returnPolicy } = req.body
-            const productExist = await productModel.findOne({ name })
+            const lowerCaseName = name.toLowerCase();
+            const productExist = await productModel.findOne({ name:lowerCaseName })
             if (!req.files || req.files.length === 0) {
                 return res.status(400).json({ error: 'No files uploaded' });
             }
@@ -50,7 +51,7 @@ module.exports = {
             const image = req.files.map((file) => file.filename)
             const productAdded = moment().format('DD/MM/YYYY')
 
-            const newProduct = await productModel({ name, price, stock, discount, description, image, colors,size, productAdded, category, subcategory,returnPolicy })
+            const newProduct = await productModel({ name:lowerCaseName, price, stock, discount, description, image, colors,size, productAdded, category, subcategory,returnPolicy })
             await newProduct.save()
             res.status(200).json({ success: 'product added successfully' })
         } catch (error) {

@@ -39,7 +39,7 @@ router.get('/dashboard',adminController.getDashboard)
       router.delete('/delete-category/:categoryId',categoryController.deleteCategory)
       router.get('/edit-category/:categoryId',categoryController.getUpdateCategory)
       router.patch('/edit-category/:categoryId',setUploadType('category'),upload.single('categoryImage'),categoryController.postUpdateCategory)
-      router.get('/subcategory',categoryController.subCategoryDelete)
+      router.delete('/subcategory',categoryController.subCategoryDelete)
 
 //ADMIN USERMANGEMENT=============================================================================================>
 
