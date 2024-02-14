@@ -13,8 +13,10 @@ const product = new mongoose.Schema({
     category: { type: String, require },
     subcategory: { type: String, require },
     returnPolicy: {
-        type: String,
-    }
+        type: Boolean,
+        default:false
+    },
+    isDeleted:{type:Boolean,default:false}
 
 })
 product.plugin(mongoosePaginate);

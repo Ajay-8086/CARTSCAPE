@@ -91,7 +91,7 @@
             
            try {
             if (response.status >= 200 && response.status <= 300){
-                document.querySelector('.tr_td'+categoryId).remove()
+                document.querySelector(`.tr_td${categoryId}`).remove()
                 Swal.fire({
                                 title: "Deleted!",
                                 text: "Your Category has been deleted.",

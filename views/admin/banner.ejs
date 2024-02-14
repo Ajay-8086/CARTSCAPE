@@ -48,7 +48,7 @@
                             <a href="/admin/edit-banner/<%=banner._id%>" class="delete-btn" title="Delete Order">
                                 <i class='bx bx-edit'></i>
                             </a>
-                            <a href="#" data-category-id="<%=banner._id%>" class="delete-btn" title="Delete Order" style="color: red;" onclick="deletion(event)">
+                            <a href="#"  class="delete-btn" title="Delete Order" style="color: red;" onclick="deleteBanner('<%=banner._id%>')">
                                 <i class='bx bx-trash'></i>
                             </a>
                         </td>
@@ -78,8 +78,8 @@
         const response = await axios.delete(`/admin/delete-banner/${bannerId}`)
         try {
             if (response.status >= 200 && response.status <= 300) {
-            
-                document.querySelector('.tr_td' + bannerId).remove();
+            console.log('deleted');
+                document.querySelector(`.tr_td${bannerId}`).remove();
                             Swal.fire({
                                 title: "Deleted!",
                                 text: "Your Banner has been deleted.",
@@ -90,7 +90,7 @@
                 errorMsg.innerHTML = response.data.error
             }
         } catch (error) {
-            console.log('Error deleting user', error);
+            console.log('Error deleting banner', error);
             errorMsg.style.visibility = 'visible';
             errorMsg.innerHTML = 'An error occurred while deleting the user.';
         }
@@ -99,18 +99,18 @@
     }
     
   
-    const errorMsg = document.getElementById('errorMsg')
-        async function deletion (event) {
-              event.preventDefault();
+    // const errorMsg = document.getElementById('errorMsg')
+    //     async function deletion (event) {
+    //           event.preventDefault();
           
               
-              const bannerId = event.currentTarget.getAttribute('data-category-id');
+    //           const bannerId = event.currentTarget.getAttribute('data-category-id');
           
-              if (bannerId) {
-                await deleteBanner(bannerId);
-              }
+    //           if (bannerId) {
+    //             await deleteBanner(bannerId);
+    //           }
            
-          };
+    //       };
 
           function jumpOnEnter(event) {
         if (event.key === 'Enter') {

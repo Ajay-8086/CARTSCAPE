@@ -12,7 +12,8 @@ module.exports = {
                 limit: 10
             };
             const result = await categoryModel.paginate({}, options);
-            res.render('admin/category', { categoryList: result.docs, paginationInfo: result, url: 'category' });
+            const categories = result.docs.filter(val=>!val.isDeleted)
+            res.render('admin/category', { categoryList: categories, paginationInfo: result, url: 'category' });
         } catch (error) {
             console.log('server error');
             res.status(500).send('Internal server error')
@@ -57,14 +58,9 @@ module.exports = {
     },
     deleteCategory: async (req, res) => {
         const categoryId = req.params.categoryId
-        const existingCategory = await categoryModel.findOne({ _id: categoryId })
         try {
-            const oldImagePath = path.join(__dirname, '../public/uploads/category', existingCategory.categoryimage)
-            if (oldImagePath) {
-                fs.unlinkSync(oldImagePath)
-            }
-            const deleted = await categoryModel.deleteOne({ _id: categoryId })
-            if (deleted.deletedCount == 0) {
+            const deleted = await categoryModel.findByIdAndUpdate(categoryId,{$set:{isDeleted:true}})
+            if (!deleted) {
                 res.status(400).json({ message: 'category not found' })
             }
 

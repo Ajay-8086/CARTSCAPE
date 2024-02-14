@@ -42,12 +42,17 @@ module.exports = {
             const deleteBanner = await bannerModel.findByIdAndDelete(id)
             if (deleteBanner) {
                 const oldImagePath = path.join(__dirname, '../public/uploads/banners', deleteBanner.bannerImage)
-                fs.unlinkSync(oldImagePath)
-                res.status(200).json({ message: 'Coupon deleted successfully' })
+                if(fs.existsSync(oldImagePath)){
+                    fs.unlinkSync(oldImagePath)
+                    res.status(200).json({ message: 'banner deleted successfully' })
+                }else{
+                    res.status(200).json({ message: 'banner deleted successfully without image' })
+                }
             } else {
-                res.status(400).json({ message: 'Can not delete the coupon' })
+                 res.status(400).json({ message: 'Can not delete the banner' })
             }
         } catch (error) {
+            console.log(error);
             res.status(500).json({ message: 'Internal server error' })
         }
 

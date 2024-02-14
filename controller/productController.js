@@ -14,7 +14,8 @@ module.exports = {
                 limit: 10
             };
             const result = await productModel.paginate({}, options);
-            res.render('admin/products', { products: result.docs, paginationInfo: result, url: 'product' })
+            const products = result.docs.filter(val=>!val.isDeleted)
+            res.render('admin/products', { products, paginationInfo: result, url: 'product' })
         } catch (error) {
             res.status(500).json({ error: 'Internal server error' });
         }
@@ -23,7 +24,7 @@ module.exports = {
 
     getAddProduct: async (req, res) => {
         try {
-            const categoryList = await categoryModel.find({})
+            const categoryList = await categoryModel.find({isDeleted:false})
             res.render('admin/addProduct', { categoryList, url: 'product' })
         } catch (error) {
             res.status(500).json({ error: 'Internal server error' })
@@ -62,16 +63,8 @@ module.exports = {
     deleteProduct: async (req, res) => {
         try {
             const product_id = req.params.id
-            const deletedProduct = await productModel.findByIdAndDelete(product_id)
+            const deletedProduct = await productModel.findByIdAndUpdate(product_id,{$set:{isDeleted:true}})
             if (deletedProduct) {
-                deletedProduct.image.forEach((img) => {
-
-                    const oldImagePath = path.join(__dirname, '../public/uploads/products', img)
-                    if (fs.existsSync(oldImagePath)) {
-                        fs.unlinkSync(oldImagePath);
-                    }
-
-                })
                 res.status(200).json({ success: true, message: 'product deleted successfully' })
             }
             else {

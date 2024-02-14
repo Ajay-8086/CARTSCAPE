@@ -110,32 +110,50 @@
                           </div>
                     </div>
                     
-                    <div class="col-sm-3 mb-3">
-                      <p class="mb-0">Colors</p>
-                      <div class="form-outline">
-                        <select name="colors[]" id="productColors" class="form-control" multiple>
-                          <option value="red">Red</option>
-                          <option value="orange">Orange</option>
-                          <option value="yellow">Yellow</option>
-                          <option value="yellow">blue</option>
-                          <option value="yellow">black</option>
+                    <div class="modal-box">
+                      <div class="sd-multiSelect form-group">
+                        <label for="colors">Colors</label>
+                        
+                        <select multiple id="productColors" class="sd-CustomSelect" name="colors[]">
+                          <% let selectedColors = product[0].colors; %>
+                          <% let availableColors = ['Red', 'Black', 'White', 'Green', 'Blue', 'Yellow']; %>
+                          <% availableColors.forEach(function(color) { %>
+                              <% if (selectedColors.includes(color)) { %>
+                                  <option value="<%= color %>" selected><%= color %></option>
+                              <% } else { %>
+                                  <option value="<%= color %>"><%= color %></option>
+                              <% } %>
+                          <% }); %>
+                      </select>
+                      
+                      
+                      </div>
+                    </div>
+                  
+                    <div class="modal-box">
+                      <div class="sd-multiSelect form-group">
+                        <label for="current-job-role">Size</label>
+                        <select multiple id="productSize" class="sd-CustomSelect" name="size">
+                          <% let selectedSizes = product[0].size; %>
+                          <% let availableSizes = ['XXL', 'XL', 'L', 'M', 'S']; %>
+                          <% availableSizes.forEach(function(size) { %>
+                            <% if (selectedSizes.includes(size)) { %>
+                                <option value="<%= size %>" selected><%= size %></option>
+                            <% } else { %>
+                                <option value="<%= size %>"><%= size %></option>
+                            <% } %>
+                        <% }); %>
                         </select>
+                      </div>
+                    </div>
+                    <div class="col-sm-6 mb-3">
+                      <p class="mb-0">Return Policy</p>
+                      <div class="form-check">
+                          <input type="checkbox" value="true"  class="form-check-input" id="returnPolicy" name="returnPolicy" <%= product[0].returnPolicy ? 'checked' : '' %>>
+                          <label class="form-check-label" for="returnPolicy">Accept return policy</label>
                       </div>
                   </div>
                   
-                  <div class="col-sm-3 mb-3">
-                        <p class="mb-0">size</p>
-                        <div class="form-outline">
-                          <select name="size" id="productSize" class="form-control">
-  
-                            <option value="red">small</option>
-                            <option value="red">medium</option>
-                            <option value="red">large</option>
-                            <option value="red">XL</option>
-                          </select>
-                        </div>
-                      </div>
-                      
                     </div>
                     
                     
@@ -170,7 +188,16 @@
                 preview.src = "";
             }
         }
-
+        $(document).ready(function() {
+    if ($('.sd-CustomSelect').length > 0) {
+        $(".sd-CustomSelect").multipleSelect({
+            selectAll: false,
+            onOptgroupClick: function(view) {
+                $(view).parents("label").addClass("selected-optgroup");
+            }
+        });
+    }
+});
     </script>
   </main>
   <%-include('../partials/adminDashFooter.ejs') %>

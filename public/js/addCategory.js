@@ -24,7 +24,6 @@ submitBtn.addEventListener('click', async (event) => {
     }
     const categoryName = document.getElementById('categoryName').value.trim()
     const categoryimage = document.getElementById('imageInput').files[0];
-    console.log(categoryName);
     if (!categoryName || !categoryimage) {
         errorMsg.style.visibility = 'visible';
        
