@@ -11,8 +11,8 @@ module.exports = {
                 page: pageNumber,
                 limit: 10
             };
-            const result = await categoryModel.paginate({}, options);
-            const categories = result.docs.filter(val=>!val.isDeleted)
+            const result = await categoryModel.paginate({isDeleted:false}, options);
+            const categories = result.docs
             res.render('admin/category', { categoryList: categories, paginationInfo: result, url: 'category' });
         } catch (error) {
             console.log('server error');

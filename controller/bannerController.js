@@ -27,7 +27,7 @@ module.exports = {
         try {
             const { bannerName, bannerHeading, specialPrice, validFrom, validTo } = req.body
             const bannerImage = req.file?.filename;
-            const newBanner = await bannerModel({ bannerName, bannerHeading, specialPrice, validFrom, validTo, bannerImage })
+            const newBanner = await bannerModel({ bannerName, bannerHeading, specialPrice, validFrom, validTo: new Date(validTo), bannerImage })
             await newBanner.save()
             res.status(200).json({ message: "Banner added successfully" })
         } catch (error) {

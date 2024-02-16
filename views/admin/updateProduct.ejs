@@ -10,7 +10,7 @@
           </div>
           <div class="card-body">
             
-            <form action="/admin/edit-product/<%=product[0]._id %>" id="addProductForm" enctype="multipart/form-data"  method="post">
+            <form action="/admin/edit-product/<%=product._id %>" id="addProductForm" enctype="multipart/form-data"  method="post">
               <div class="card shadow-0 ">
                 <div class="p-4" style="background-color:#f5f5f7;">
                   <h5 class="card-title mb-3" style="background-color:#f5f5f7;">Product details</h5>
@@ -22,7 +22,7 @@
                     <div class="form-outline">
                       
                       <img id="imagePreview" class="mt-2"
-                      style="max-width: 100px; height: 100px; object-fit: cover;" src="/uploads/products/<%=product[0].image[0] %>" alt="Image Preview">
+                      style="max-width: 100px; height: 100px; object-fit: cover;" src="/uploads/products/<%=product.image[0] %>" alt="Image Preview">
                       <input  type="file" name="image"  multiple  class="form-control-file" accept="image/*" onchange="previewImage(this)">
                       
                     </div>
@@ -36,7 +36,7 @@
                       <p class="mb-0">product name</p>
                       <div class="form-outline">
                         <input  type="text" name="name" class="form-control" id="productName"
-                        value="<%=product[0].name%>">
+                        value="<%=product.name%>">
                       </div>
                     </div>
                     
@@ -45,7 +45,7 @@
                     <div class="col-sm-8 mb-3">
                       <p class="mb-0">Discription</p>
                       <div class="form-outline">
-                        <textarea name="description"   class="form-control" id="productDescription" ><%=product[0].description%></textarea>
+                        <textarea name="description"   class="form-control" id="productDescription" ><%=product.description%></textarea>
                       </div>
                     </div>
                     
@@ -55,7 +55,7 @@
                       <p class="mb-0">product price</p>
                       <div class="form-outline">
                         <input  type="number" name="price" class="form-control" id="productPrice"
-                           value="<%=product[0].price%>">
+                           value="<%=product.price%>">
                       </div>
                       <p class="mb-0" id="PriceWarning" style="display: none; color: red;">price should be positive
                         value</p>
@@ -65,20 +65,19 @@
                         <p class="mb-0">Add Stock</p>
                         <div class="form-outline">
                           <input  type="number" name="stock" class="form-control" id="productStock"
-                          value="<%=product[0].stock%>">
+                          value="<%=product.stock%>">
                         </div>
                         <p class="mb-0" id="PriceStock" style="display: none; color: red;">stock should be positive
                           value</p>
                           
                         </div>
-                        
                         <div class="col-sm-3 mb-3">
                           <p class="mb-0">subCategory</p>
                           <div class="form-outline">
                             <select name="subcategory" id="subCategory" class="form-control">
                               <% categoryList.forEach((category)=>{ %>
                                 <%category.subCategory.forEach((sub)=>{ %>
-                                  <option  selected><%=product[0].subcategory%></option>
+                                  <option  selected><%=product.subcategory%></option>
                                   <option ><%= sub %></option>
                                   <% }) %>
                                   <% }) %>
@@ -89,7 +88,7 @@
                     <div class="col-sm-3 mb-3">
                       <p class="mb-0">Add Discount(%)</p>
                       <div class="form-outline">
-                        <input  type="number" name="discound" class="form-control" id="productDiscount" value="<%=product[0].discount%>"
+                        <input  type="number" name="discound" class="form-control" id="productDiscount" value="<%=product.discount%>"
                           >
                       </div>
                       <p class="mb-0" id="PriceDiscount" style="display: none; color: red;">Discount Less than 90% And
@@ -103,7 +102,7 @@
                           <select name="category" id="productCategory" class="form-control">
                             <% categoryList.forEach((category)=>{ %>
                               
-                              <option value="<%= product.subcategory %>" selected><%= product[0].category %></option>
+                              <option value="<%= product.subcategory %>" selected><%= product.category %></option>
                               <option value="<%= category.categoryName %>"><%= category.categoryName %></option>
                               <% }) %>
                             </select>
@@ -115,7 +114,7 @@
                         <label for="colors">Colors</label>
                         
                         <select multiple id="productColors" class="sd-CustomSelect" name="colors[]">
-                          <% let selectedColors = product[0].colors; %>
+                          <% let selectedColors = product.colors; %>
                           <% let availableColors = ['Red', 'Black', 'White', 'Green', 'Blue', 'Yellow']; %>
                           <% availableColors.forEach(function(color) { %>
                               <% if (selectedColors.includes(color)) { %>
@@ -134,7 +133,7 @@
                       <div class="sd-multiSelect form-group">
                         <label for="current-job-role">Size</label>
                         <select multiple id="productSize" class="sd-CustomSelect" name="size">
-                          <% let selectedSizes = product[0].size; %>
+                          <% let selectedSizes = product.size; %>
                           <% let availableSizes = ['XXL', 'XL', 'L', 'M', 'S']; %>
                           <% availableSizes.forEach(function(size) { %>
                             <% if (selectedSizes.includes(size)) { %>
@@ -149,7 +148,7 @@
                     <div class="col-sm-6 mb-3">
                       <p class="mb-0">Return Policy</p>
                       <div class="form-check">
-                          <input type="checkbox" value="true"  class="form-check-input" id="returnPolicy" name="returnPolicy" <%= product[0].returnPolicy ? 'checked' : '' %>>
+                          <input type="checkbox" value="true"  class="form-check-input" id="returnPolicy" name="returnPolicy" <%= product.returnPolicy ? 'checked' : '' %>>
                           <label class="form-check-label" for="returnPolicy">Accept return policy</label>
                       </div>
                   </div>

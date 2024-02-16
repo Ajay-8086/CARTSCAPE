@@ -1,65 +1,143 @@
-<!-- header section  -->
-
-<%-include('../partials/header.ejs') %>
-
-
-
-
-  <!-- Jumbotron -->
+<header>
+  <%-include('../partials/header.ejs') %>
 </header>
-<!-- Products--><div class=" text-white py-5" style="background-color: #00224e;">
-      <div class="container py-5" >
-        <h1>
-          Best products & <br />
-          brands in our store
-        </h1>
-        <p>
-          Trendy Products, Factory Prices, Excellent Service
-        </p>
-       
+<!-- Jumbotron -->
+<!-- Banner Slider -->
+<div style="position: relative;" id="offerBanner" class="carousel slide" data-ride="carousel" data-interval="5000" data-wrap="true" >
+  <div  class="carousel-inner">
+    <% banners.forEach((banner,index) => { %>
+      <div  class="carousel-item <%= index === 0 ? 'active' : '' %>" >
+        <a href="#">
+          <img src="/uploads/banners/<%= banner.bannerImage %>" class="d-block img-fluid w-100" alt="Image" style="aspect-ratio: 12/3;">
+          <div style="position: absolute; right: -50rem; top: 4rem;" class="carousel-caption d-none d-md-block">
+            <h4 style="font-size: 4.6rem;color: rgb(193, 106, 75); font-family: sans-serif;">Mega Sale</h4>
+            <p style="font-size: 2rem; color: black;"><%= banner.bannerHeading %></p>
+            <h6 style="color: green;  font-family: sans-serif;">4,532</h6>
+          </div>
+        </a>
+      </div>
+    <% }) %>
+  </div>
+  <!-- Controls -->
+  <button class="carousel-control-prev" type="button" data-target="#offerBanner" data-slide="prev" >
+    <span class="carousel-control-prev-icon" aria-hidden="true" ></span>
+    <span class="sr-only">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-target="#offerBanner" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </button>
+</div>
+<!-- Products Section -->
+<section>
+  <div class="container my-5">
+    <header class="mb-4">
+      <h3>New Arrivals</h3>
+    </header>
+    
+    
+    <div class="row">
+      <div class="row"style="display: contents;">
+        <% products.forEach((product) => { %>
+          <% var discount=product.discount %>
+            <% var Odiscount=product.price * discount / 100 %>
+              <% var showPrice=product.price-Odiscount %>
+    
+                <div class="col-lg-3 mt-3 col-md-3 col-sm-3 d-flex">
+    
+                  <div id="card" class="card w-100 my-2 border-" style="box-shadow: 0 0 10px #0000001a;">
+                    <% if(discount> 0) { %>
+                      <div class="discount-badge position-absolute top-0 start-0 mt-2 px-1 py-0"
+                        style="background-color: #febd69; color: #131921; border-radius: 90px; margin-left: 8px; font-size: 0.75rem; font-weight: bolder;">
+                        <%= discount %>% OFF
+                      </div>
+                      <% } %>
+                        
+                        <img src="/uploads/products/<%=product.image[0] %>" class="card-img-top main-image"
+                          style="aspect-ratio: 1 / 1" />
+                        <img src="/uploads/products/<%=product.image[1] %>" class="card-img-top  hover-image"
+                          style="aspect-ratio: 1 / 1 ;display: none;" />
+                        <style>
+                          .card-title {
+                            display: -webkit-box;
+                            -webkit-box-orient: vertical;
+                            overflow: hidden;
+                            -webkit-line-clamp: 2;
+                            /* number of lines to show */
+                          }
+    
+                          .card {
+                            transition: transform 0.3s ease;
+                          }
+    
+                          .card.hovered {
+                            transform: scale(1.05);
+                          }
+    
+                          .card .card-body {
+                            transition: background-color 0.3s ease;
+                          }
+    
+                          .card:hover .card-body {
+                            background-color: white;
+                          }
+                        </style>
+    
+                        <div style="padding-bottom: 0;" class="card-body d-flex flex-column justify-content-center pt-1">
+                          <h5 class="card-text" style="color: #000000; text-align: center;">
+                            <%=product.name%>
+                            </ h5>
+                          </div>
+                            
+                          <div style="display: flex; align-items: center; gap: 1rem; justify-content: center; margin: 1rem 0;">
+                          <p style="padding: 0; margin: 0;  text-decoration: line-through;color: red;">₹<%=product.price%></p>
+    
+                          <p class="card-text" style="font-weight: 400;font-size: 18px;letter-spacing: .3px; color: #1c1b1b;font-family: 'Rubik', sans-serif">
+                            ₹<%=showPrice.toLocaleString('en-IN')%>
+                          </p>
+                          
+                        </div>
+                        <div class=" d-flex align-items-center justify-content-center pb-3 px-0 pb-0 mt-auto">
+                          <a href="#!" class="btn btn-primary shadow-0 me-1" style="background-color: black;">Add to cart</a>
+                      </div>
+                      
+    
+                  </div>
+                </div>
+    
+                <% }) %>
       </div>
     </div>
+    
+  </div>
+</section>
+<!-- footer section  -->
+<footer>
+  <%- include('../partials/footer.ejs') %>
+</footer>
+<!-- footer section  -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+          var cards = document.querySelectorAll('.card');
 
+          cards.forEach(function (card) {
+            var mainImage = card.querySelector('.main-image');
+            var hoverImage = card.querySelector('.hover-image');
 
+            card.addEventListener('mouseover', function () {
+              mainImage.style.display = 'none';
+              hoverImage.style.display = 'block';
+              card.classList.add('hovered');
+            });
 
-
-    <!-- Jumbotron -->
-  </header>
-  <!-- Products-->
-
-  <section>
-    <div class="container my-5">
-      <header class="mb-4">
-        <h3>New products</h3>
-      </header>
-
-      <div class="row">
-        <div class="col-lg-3 col-md-6 col-sm-6 d-flex">
-          <div class="card w-100 my-2 shadow-2-strong">
-            <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/1.webp" class="card-img-top"
-              style="aspect-ratio: 1 / 1" />
-            <div class="card-body d-flex flex-column">
-              <h5 class="card-title">GoPro HERO6 4K Action Camera - Black</h5>
-              <p class="card-text">$790.50</p>
-              <div class="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-                <a href="#!" class="btn btn-primary shadow-0 me-1" style="background-color: #00224e;">Add to cart</a>
-                <a href="#!" class="btn btn-light border px-2 pt-2 icon-hover"><i
-                    class="fas fa-heart fa-lg text-secondary px-1"></i></a>
-              </div>
-
-            </div>
-          </div>
-  </section>
-  <!-- Products -->
-
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.js"></script>
-
+            card.addEventListener('mouseout', function () {
+              mainImage.style.display = 'block';
+              hoverImage.style.display = 'none';
+              card.classList.remove('hovered');
+            });
+          });
+        });
+</script>
 </body>
-
-<!-- footer section  -->
-
-<%- include('../partials/footer.ejs') %>
-
-<!-- footer section  -->
 
 </html>

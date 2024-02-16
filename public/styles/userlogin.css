@@ -24,7 +24,7 @@
      transform: translateX(-50%);
  }
  .headingLogin p{
-     color: #00224e;
+     color: #000;
      font-size: 1.125rem;
      font-weight: 700;
      line-height: normal;
@@ -75,7 +75,7 @@
      border-radius: 7px;
      width:172px;
      height: 45px;
-     background: #00224e;
+     background: #000;
      border: transparent;
      margin-bottom: 1.5rem;
      border-radius: 100px;
@@ -96,9 +96,9 @@
     outline: 1px solid rgb(244, 244, 244);
  }
  
- input[type="search"]:focus + .form-label {
-   background-color: #00224e !important;
- }
+ /* input[type="search"]:focus + .form-label {
+   background-color: #000 !important;
+ } */
 
 
 
@@ -150,14 +150,14 @@
         padding: 15px;
         margin-top: 10px;
         color: white;
-        background-color: #00224e;
+        background-color: #000;
         border: none;
         border-radius: 5px;
         box-shadow: none;
         cursor: pointer;
     }
     .btn-success:focus{
-        background-color: #00224e!important;
+        background-color: #000!important;
     }
  /*---------- media query ----------*/
  @media (max-width: 1472px) {

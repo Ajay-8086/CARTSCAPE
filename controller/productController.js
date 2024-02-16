@@ -13,8 +13,8 @@ module.exports = {
                 page: pageNumber,
                 limit: 10
             };
-            const result = await productModel.paginate({}, options);
-            const products = result.docs.filter(val=>!val.isDeleted)
+            const result = await productModel.paginate({isDeleted: false}, options);
+            const products = result.docs
             res.render('admin/products', { products, paginationInfo: result, url: 'product' })
         } catch (error) {
             res.status(500).json({ error: 'Internal server error' });
@@ -78,7 +78,7 @@ module.exports = {
     getUpdateProduct: async (req, res) => {
         try {
             const id = req.params.productId
-            const product = await productModel.find({ _id: id })
+            const product = await productModel.findOne({ _id: id })
             const categoryList = await categoryModel.find({})
             res.status(200).render('admin/updateProduct', { product, categoryList, url: 'product' })
         } catch (error) {

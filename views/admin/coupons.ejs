@@ -28,6 +28,7 @@
                         <th>CouponCode</th>
                         <th>CouponName</th>
                         <th>Discount</th>
+                        <th>Purchase Above</th>
                         <th>Valid From</th>
                         <th>Valid To</th>
                         
@@ -42,10 +43,11 @@
                        
                         <td>
                            
-                            <p><%=coupon.couponCode%></p>
+                            <%=coupon.couponCode%>
                         </td>
                         <td><%= coupon.couponName %></td>
                         <td><%= coupon.discount %></td>
+                        <td><%= coupon.purchaseAbove %></td>
                         <td><%= coupon.validFrom %></td>
                         <td><%= coupon.validTo %></td>
                         

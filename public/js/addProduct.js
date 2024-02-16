@@ -7,13 +7,9 @@ submitBtn.addEventListener('click',async(event)=>{
     const price = document.getElementById('productPrice').value.trim()
     const stock = document.getElementById('productStock').value.trim()
     const category = document.getElementById('productCategory').value.trim()
-    const discount = document.getElementById('productDiscount').value.trim()
     const subCategory = document.getElementById('subCategory').value.trim()
-    const color = document.getElementById('productColors').value.trim()
-    const size = document.getElementById('productSize').value.trim()
-    const returnPolicy = document.getElementById('returnPolicy').checked
     const errorMsg = document.querySelector('.errorMg')
-    if(productName =='' || description=='' || price=='' || stock=='' || category=='' || discount=='' || subCategory=='' || color=='' || size==''|| returnPolicy=='' ){
+    if(productName =='' || description=='' || price=='' || stock=='' || category=='' ||subCategory=='' ){
         errorMsg.style.visibility = 'visible'
         errorMsg.innerHTML = 'Please Fill all Fields'
         setTimeout(() => {

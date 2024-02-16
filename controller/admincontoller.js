@@ -23,8 +23,8 @@ module.exports = {
                 page: pageNumber,
                 limit: 10
             };
-            const result = await userModel.paginate({}, options);
-            const users = result.docs.filter(val => !val.blocked)
+            const result = await userModel.paginate({blocked:false}, options);
+            const users = result.docs
             res.render('admin/userList', { users, paginationInfo: result, url: "user" });
         } catch (error) {
             res.status(500).send('internal server error')

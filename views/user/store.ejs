@@ -1,0 +1,328 @@
+<header>
+    <%-include('../partials/header.ejs') %>
+</header>
+<section class="">
+    <div class="container">
+      <div class="row">
+        <!-- sidebar -->
+        <div class="col-lg-3 mt-5">
+          <!-- Toggle button -->
+          <button class="btn btn-outline-secondary mb-3 w-100 d-lg-none" type="button" data-mdb-toggle="collapse"
+            data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span>Show filter</span>
+          </button>
+          <!-- Collapsible wrapper -->
+          <div class="collapse card d-lg-block mb-5" id="navbarSupportedContent">
+            <div class="accordion" id="accordionPanelsStayOpenExample">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                  <button class="accordion-button text-dark bg-light" type="button" data-mdb-toggle="collapse"
+                    data-mdb-target="#panelsStayOpen-collapseOne" aria-expanded="true"
+                    aria-controls="panelsStayOpen-collapseOne">
+                    Shop By Categories
+                  </button>
+                </h2>
+                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show"
+                  aria-labelledby="headingOne">
+                  <div class="accordion-body">
+                    <ul class="list-unstyled">
+                      <li><a href="/products" class="text-dark">All</a></li>
+                      
+                        <li><a href="/products?category=" class="text-dark">
+                          cat
+                          </a></li>
+                       
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                  <button class="accordion-button text-dark bg-light" type="button" data-mdb-toggle="collapse"
+                    data-mdb-target="#panelsStayOpen-collapseTwo" aria-expanded="true"
+                    aria-controls="panelsStayOpen-collapseTwo">
+                    Brands
+                  </button>
+                </h2>
+                <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show"
+                  aria-labelledby="headingTwo">
+                  <div class="accordion-body">
+                    <div>
+                     
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" />
+                            <label class="form-check-label" for="checkbox_">
+                            
+                            </label>
+
+                        </div>
+                        
+                          <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                              // Get all checkboxes
+                              const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+
+                              // Add event listener to each checkbox
+                              checkboxes.forEach(function (checkbox) {
+                                checkbox.addEventListener('change', updateUrl);
+                              });
+
+                              // Function to update the URL based on checked checkboxes
+                              function updateUrl() {
+                                const checkedCheckboxes = Array.from(checkboxes).filter(checkbox => checkbox.checked);
+                                const categories = checkedCheckboxes.map(checkbox => checkbox.value);
+
+                                // Build the new URL
+                                const currentUrl = new URL(window.location.href);
+
+                                // Replace the current Category parameter with the updated one
+                                currentUrl.searchParams.set('category', categories.join(','));
+
+                                // Replace URL encoding with commas
+                                const updatedUrl = currentUrl.toString().replace(/%2C/g, ',');
+
+                                // Replace the current URL with the updated one
+                                window.location.href = updatedUrl;
+                              }
+                            });
+                          </script>
+
+
+                          <!-- Checked checkbox -->
+
+                          <!-- Checked checkbox -->
+
+                          <!-- Checked checkbox -->
+
+                          <!-- Default checkbox -->
+
+                          <!-- Default checkbox -->
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingThree">
+                  <button class="accordion-button text-dark bg-light" type="button" data-mdb-toggle="collapse"
+                    data-mdb-target="#panelsStayOpen-collapseThree" aria-expanded="false"
+                    aria-controls="panelsStayOpen-collapseThree">
+                    Price
+                  </button>
+                </h2>
+                <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse show"
+                  aria-labelledby="headingThree">
+                  <div class="accordion-body">
+                    <!-- <div class="range">
+                    <input type="range" class="form-range" id="customRange1" />
+                  </div> -->
+                    <input type="hidden" name="page" value=">">
+
+                    <form action="" id="fromPrice">
+
+                      <div class="row mb-3">
+                        <div class="col-6">
+                          <p class="mb-0">
+                            Min
+                          </p>
+                          <div class="form-outline">
+                            <input type="number" name="minPrice" id="typeNumber" class="form-control minPrice"
+                              value="" />
+                            <label class="form-label" for="typeNumber">Min Price</label>
+                          </div>
+                        </div>
+                        <div class="col-6">
+                          <p class="mb-0">
+                            Max
+                          </p>
+                          <div class="form-outline">
+                            <input type="number" name="maxPrice" id="typeNumber" class="form-control maxPrice"
+                              value="" />
+                            <label class="form-label" for="typeNumber">Max Price</label>
+                          </div>
+                        </div>
+                      </div>
+                      <button type="submit" class="btn btn-white w-100 border border-secondary">apply</button>
+                    </form>
+
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+        <!-- sidebar -->
+        <!-- content -->
+        <div class="col-lg-9">
+          <header class="d-sm-flex align-items-center border-bottom mb-4 pb-3">
+            <!-- <strong class="d-block py-2">32 Items found </strong> -->
+            <div class="ms-auto">
+              <select class="form-select d-inline-block w-auto border pt-1">
+                <option value="0">Best match</option>
+                <option value="1">Recommended</option>
+                <option value="2">High rated</option>
+                <option value="3">Randomly</option>
+              </select>
+
+            </div>
+          </header>
+
+          <div class="row">
+           
+
+                    <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                      <div class="card h-100 position-relative" onclick="userdetails('')">
+                        
+                          <div class="discount-badge position-absolute top-0 start-0 mt-2   px-2 py-1"
+                            style="background-color: #febd69; color: #131921; border-radius: 90px;margin-left: 8px; font-weight: bolder;font-size:x-small;">
+                            % OFF
+                          </div>
+                          
+                            <img src="/primg/" class="card-img-top"
+                              alt="">
+                            <div class="card-body">
+                              <p class="card-text mb-2" style="color:#bf4800;font-family: 'Rubik', sans-serif;    font-weight: 400;
+                    font-size: 16px;
+                    letter-spacing: .3px;
+                    line-height: 20px;">
+                               
+                              </p>
+                              <h5 class="card-title mb-3"
+                                style="color: #1c1b1b; font-family: 'Rubik', sans-serif;font-size: 18px;    font-weight: 800;">
+                               
+                              </h5>
+                              <p class="card-text" style="color: #e02b40;">
+                                
+                                  <span class="original-price"
+                                    style="color: #131921; text-decoration: line-through;">₹
+                                  </span>
+                                  
+                              </p>
+                            </div>
+
+                      </div>
+                    </div>
+                    
+          </div>
+
+
+
+
+          <hr />
+        </div>
+
+
+        <!-- Pagination -->
+        <!-- Pagination -->
+
+        
+            <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-3">
+              <ul class="pagination">
+                <li class="page-item ">
+                  <a class="page-link" href="/products?page=" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+
+               
+                  <li class="page-item ">
+                    <a class="page-link" href="/products?page=">
+                     
+                    </a>
+                  </li>
+                  
+
+                    <li class="page-item ">
+                      <a class="page-link" href="/products?page=" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                      </a>
+                    </li>
+              </ul>
+            </nav>
+            <!-- Pagination -->
+
+            <!-- Pagination -->
+      </div>
+    </div>
+    </div>
+  </section>
+  <!-- sidebar + content -->
+  <script>
+    document.getElementById('fromPrice').addEventListener('submit', (e) => {
+      e.preventDefault();
+      updateUrlPrice();
+    })
+    function updateUrlPrice() {
+
+      // Build the new URL
+      const currentUrl = new URL(window.location.href);
+
+      // Replace the current Category parameter with the updated one
+      currentUrl.searchParams.set('minPrice', Number(document.querySelector('.minPrice').value));
+      currentUrl.searchParams.set('maxPrice', Number(document.querySelector('.maxPrice').value));
+
+      // Replace URL encoding with commas
+      const updatedUrl = currentUrl.toString().replace(/%2C/g, ',');
+
+      // Replace the current URL with the updated one
+      window.location.href = updatedUrl;
+    }
+    
+
+  </script>
+  <script>
+    function userdetails(id) {
+      fetch(`/save-singleProduct-session?id=${id}`, {
+        method: "GET",
+        "Content-Type": "application/json",
+
+      })
+        .then((response) => {
+
+
+          if (!response) {
+            new Error("Network response was not ok: " + response.statusText);
+
+          }
+         
+
+
+          window.location.href = '/product-details';
+        })
+        .catch((error) => {
+          // Handle errors
+          console.error("Error during fetch operation:", error);
+        });
+
+    }
+
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const currentUrl = new URL(window.location.href);
+      const categoryParam = currentUrl.searchParams.get('category');
+      const bestMatchSelect = document.querySelector('.form-select');
+
+      // Display the selected category near the Best Match dropdown
+      if (categoryParam) {
+        const selectedCategoryDiv = document.createElement('div');
+        selectedCategoryDiv.innerHTML = `Selected Category: ${categoryParam}`;
+        selectedCategoryDiv.className = 'selected-category';
+
+        // Insert the new div after the Best Match dropdown
+        bestMatchSelect.parentNode.insertBefore(selectedCategoryDiv, bestMatchSelect.nextSibling);
+      }
+    });
+
+  </script>
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.js"></script>
+  <!-- Footer -->
+</body>
+
+</html>

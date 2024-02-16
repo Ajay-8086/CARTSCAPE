@@ -6,8 +6,9 @@ const banner = new mongoose.Schema({
     bannerImage:{type:String},
     specialPrice:{type:String},
     validFrom:{type:String},
-    validTo:{type:String}
+    validTo:{type:Date}
 })
 banner.plugin(mongoosePaginate);
+banner.index({ validTo: 1 }, { expireAfterSeconds: 0 });
 const bannerModel = mongoose.model('banner',banner)
 module.exports = bannerModel
