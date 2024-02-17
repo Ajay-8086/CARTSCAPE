@@ -60,12 +60,12 @@
                             
                             <div class="form-group">
                                 <label for="valid-from">Valid From</label>
-                                <input type="date" class="form-control" id="valid-from" min="" value="<%=banner.validFrom %>" name="validFrom" required>
+                                <input type="date" class="form-control" id="valid-from" min="" value="<%=banner.validFrom.toISOString().substring(0, 10)%>" name="validFrom" required>
                                 <small id="valid-from-error" class="text-danger"></small>
                             </div>
                             <div class="form-group">
                                 <label for="valid-to">Valid To</label>
-                                <input type="date" class="form-control" min="" id="valid-to" value="<%=banner.validTo %>" name="validTo" required>
+                                <input type="date" class="form-control" min="" id="valid-to" value="<%=banner.validTo.toISOString().substring(0, 10)%>" name="validTo" required>
                                 <small id="valid-to-error" class="text-danger"></small>
                             </div>
                             <h1></h1>

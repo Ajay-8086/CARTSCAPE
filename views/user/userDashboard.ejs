@@ -40,7 +40,7 @@
       <div class="row"style="display: contents;">
         <% products.forEach((product) => { %>
           <% var discount=product.discount %>
-            <% var Odiscount=product.price * discount / 100 %>
+            <% var Odiscount=parseInt(product.price * discount / 100 ) %>
               <% var showPrice=product.price-Odiscount %>
     
                 <div class="col-lg-3 mt-3 col-md-3 col-sm-3 d-flex">

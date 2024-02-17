@@ -1,5 +1,6 @@
 const adminModel = require('../models/admin')
 const customerModel = require('../models/customer');
+const categoryModel = require('../models/category')
 const sendMail = require('../utility/sendMail');
 const { sendVerificationCode, verifyOtp } = require('../utility/verification')
 const bcrypt = require('bcrypt')
@@ -103,10 +104,11 @@ module.exports = {
     
     //USER AUTHENTICATION MANAGEMENT===============================================================================>
 
-    getLogin: (req, res) => {
+    getLogin: async(req, res) => {
         try {
             const errorMessage = req.flash('error')[0];
-            res.status(200).render('user/login', { messages: { error: errorMessage } });
+            const categories = await categoryModel.find({isDeleted:false})
+            res.status(200).render('user/login', { messages: { error: errorMessage } ,categories});
         } catch (error) {
             res.status(500).send('Internal server error')
         }
@@ -116,6 +118,7 @@ module.exports = {
         try {
             const { email, password } = req.body;
             const userExist = await customerModel.findOne({ email });
+            const phone = userExist.phone
             if (!userExist) {
                 req.flash('error', 'User does not exist. Please register.');
                 return res.status(400).redirect('/login');
@@ -123,10 +126,15 @@ module.exports = {
                 const passwordCheck = await bcrypt.compare(password, userExist.password);
                 if (passwordCheck) {
                     if (userExist.verified && !userExist.blocked) {
+                        req.session.userId = userExist._id
                         res.status(200).redirect('/')
-                    } else {
-                        req.flash('error', 'please verify otp');
-                        res.status(400).redirect('/login')
+                    } else if(!userExist.verified && !userExist.blocked) {
+                        console.log('not verified');
+                        req.flash('error', { phone })
+                    res.status(200).redirect('/verify-otp');
+                    await sendVerificationCode(phone);
+                    }else{
+                        console.log('user blocked');
                     }
                 } else {
                     req.flash('error', 'Invalid password');
@@ -139,9 +147,10 @@ module.exports = {
     },
 
     
-    getSignup: (req, res) => {
+    getSignup: async(req, res) => {
         try {
-            res.status(200).render('user/signup')
+            const categories = await categoryModel.find({isDeleted:false})
+            res.status(200).render('user/signup',{categories})
         } catch (error) {
             res.status(500).send('Internal server error')
         }
@@ -155,13 +164,10 @@ module.exports = {
 
             if (userExist) {
                 if (userExist.verified) {
-                    console.log('user role');
                     return res.status(200).redirect('/login');
                 } else {
-                    console.log('user not role');
                     req.flash('error', { phone })
                     res.status(200).redirect('/verify-otp');
-                    console.log(phone);
                     await sendVerificationCode(phone);
                 }
             } else {
@@ -182,9 +188,10 @@ module.exports = {
         }
     },
 
-    getOtp: (req, res) => {
+    getOtp: async(req, res) => {
         try {
-            res.status(200).render('user/otpVerify', { error: req.flash('error')[0] })
+            const categories = await categoryModel.find({isDeleted:false})
+            res.status(200).render('user/otpVerify', { error: req.flash('error')[0],categories })
         } catch (error) {
             res.status(500).send('Internal server error')
         }
@@ -194,7 +201,7 @@ module.exports = {
         try {
             const { digit1, digit2, digit3, digit4, phone } = req.body;
             await verifyOtp(res, phone, `${digit1}${digit2}${digit3}${digit4}`);
-            res.status(200).redirect('/login')
+            console.log('redirected');
         } catch (error) {
             res.status(500).send('internal server error')
         }

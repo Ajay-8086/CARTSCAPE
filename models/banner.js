@@ -5,7 +5,7 @@ const banner = new mongoose.Schema({
     bannerHeading:{type:String},
     bannerImage:{type:String},
     specialPrice:{type:String},
-    validFrom:{type:String},
+    validFrom:{type:Date},
     validTo:{type:Date}
 })
 banner.plugin(mongoosePaginate);

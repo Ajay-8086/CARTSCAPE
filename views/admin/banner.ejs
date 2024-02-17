@@ -41,8 +41,8 @@
                         </td>
                         <td><%=banner.bannerHeading%></td>
                         <td><%=banner.specialPrice%></td>
-                        <td><%=banner.validFrom%></td>
-                        <td><%=banner.validTo%></td>
+                        <td><%=banner.validFrom.toLocaleDateString('en-GB')%></td>
+                        <td><%=banner.validTo.toLocaleDateString('en-GB')%></td>
                         
                         <td>
                             <a href="/admin/edit-banner/<%=banner._id%>" class="delete-btn" title="Delete Order">
