@@ -29,7 +29,9 @@ router.get('/allproducts',userController.getAllProducts)
 
 
 // WHISHLISTMANAGEMENT ========================================================================================>
-router.post('/wishlistcount',wislistController.getWishListCount)
+router.get('/wishlistcount',wislistController.getWishListCount)
 router.post('/addtoWhislist',wislistController.addOrRemoveWhishlist)
+router.get('/wishlist',wislistController.getWishList)
+router.delete('/wishlist_remove',wislistController.deleteWishListed)
       
 module.exports = router

@@ -1,142 +1,74 @@
-
 <!-- header section  -->
 
-<%-include('../partials/header.ejs') %>
-
-<!-- header section  -->
-
-
-<div>
-
-    <!-- Heading -->
-    </header>
-
-    <!-- cart + summary -->
-    <section class="bg-light my-5">
-        <div class="container">
-            <div class="row">
-                <!-- cart -->
-                <div class="col-lg-12">
-                    <div class="card border shadow-0">
-                        <div class="m-4">
-                            <h4 class="card-title mb-4">Your Wishlist</h4>
-                            <div class="row gy-3 mb-4">
-                                <div class="col-lg-5">
-                                    <div class="me-lg-5">
-                                        <div class="d-flex">
-                                            <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/11.webp"
-                                                class="border rounded me-3" style="width: 96px; height: 96px;" />
+<%- include('../partials/header.ejs') %>
+    <div>
+        <!-- Heading -->
+        </header>
+        <!-- cart + summary -->
+        <section class="bg-light my-5">
+            <div class="container">
+                <div class="row">
+                    <!-- cart -->
+                    <div class="col-lg-12">
+                        <div class="card border shadow-0">
+                            <div class="m-4">
+                              <% if (!wishlistedItems) { %>
+                                <h4 class="card-title mb-4">Your Wishlist is empty</h4>
+                              <% } else { %>
+                                <h4 class="card-title mb-4">Your Wishlist</h4>
+                                <% wishlistedItems.productId.forEach((product) => { %>
+                                    <div class="row gy-3 mb-4 wish<%=product._id%>">
+                                        <div class="col-lg-5">
+                                            <div class="me-lg-5">
+                                                <div class="d-flex">
+                                                    <img src="/uploads/products/<%= product.image[0] %>"
+                                                        class="border rounded me-3" style="width: 96px; height: 96px;" />
+                                                    <div class="">
+                                                        <a href="#" class="nav-link"><%= product.name %></a>
+                                                        <!-- <p class="text-muted">Yellow, Jeans</p> -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap">
                                             <div class="">
-                                                <a href="#" class="nav-link">Winter jacket for men and lady</a>
-                                                <p class="text-muted">Yellow, Jeans</p>
+                                                <% let discount = product.discount %>
+                                                <% let price = product.price %>
+                                                <% let discountedPrice = parseInt(price - (price * discount / 100)) %>
+                                                <text class="h6">$<%= discountedPrice %></text> <br />
+                                                <small class="text-muted text-nowrap" style="color: red !important; text-decoration: line-through;"> $<%= price %></small>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-lg col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2 ">
+                                            <div class="float-md-end me-2">
+                                                <a href="#" class="btn btn-light border text-danger icon-hover-danger" onclick="deleteWishList('<%=product._id%>')">
+                                                    Remove</a>
+                                            </div>
+                                            <div class="float-md-end ms-2">
+                                                <a href="#" class="btn btn-light border text-white  bg-black">
+                                                    Add to cart</a>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div
-                                    class="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap">
-                                    
-                                    <div class="">
-                                        <text class="h6">$1156.00</text> <br />
-                                        <small class="text-muted text-nowrap"> $460.00 / per item </small>
-                                    </div>
-                                </div>
-                                <div
-                                    class="col-lg col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2">
-                                    <div class="float-md-end">
-                                        </a>
-                                        <a href="#" class="btn btn-light border text-danger icon-hover-danger">
-                                            Remove</a>
-                                    </div>
-                                </div>
+                                <% }) %>
+                              <% } %>
                             </div>
-
-                            <div class="row gy-3 mb-4">
-                                <div class="col-lg-5">
-                                    <div class="me-lg-5">
-                                        <div class="d-flex">
-                                            <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/12.webp"
-                                                class="border rounded me-3" style="width: 96px; height: 96px;" />
-                                            <div class="">
-                                                <a href="#" class="nav-link">Mens T-shirt Cotton Base</a>
-                                                <p class="text-muted">Blue, Medium</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                    class="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap">
-                                    
-                                    <div class="">
-                                        <text class="h6">$44.80</text> <br />
-                                        <small class="text-muted text-nowrap"> $12.20 / per item </small>
-                                    </div>
-                                </div>
-                                <div
-                                    class="col-lg col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2">
-                                    <div class="float-md-end">
-                                        </a>
-                                        <a href="#" class="btn btn-light border text-danger icon-hover-danger">
-                                            Remove</a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row gy-3">
-                                <div class="col-lg-5">
-                                    <div class="me-lg-5">
-                                        <div class="d-flex">
-                                            <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/13.webp"
-                                                class="border rounded me-3" style="width: 96px; height: 96px;" />
-                                            <div class="">
-                                                <a href="#" class="nav-link">Blazer Suit Dress Jacket for Men</a>
-                                                <p class="text-muted">XL size, Jeans, Blue</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                    class="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap">
-                                    
-                                    <div class="">
-                                        <text class="h6">$1156.00</text> <br />
-                                        <small class="text-muted text-nowrap"> $460.00 / per item </small>
-                                    </div>
-                                </div>
-                                <div
-                                    class="col-lg col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2">
-                                    <div class="float-md-end">
-                                        </a>
-                                        <a href="#" class="btn btn-light border text-danger icon-hover-danger">
-                                            Remove</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="border-top pt-4 mx-4 mb-4">
-                            <p><i class="fas fa-truck text-muted fa-lg"></i> Free Delivery within 1-2 weeks</p>
-                            <p class="text-muted">
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                                exercitation ullamco laboris nisi ut
-                                aliquip
-                            </p>
                         </div>
                     </div>
                 </div>
-                <!-- cart -->
-                <!-- summary -->
-
-                <!-- summary -->
             </div>
-        </div>
-    </section>
-    <!-- cart + summary -->
+        </section>
+        <!-- cart + summary -->
 
-    <!-- Recommended -->
+        <!-- Recommended -->
 
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.js"></script>
-    </body>
+        <footer>
+            <%- include('../partials/footer.ejs') %>
+        </footer>
+        <script>
+          
+        </script>
+        </body>
 
-    </html>
+        </html>

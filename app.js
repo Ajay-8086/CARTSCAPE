@@ -18,7 +18,7 @@ app.use(flash());
 app.use(session({
     secret: process.env.SECRET,
     resave: true,
-    saveUninitialized: true
+    saveUninitialized: false
 }))
 // const customFormat = ':method :url :status - :response-time ms';
 // app.use(morgan(customFormat));
