@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded',async function(){
             wishlistCount(response.data.count);
         } else {
             wishlistCount('');
+            document.querySelector('.wishlistTitle').innerHTML='your Wishlist is Empty'
         }
    } catch (error) {
     console.log(error);
@@ -53,7 +54,11 @@ async function addToWhislist(productId){
         const response = await axios.delete(`/wishlist_remove?id=${productId}`)
         if(response.status==200){
             document.querySelector('.wish'+productId).remove()
-            wishlistCount(response.data.count)
+           const countsResult =  wishlistCount(response.data.count)
+        //    console.log(countsResult);
+           if(!countsResult){
+            document.querySelector('.wishlistTitle').innerHTML='your Wishlist is Empty'
+           }
         }else{
             console.log('error occured');
         }

@@ -3,11 +3,11 @@ const router = express.Router()
 const authController = require('../controller/authController')
 const userController = require('../controller/userController')
 const wislistController = require('../controller/wishlistController')
+const cartController = require('../controller/cartController')
 
 // USER MANAGEMENT =========================================================================================>
 
 router.get('/',userController.home)
-router.get('/cart',userController.getCart)
 
 // USER AUTHENTICATION MANAGEMENT===========================================================================>
 
@@ -33,5 +33,9 @@ router.get('/wishlistcount',wislistController.getWishListCount)
 router.post('/addtoWhislist',wislistController.addOrRemoveWhishlist)
 router.get('/wishlist',wislistController.getWishList)
 router.delete('/wishlist_remove',wislistController.deleteWishListed)
-      
+
+//CART MANAGEMENT============================================================================================>
+router.get('/view_cart',cartController.getCart)
+router.get('/cartcount',cartController.getCartCount)
+router.post('/addtocart',cartController.addToCart)
 module.exports = router

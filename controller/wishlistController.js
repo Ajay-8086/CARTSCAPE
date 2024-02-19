@@ -1,9 +1,6 @@
-const productModel = require('../models/product')
-const userModel = require('../models/customer')
 const categoryModel = require('../models/category')
 const wishlistModel = require('../models/wishlist')
-const mongoose  = require('mongoose')
-
+const mongoose = require('mongoose')
 module.exports={
     addOrRemoveWhishlist: async(req, res) =>{
         try {
@@ -61,7 +58,7 @@ module.exports={
             const categories = await categoryModel.find({isDeleted:false})
             const wishlistedItems = await wishlistModel.findOne({userId}).populate('productId')
             res.render('user/wishlist',{categories,wishlistedItems})
-        } catch (error) {
+        } catch (error) { 
             console.log(error);
         }
     },

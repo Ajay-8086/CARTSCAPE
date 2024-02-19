@@ -85,9 +85,10 @@
                 
                 <span id="wishlistCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" ></span>
               </a>
-              <a href="/cart" class="border rounded py-1 px-3 nav-link d-flex align-items-center" 
-                style="color: #000;"> <i class="fas fa-shopping-cart m-1 me-md-2"></i>
-                <p class="d-none d-md-block mb-0">My cart</p>
+              <a href="/view_cart" class="me-1   nav-link d-flex align-items-center position-relative"  style="color: #000;">
+                <i class="fas fa-shopping-cart m-1 me-md-2" style="font-size: 25px;"></i>
+                
+                <span id="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" ></span>
               </a>
             </div>
           </div>
@@ -151,16 +152,16 @@
             </li>
           
 
-            <% categories.forEach((category)=>{ %>
+            <% categories.forEach((category)=>{%>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
-                <%=category.categoryName %>
+                <%=category.categoryName%>
               </a>
               <!-- Dropdown menu -->
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <%category.subCategory.forEach((sub)=>{%>
                   <li>
-                    <a class="dropdown-item" href="#"><%=sub%>  </a>
+                    <a class="dropdown-item" href="#"><%=sub%></a>
                   </li>
 
                 <%})%>

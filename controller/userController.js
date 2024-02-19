@@ -29,15 +29,5 @@ module.exports = {
            console.log(error); 
         }
     },
-
-
-    getCart: (req, res) => {
-        try {
-            res.status(200).render('user/cart')
-        } catch (error) {
-            res.status(500).send('Internal server error')
-        }
-    },
-
-   
+  
 };

@@ -13,9 +13,9 @@
                         <div class="card border shadow-0">
                             <div class="m-4">
                               <% if (!wishlistedItems) { %>
-                                <h4 class="card-title mb-4">Your Wishlist is empty</h4>
+                                <h4 class="card-title wishlistTitle mb-4">Your Wishlist is empty</h4>
                               <% } else { %>
-                                <h4 class="card-title mb-4">Your Wishlist</h4>
+                                <h4 class="card-title wishlistTitle mb-4">Your Wishlist</h4>
                                 <% wishlistedItems.productId.forEach((product) => { %>
                                     <div class="row gy-3 mb-4 wish<%=product._id%>">
                                         <div class="col-lg-5">
