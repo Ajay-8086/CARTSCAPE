@@ -39,4 +39,5 @@ router.get('/view_cart',cartController.getCart)
 router.get('/cartcount',cartController.getCartCount)
 router.post('/addtocart',cartController.addToCart)
 router.patch('/cart_quanatity',cartController.cartQuantityManging)
+router.delete('/remove_cart',cartController.cartItemRemove)
 module.exports = router

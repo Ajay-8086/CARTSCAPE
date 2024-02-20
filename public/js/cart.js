@@ -45,32 +45,6 @@ async function addingToCart(productId){
         console.log(error.message);
     }
 }
-// }
-// async function reduceQuantity(id){
-//     const quantityInput =  document.querySelector('.quantity-input'+id)
-//     const discountedPrice = document.querySelector('.discount'+id)
-//     const originalPrice = document.querySelector('.price'+id)
-//     let price = originalPrice.innerText.replace(/\$|,/g, '')
-//     let discount = discountedPrice.innerText.replace(/\$|,/g, '')
-//     let quantity = parseInt(quantityInput.value)
-//     let priceOfAnItem = parseInt(discount/quantity)
-//     let originaPriceOfAnItem = parseInt(price/quantity)
-//     if(quantity>1){
-//         quantity--
-//         quantityInput.value = quantity
-//         discountedPrice.innerText ='$'+(discount - priceOfAnItem)
-//         originalPrice.innerText = '$'+(price-originaPriceOfAnItem)
-//         updatingTotal(priceOfAnItem*-1)
-//     }
-// try {
-//     await  axios.patch(`/cart_quanatity`,{
-//         id:id,
-//         quantity:quantity
-//     })
-// } catch (error) {
-//     console.log(error);
-// }
-// }
 
 function updatingTotal(price){
    const totalPrice = document.querySelector('.totalPrice')
@@ -120,4 +94,20 @@ try {
 } catch (error) {
     console.log(error);
 }
+}
+
+async function removeFromCart(id){
+    try {
+        const response  = await  axios.delete(`/remove_cart?id=${id}`)
+        if(response.status==200){
+
+            document.querySelector('.cartDetails'+id).remove()
+            cartCount(response.data.count)
+        }else{
+            console.log('error');
+        }
+    } catch (error) {
+        console.log(error);
+
+    }
 }

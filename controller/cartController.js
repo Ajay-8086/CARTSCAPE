@@ -77,5 +77,28 @@ module.exports={
         console.log(error);
         res.status(500).json('Internal server error')
        }
+    },
+
+    cartItemRemove: async (req, res) => {
+    try {
+        const productId = req.query.id;
+        const userId = req.session.userId;
+        const id =new mongoose.Types.ObjectId(productId)
+        const cart = await cartModel.updateOne(
+            { userId },
+            { $pull: { productId: { id:  id} } }
+        );
+        const cartDetails = await cartModel.findOne({userId})
+        const count = cartDetails.productId.length 
+        if(cart){
+            res.status(200).json({message:'cart updated',count});
+        }else{
+            res.status(400).json('cart not updated');
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal Server Error" });
     }
+}
+
 }

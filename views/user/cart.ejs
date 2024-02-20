@@ -22,10 +22,11 @@
 
             <h4 class="card-title mb-4 cartTitle">Your shopping cart is empty</h4>
            <% } else{ %>
+            <h2 class="message" style="text-align: center; color: green;"></h2>
             <h4 class="card-title mb-4 cartTitle">Your shopping cart</h4>
             <% cartItems.productId.forEach((product)=>{ %>
 
-              <div class="row gy-3 mb-4">
+              <div class="row gy-3 mb-4 cartDetails<%= product.id._id %>">
                 <div class="col-lg-5">
                   <div class="me-lg-5">
                     <div class="d-flex">
@@ -55,7 +56,7 @@
                 </div>
                 <div class="col-lg col-sm-6 d-flex justify-content-sm-center justify-content-md-start justify-content-lg-center justify-content-xl-end mb-2">
                   <div class="float-md-end">
-                    <a href="#" class="btn btn-light border text-danger icon-hover-danger"> Remove</a>
+                    <a  class="btn btn-light border text-danger icon-hover-danger" onclick="removeFromCart('<%= product.id._id %>')"> Remove</a>
                   </div>
                 </div>
               </div>
