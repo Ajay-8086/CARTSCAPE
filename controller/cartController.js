@@ -5,11 +5,13 @@ module.exports={
     getCart:async(req,res)=>{
         try {   
                  const userId = req.session.userId
-                 console.log(userId);
                 const categories = await categoryModel.find({isDeleted:false})
                 const cartItems = await cartModel.findOne({userId}).populate('productId.id')
-                console.log(cartItems);
-                res.status(200).render('user/cart',{categories,cartItems})
+
+                const totalCartPrice = cartItems?.productId.reduce((accumulator, element) => {
+                    return accumulator + (parseInt((element.id.price-(element.id.price*element.id.discount/100))) * element.quantity);
+                }, 0);
+                res.status(200).render('user/cart',{categories,cartItems,totalCartPrice})
         
         } catch (error) {     
             console.log('error',error);
@@ -37,7 +39,6 @@ module.exports={
                 return res.status(401).json({ error: 'Unauthorized', message: 'User is not logged in' });
             }else{
                 const productId = req.body.id
-                console.log('id',productId);
                 const id = new mongoose.Types.ObjectId(productId)
                 console.log(id);
                 const cart = await cartModel.findOne({userId})
@@ -63,5 +64,18 @@ module.exports={
             console.error(error);
         return res.status(500).json({ success: false, error: 'Internal Server Error' });
         }
+    },
+    cartQuantityManging:async(req,res)=>{
+       try {
+           const userId = req.session.userId
+           const productId = req.body.id
+           const newProductId = new mongoose.Types.ObjectId(productId)
+            const newQuantity = req.body.quantity 
+            await cartModel.updateOne({userId:userId,"productId.id":newProductId},{$set:{"productId.$.quantity":newQuantity}})
+            res.status(200).json({success:true})
+       } catch (error) {
+        console.log(error);
+        res.status(500).json('Internal server error')
+       }
     }
 }

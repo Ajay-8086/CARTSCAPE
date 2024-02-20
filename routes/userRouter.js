@@ -38,4 +38,5 @@ router.delete('/wishlist_remove',wislistController.deleteWishListed)
 router.get('/view_cart',cartController.getCart)
 router.get('/cartcount',cartController.getCartCount)
 router.post('/addtocart',cartController.addToCart)
+router.patch('/cart_quanatity',cartController.cartQuantityManging)
 module.exports = router
