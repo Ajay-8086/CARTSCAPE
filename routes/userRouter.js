@@ -9,6 +9,9 @@ const productController = require('../controller/productController')
 // USER MANAGEMENT =========================================================================================>
 
 router.get('/',userController.home)
+router.get('/profile',userController.getUserProfile)
+router.get('/editprofile',userController.editProfileGet)
+router.post('/editprofile',userController.editProfilePost)
 
 // USER AUTHENTICATION MANAGEMENT===========================================================================>
 
@@ -34,7 +37,7 @@ router.get('/wishlistcount',wislistController.getWishListCount)
 router.post('/addtoWhislist',wislistController.addOrRemoveWhishlist)
 router.get('/wishlist',wislistController.getWishList)
 router.delete('/wishlist_remove',wislistController.deleteWishListed)
-
+ 
 //CART MANAGEMENT============================================================================================>
 router.get('/view_cart',cartController.getCart)
 router.get('/cartcount',cartController.getCartCount)

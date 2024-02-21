@@ -1,0 +1,101 @@
+<!-- include header -->
+<%- include('../partials/header.ejs') %>
+<!-- /include header -->
+    <div class="cartHead mt-4 mb-4">
+      <div class="d-flex align-items-center gap-2">
+        <i class="fa-solid fa-user"></i>
+        <h2 class="m-0 p-0 text-capitalize">Update Account</h2>
+      </div>
+    </div>
+    <p id="message" style="color: red; text-align: center;"></p>
+    <form  id="form">
+        <div class="editBody">
+            <h2>Personal Information</h2>
+            <div class="d-flex uAcc">
+                <div class="sides">
+                    <div>
+                        <label for="fName">Full Name</label>
+                        <input name="name" class="d-block text-capitalize" id="name" type="text" value="<%=userDetails.name%>">
+                        <label for="email">Email</label>
+                        <input name="email" class="d-block" type="text" id="email" value="<%=userDetails.email%>">
+                        <label for="phone">Phone</label>
+                        <input name="phone" class="d-block" type="number" id="phone" value="<%=userDetails.phone%>">
+                    </div>
+                    <button type="submit" class="saveBtn oneBtn" style="background-color: black !important; color: white!important;">Save Changes</button>
+                </div>
+                <div class="sides">
+                    <div class="left">
+                        <label for="password">New Password</label>
+                        <input name="password" class="d-block" type="password" id="password">
+                        <label for="cPass">Confirm Password</label>
+                        <input name="confirmpassword" class="d-block" type="password" id="confirm">
+                    </div>
+                    <button type="submit" class="saveBtn twoBtn" style="background-color: black !important; color: white!important;">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </form>
+  </div>
+
+<footer>
+    <%- include('../partials/footer.ejs') %>
+    </footer>
+    <script>
+    const submitBtn=  document.querySelector('.saveBtn')
+    const form= document.getElementById('form')
+    submitBtn.addEventListener('click',async(event)=>{
+        event.preventDefault()
+        const name = document.getElementById('name').value
+        const email = document.getElementById('email').value
+        const message = document.getElementById('message')
+        const password = document.getElementById('password').value
+        const confirm = document.getElementById('confirm').value
+        const phone = document.getElementById('phone').value
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+        const mobilenumregex = /^\d{10}$/
+        if(!emailRegex.test(email)){
+            message.innerText = 'Email format is incorect'
+            setTimeout(() => {
+                message.innerText = ''
+            }, 3000);
+            return
+        }
+        if(!mobilenumregex.test(phone)){
+            message.innerText = 'mobile number format is incorect'
+            setTimeout(() => {
+                message.innerText = ''
+            }, 3000);
+            return
+        }
+        if(password){
+            if(!passwordRegex.test(password)){
+                message.innerText = 'password format is incorect'
+            setTimeout(() => {
+                message.innerText = ''
+            }, 3000);
+            return
+        }
+        else if(password!==confirm){
+            message.innerText = 'password confirm password should match'
+            setTimeout(() => {
+                message.innerText = ''
+            }, 3000);
+            return
+        }
+        }
+    try {
+        const formData = new FormData(form)
+        const data = Object.fromEntries(formData.entries())
+        console.log('ss');
+        const response = await axios.post('/editprofile',data)
+        if(response.status==200){
+            window.location.href = '/profile'
+        }else{
+            console.log('failed');
+        }
+    } catch (error) {
+        console.log('error');
+    }
+    })
+    </script>

@@ -4,4 +4,4 @@ const whishlist = new mongoose.Schema({
     userId:{type:mongoose.Types.ObjectId}
 })
 const wishlisttModel = mongoose.model('whishlist',whishlist)
-module.exports = wishlisttModel 
+module.exports = wishlisttModel  

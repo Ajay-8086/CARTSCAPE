@@ -7,9 +7,9 @@ const bcrypt = require('bcrypt')
 module.exports = {
     //ADMIN AUTHENTICATION MANAGEMENT===========================================================================>
     
-    getSignup: (req, res) => {
+    getSignup: async(req, res) => {
         try {
-            res.status(200).render('admin/signup')
+            res.status(200).render('admin/signup',{categories})
         } catch (error) {
             res.status(500).send('Internal sseerver error')
         }
@@ -207,9 +207,10 @@ module.exports = {
         }
     },
 
-    getForgotPassword: (req, res) => {
+    getForgotPassword: async(req, res) => {
         try {
-            res.status(200).render('user/forgetPassword')
+            const categories = await categoryModel.find({isDeleted:false})
+            res.status(200).render('user/forgetPassword',{categories})
         } catch (error) {
             res.status(500).send('Internal server error')
         }
@@ -234,7 +235,16 @@ module.exports = {
         }
     },
     
-    getForgetOtp: (req, res) => res.render('user/forgotOtp'),
+    getForgetOtp: async(req, res) =>{
+        try {
+            const categories = await categoryModel.find({isDeleted:false})
+            res.render('user/forgotOtp',{categories})
+            
+        } catch (error) {
+            console.error('Unexpected error:', error);
+            res.status(500).send('Internal Server Error');
+        }
+    } ,
 
     resendOtp: async (req, res) => {
         try {
@@ -247,7 +257,7 @@ module.exports = {
             res.atatus(500).send('Internal server error')
         }
     },
-    
+     
     postForgetOtp: (req, res) => {
         try {
             const { digit1, digit2, digit3, digit4 } = req.body;
