@@ -9,15 +9,12 @@ document.addEventListener('DOMContentLoaded',async function(){
     try {
         const response = await axios.get('/wishlistcount')
         if (response.status === 200 && response.data.isLogged && response.data.count > 0) {
-            const wishlistedProducts = response.data.wishlist.productId;
-            const products = document.querySelectorAll('.product');
-            products.forEach(product => {
-                const productId = product.querySelector('.wishlist-icon').getAttribute('data-product-id');
-                if (wishlistedProducts.includes(productId)) {
-                    document.getElementById('wish' + productId).classList.add('red');
-                }
-            });
             wishlistCount(response.data.count);
+            const wishlistedProducts = response.data.wishlist.productId;
+            wishlistedProducts.forEach(element => {
+                const wishlistBtn =  document.getElementById(`wish${element}`)
+                wishlistBtn.classList.add('red')
+            });
         } else {
             wishlistCount('');
             document.querySelector('.wishlistTitle').innerHTML='your Wishlist is Empty'
@@ -31,10 +28,7 @@ async function addToWhislist(productId){
     try {
       const wishlist = document.getElementById(`wish${productId}`)
       const response = await axios.post('/addtoWhislist?productId='+productId)
-      if (response.status === 401) {
-        const myModal = new mdb.Modal(document.getElementById('exampleModal'));
-        myModal.show();
-      }
+     
       if(response.data.success){
         wishlist.classList.add('red')
       }else{
@@ -43,9 +37,15 @@ async function addToWhislist(productId){
     }
     wishlistCount(response.data.count)
     } catch (error) {
-      console.log(error);
+            if(error.response.status==401){
+                const myModal = new mdb.Modal(document.getElementById('exampleModal'));
+                myModal.show();
+            } else{
+                console.log('error');
+            }
+        }
     }
-  }
+   
 
   //Delete item from the wishlist==========================================================>
 
@@ -55,7 +55,6 @@ async function addToWhislist(productId){
         if(response.status==200){
             document.querySelector('.wish'+productId).remove()
            const countsResult =  wishlistCount(response.data.count)
-        //    console.log(countsResult);
            if(!countsResult){
             document.querySelector('.wishlistTitle').innerHTML='your Wishlist is Empty'
            }

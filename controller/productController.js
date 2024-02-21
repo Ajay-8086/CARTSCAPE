@@ -122,5 +122,15 @@ module.exports = {
             res.status(500).send('Internal server eroor')
         }
     },
+    getProductPage:async(req,res)=>{
+        try {
+            const productId = req.query.id
+            const productDetails = await productModel.findById(productId)
+            const categories = await categoryModel.find({isDeleted:false})
+            res.status(200).render('user/productPage', { productDetails,categories })
+        } catch (error) {
+            res.status(500).send('Internal server eroor')
+        }
+    }
 
 }

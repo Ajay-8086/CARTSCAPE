@@ -7,7 +7,6 @@ module.exports={
                  const userId = req.session.userId
                 const categories = await categoryModel.find({isDeleted:false})
                 const cartItems = await cartModel.findOne({userId}).populate('productId.id')
-
                 const totalCartPrice = cartItems?.productId.reduce((accumulator, element) => {
                     return accumulator + (parseInt((element.id.price-(element.id.price*element.id.discount/100))) * element.quantity);
                 }, 0);
@@ -40,15 +39,13 @@ module.exports={
             }else{
                 const productId = req.body.id
                 const id = new mongoose.Types.ObjectId(productId)
-                console.log(id);
                 const cart = await cartModel.findOne({userId})
                 if(!cart){
                     const newCart = new cartModel({userId,productId:[{id,quantity:1}]})
-                  await  newCart.save()
+                    await  newCart.save()
                     res.status(200).json({success:true,count:1})
                 }else{
                     const productExist = cart.productId.find(item=>item.id==productId)
-                    console.log(productExist);
                     if(productExist){
                        return res.status(200).json()
                     }else{

@@ -1,6 +1,10 @@
 function cartCount(count){
     const counts = document.getElementById('cartCount')
-    counts.innerHTML = count !==0 ? count :''
+    if (count == null || count === undefined || count === 0) {
+        counts.innerHTML = '';
+      } else {
+        counts.innerHTML = count;
+      }
 }
 
 document.addEventListener('DOMContentLoaded',async function(){
@@ -11,16 +15,12 @@ document.addEventListener('DOMContentLoaded',async function(){
             document.querySelector('.cartTitle').innerHTML='Your Cart is empty please login'
         }
         else if (response.status === 200 && response.data.isLogged && response.data.count > 0) {
-            const cartProducts = response.data.cart.productId.map(item => item.id);
-            const products = document.querySelectorAll('.product');
-            products.forEach(product => {
-                const productId = product.querySelector('.cartBtn').getAttribute('data-product-id');
-                if (cartProducts.includes(productId)) {
-                    document.getElementById('cart' + productId).innerText="Go to cart"
-                    document.getElementById('cart' + productId).setAttribute('href', '/view_cart')
-                }
-            });
             cartCount(response.data.count);
+            const cartProducts = response.data.cart.productId
+            cartProducts.forEach(product=>{
+                document.getElementById('cart' +product.id).innerText="Go to cart"
+                document.getElementById('cart' +product.id).setAttribute('href', '/view_cart')
+            })
         } else {
             cartCount('');
             document.querySelector('.cartTitle').innerHTML='Your Cart is empty'
@@ -30,19 +30,24 @@ document.addEventListener('DOMContentLoaded',async function(){
    }
 })
 
+
+
 async function addingToCart(productId){
     try {
         const response  = await axios.post('/addtocart',{id:productId})
-        if (response.status === 401) {
+        if (response.status === 200) {
+            document.getElementById('cart' + productId).innerText="Go to cart"
+            cartCount(response.data.count)
+            document.getElementById('cart' + productId).setAttribute('href', '/view_cart')
+        }
+    } catch (error) {
+        if(error.response.status===401){
             const myModal = new mdb.Modal(document.getElementById('exampleModal'));
             myModal.show();
-          }else{
-            document.getElementById('cart' + productId).innerText="Go to cart"
-            document.getElementById('cart' + productId).setAttribute('href', '/view_cart')
-            cartCount(response.data.count)
-          }
-    } catch (error) {
-        console.log(error.message);
+        }
+        else{
+            console.log(error);
+        }
     }
 }
 
@@ -98,11 +103,18 @@ try {
 
 async function removeFromCart(id){
     try {
+       const discountedPrice =  document.querySelector('.discount'+id).innerText
+       console.log(discountedPrice);
+        let discount = discountedPrice.replace(/\$|,/g, '')
+        console.log(discount);
         const response  = await  axios.delete(`/remove_cart?id=${id}`)
         if(response.status==200){
-
             document.querySelector('.cartDetails'+id).remove()
-            cartCount(response.data.count)
+          const countOfCart=  cartCount(response.data.count)
+            updatingTotal(discount*-1)
+            if(!countOfCart){
+                document.querySelector('.cartTitle').innerHTML='Your Cart is empty'
+            }
         }else{
             console.log('error');
         }

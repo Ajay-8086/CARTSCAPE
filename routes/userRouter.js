@@ -4,6 +4,7 @@ const authController = require('../controller/authController')
 const userController = require('../controller/userController')
 const wislistController = require('../controller/wishlistController')
 const cartController = require('../controller/cartController')
+const productController = require('../controller/productController')
 
 // USER MANAGEMENT =========================================================================================>
 
@@ -40,4 +41,7 @@ router.get('/cartcount',cartController.getCartCount)
 router.post('/addtocart',cartController.addToCart)
 router.patch('/cart_quanatity',cartController.cartQuantityManging)
 router.delete('/remove_cart',cartController.cartItemRemove)
+
+//PRODUCT MANAGEMENT=================================================================================================================>
+router.get('/products_page',productController.getProductPage)
 module.exports = router
