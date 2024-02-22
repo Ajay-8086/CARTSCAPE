@@ -18,15 +18,23 @@ module.exports = {
     },
     getAllProducts:async(req,res)=>{ 
         try {
+            const page = parseInt(req.query.page) || 1;
+            const limit = parseInt(req.query.limit) || 9;
             const categories = await categoryModel.find({isDeleted:false})
             const categoryName = req.query?.category
             let products;
+            let total;
             if(categoryName){
-                products = await productModel.find({isDeleted:false,category:categoryName})
+                products = await productModel.find({isDeleted:false,category:categoryName}).skip((page - 1) * limit)
+                .limit(limit);
+                total=   await productModel.countDocuments({isDeleted:false,category:categoryName})
             }else{
-                products = await productModel.find({isDeleted:false})
+                products = await productModel.find({isDeleted:false}).skip((page - 1) * limit)
+                .limit(limit);
+             total=   await productModel.countDocuments({isDeleted:false})
             }
-            res.status(200).render('user/store',{categories,products})
+            const noPages = Math.ceil(total / limit);
+            res.status(200).render('user/store',{categories,products,page,total,noPages,categoryName})
         } catch (error) {
            console.log(error); 
         }
@@ -74,7 +82,7 @@ module.exports = {
                 const oldPassword = await userModel.findById(userId)
                 hashPassword=oldPassword.password
             }
-             await userModel.findByIdAndUpdate(userId,{name,email,phone,password:hashPassword})
+         await userModel.findByIdAndUpdate(userId,{name,email,phone,password:hashPassword})
             res.status(200).json('userProfile updated successfully')
         }else{
             res.status(401).json('unauthorised user')

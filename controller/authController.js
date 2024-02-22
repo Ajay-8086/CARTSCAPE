@@ -257,7 +257,7 @@ module.exports = {
             res.atatus(500).send('Internal server error')
         }
     },
-     
+      
     postForgetOtp: (req, res) => {
         try {
             const { digit1, digit2, digit3, digit4 } = req.body;
