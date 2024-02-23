@@ -1,6 +1,6 @@
 
   <header>
-    <%-include('../partials/header.ejs') %>
+    <%-include('../partials/header2.ejs') %>
   </header>
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -43,14 +43,14 @@
                   aria-labelledby="headingOne">
                   <div class="accordion-body">
                     <ul class="list-unstyled">
-                      <li><a href="/allproducts" class="text-dark">All</a></li>
+                      <li><a href="/allproducts" class="text-dark" onclick="">All</a></li>
                       <% let categorysName  %>
                       <% categories.forEach((category)=>{ %>
                         <li>
-                          <a href="/allproducts?category=<%=category.categoryName%>" class="text-dark cat" data-category-name="<%=category.categoryName%>">
-                          <% categorysName = category.categoryName%>  
-                            <%=category.categoryName%>
-                          </a>
+                          <label>
+                            <a href="/allproducts?category=<%= category.categoryName %>" class="text-dark" onclick=""><%= category.categoryName %></a></li>
+                            
+                          </label>
                         </li>
                         <% }) %>
 
@@ -64,7 +64,7 @@
                   <button class="accordion-button text-dark bg-light" type="button" data-mdb-toggle="collapse"
                     data-mdb-target="#panelsStayOpen-collapseTwo" aria-expanded="true"
                     aria-controls="panelsStayOpen-collapseTwo">
-                    Brands
+                    Colors
                   </button>
                 </h2>
                 <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show"
@@ -73,10 +73,30 @@
                     <div>
 
                       <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" />
-                        <label class="form-check-label" for="checkbox_">
+                        <input class="form-checkbox-input" type="checkbox" value="Red" />
+                        <label class="form-checkbox-label" for="checkbox">
+                          Red
                         </label>
-
+                        <input class="form-checkbox-input" type="checkbox" value="Black" />
+                        <label class="form-checkbox-label" for="checkbox">
+                          Black
+                        </label>
+                        <input class="form-checkbox-input" type="checkbox" value="Yellow" />
+                        <label class="form-checkbox-label" for="checkbox">
+                          Yellow
+                        </label>
+                        <input class="form-checkbox-input" type="checkbox" value="Green" />
+                        <label class="form-checkbox-label" for="checkbox">
+                          Green
+                        </label>
+                        <input class="form-checkbox-input" type="checkbox" value="Blue" />
+                        <label class="form-checkbox-label" for="checkbox">
+                          Blue
+                        </label>
+                        <input class="form-checkbox-input" type="checkbox" value="White" />
+                        <label class="form-checkbox-label" for="checkbox">
+                          White
+                        </label>
                       </div>
                     </div>
                   </div>
@@ -197,8 +217,7 @@
 
 
         <!-- Pagination -->
-        <!-- Pagination -->
-
+        
         <% var total=total %>
         <% var limit=limit %>
         <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-3">
@@ -222,8 +241,6 @@
             </li>
           </ul>
         </nav>
-        
-        <!-- Pagination -->
 
         <!-- Pagination -->
       </div>
@@ -234,6 +251,23 @@
   <footer>
     <%- include('../partials/footer.ejs') %>
   </footer>
+  <script>
+    
+function redirectToProduct(productId) {
+    window.location.href = "/products_page?id=" + productId;
+}
+
+const colors = document.querySelectorAll('.form-checkbox-input')
+colors.forEach((color)=>{
+color.addEventListener('change',()=>{
+  if(color.checked){
+    window.location.href='/allproducts?color='+color.value
+  
+  }
+})
+})
+
+  </script>
 </body>
 
   </html>

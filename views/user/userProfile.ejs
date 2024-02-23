@@ -123,22 +123,25 @@
                     <div class="row">
                       <div class="col-sm-3">
                         <p class="mb-0">Address</p>
+                        <p class="mb-0">HouseNo</p>
+                        <p class="mb-0">City</p>
+                        <p class="mb-0">Pincode</p>
+                        <p class="mb-0">District</p>
+                        <p class="mb-2">State</p>
+
+                      </div>
+                      <div class="col-sm-9">
+                        <p><%=address[0].address%></p>
+                        <p><%=address[0].house_No%></p>
+                        <p><%=address[0].city%></p>
+                        <p><%=address[0].postcode%></p>
+                        <p><%=address[0].district%></p>
+                        <p><%=address[0].state%></p>
                       </div>
                      
-                        <div class="col-sm-9">
-                          <a href="/account/address">
-                            <p class="text-dark mb-0">
-                              View Address ()
-                            </p>
-                          </a>
-                        </div>
-                       
                           <div class="col-sm-9">
-                            <a href="/add-address">
-                              <p class="text-dark mb-0" style="text-decoration: underline;">
-                                Add Address
-                              </p>
-                            </a>
+                            <a href="/add-address"><button class="btn "
+                              style="background-color: #FEBD69; color: #131921; font-weight: 500;">Add Address</button></a>
                           </div>
                           
                     </div>

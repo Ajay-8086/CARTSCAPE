@@ -1,6 +1,38 @@
+document.addEventListener('DOMContentLoaded',async()=>{
+    try {
+        const response = await axios.get('/cartcount')
+        if(response.status==401){
+            cartCount('');
+            document.querySelector('.cartTitle').innerHTML='Your Cart is empty please login'
+        }
+        else if (response.status === 200 && response.data.isLogged && response.data.count > 0) {
+            cartCount(response.data.count);
+            const cartProducts = response.data.cart.productId
+            cartProducts.forEach(product=>{
+                
+                let id =product.id
+               let cartBtn = document.querySelector(`.cart${id}`)
+               cartBtn.innerText="Go to cart"
+                cartBtn.setAttribute('href', '/view_cart')
+            })
+        } else {
+            cartCount('');
+            document.querySelector('.cartTitle').innerHTML='Your Cart is empty'
+        }
+   } catch (error) {
+    console.log(error);
+   }
+})
 
-
-
+//Getting cart count==============================================================================================>
+function cartCount(count){
+    const counts = document.getElementById('cartCount')
+    if (count == null || count === undefined || count === 0) {
+        counts.innerHTML = '';
+      } else {
+        counts.innerHTML = count;
+      }   
+}
 
 
 async function addingToCart(productId){
@@ -75,15 +107,13 @@ try {
 async function removeFromCart(id){
     try {
        const discountedPrice =  document.querySelector('.discount'+id).innerText
-       console.log(discountedPrice);
         let discount = discountedPrice.replace(/\$|,/g, '')
-        console.log(discount);
         const response  = await  axios.delete(`/remove_cart?id=${id}`)
         if(response.status==200){
             document.querySelector('.cartDetails'+id).remove()
-          const countOfCart=  cartCount(response.data.count)
             updatingTotal(discount*-1)
-            if(!countOfCart){
+              cartCount(response.data.count)
+            if(response.data.count==0){
                 document.querySelector('.cartTitle').innerHTML='Your Cart is empty'
             }
         }else{

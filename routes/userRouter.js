@@ -12,6 +12,8 @@ router.get('/',userController.home)
 router.get('/profile',userController.getUserProfile)
 router.get('/editprofile',userController.editProfileGet)
 router.post('/editprofile',userController.editProfilePost)
+router.get('/add-address',userController.getAddAddress)
+router.post('/add-address',userController.postAddAddress)
 
 // USER AUTHENTICATION MANAGEMENT===========================================================================>
 

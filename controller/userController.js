@@ -2,16 +2,27 @@ const categoryModel = require('../models/category')
 const bannerModel = require('../models/banner')
 const productModel = require('../models/product')
 const userModel = require('../models/customer')
+const profileModel = require('../models/profile')
 const bcrypt = require('bcrypt')
 module.exports = {
     home: async(req, res) => {
         try {
             const categories = await categoryModel.find({isDeleted:false})
             const banners = await bannerModel.find({})
+            const subcategory =req.query?.subcat
             const oneWeekAgo = new Date()
             oneWeekAgo.setDate(oneWeekAgo.getDate()-7)
-            const products = await productModel.find({createdAt:{$gte:oneWeekAgo},isDeleted:false,stock:{$gt:0}}).limit(8)
-            res.status(200).render('user/userDashboard',{categories,banners,products})
+            let products ;
+            if(subcategory){
+                products = await productModel.find({isDeleted:false,subcategory:subcategory,stock:{$gt:0}}).limit(8)
+            }else{
+
+                products = await productModel.find({createdAt:{$gte:oneWeekAgo},isDeleted:false,stock:{$gt:0}}).limit(8)
+               if(!products || products.length==0){
+                   products = await productModel.find({isDeleted:false,stock:{$gt:0}}).limit(8)
+               }
+            }
+            res.status(200).render('user/userDashboard',{categories,banners,products,title:subcategory??'New Arrivals'})
         } catch (error) {
             res.status(500).send('Internal server error')
         }
@@ -43,9 +54,12 @@ module.exports = {
        try {
         const categories = await categoryModel.find({isDeleted:false})
         const userId = req.session.userId
+        const addressDetails = await profileModel.find({userId})
+        const address= addressDetails[0]?.addresses
+        console.log(address);
         if(userId){
             const userDetails = await userModel.findOne({_id:userId})
-            res.status(200).render('user/userProfile',{categories,userDetails})
+            res.status(200).render('user/userProfile',{categories,userDetails,address})
         }else{
             res.status(400).redirect('/login')
         }
@@ -91,6 +105,36 @@ module.exports = {
         console.log(error);
         res.status(500).json('Internal server error')
        }
-    }
-  
+    },
+    getAddAddress:async(req,res)=>{
+        try {
+            const categories = await categoryModel.find({isDeleted:false})
+            res.status(200).render('user/addAddress',{categories})
+        } catch (error) {
+            console.log(error);
+            res.send('Internal server error')
+        }
+    },
+    postAddAddress:async(req,res)=>{
+        try {
+           const {address,city,house_No,postcode,altr_number,state,country,district} = req.body
+           const userId = req.session.userId
+           if(!userId){
+            res.status(401).redirect('/login')
+           }else{
+            const addressExist =await profileModel.findOne({userId})
+            if(!addressExist){
+                const newAdress =  new profileModel({userId,addresses:[{address,city,house_No,postcode,altr_number,state,country,district}]})
+                await newAdress.save()
+                res.status(200).redirect('/profile')
+            }else{
+                addressExist.addresses.push({address,city,house_No,postcode,altr_number,state,country,district})
+                addressExist.save()
+                res.status(200).redirect('/profile')
+            }
+           }
+        } catch (error) {
+            res.status(500).send('Internal server error')
+        }
+    },
 };
