@@ -15,6 +15,7 @@ router.post('/editprofile',userController.editProfilePost)
 router.get('/add-address',userController.getAddAddress)
 router.post('/add-address',userController.postAddAddress)
 router.delete('/address/delete',userController.deleteAddress)
+router.get('/logout',userController.userLogout)
 
 // USER AUTHENTICATION MANAGEMENT===========================================================================>
 

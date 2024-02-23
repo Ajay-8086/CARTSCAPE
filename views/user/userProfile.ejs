@@ -15,10 +15,8 @@
         <div class="col">
           <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
             <ol class="breadcrumb mb-0">
-              <form action="/logout">
-                <button type="submit" class="btn " style="background-color: #131921; color:whitesmoke"
-                  id="logoutButton">logout</button>
-              </form>
+              <a href="/logout" style="margin-left: 10px;"><button class="btn "
+                style="background-color: #000000; color: #fff; font-weight: 500;">Logout</button></a>
               <a href="/editprofile" style="margin-left: 10px;"><button class="btn "
                 style="background-color: #FEBD69; color: #131921; font-weight: 500;">Edit Profile</button></a>
             </ol>
@@ -123,7 +121,7 @@
                     <hr>
                     <div class="row">
                     
-                     <% if(address){ %>
+                     <% if(address[0]){ %>
 
                        <div class="col-sm-9" style="display: flex; gap: 10rem; width: 100%;">
                         <div>
