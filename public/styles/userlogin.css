@@ -90,6 +90,16 @@
 .form-label{
     background: none !important;
 }
+
+.address_frame::-webkit-scrollbar {
+    width: 0em;
+  }
+.address_frame::-webkit-scrollbar-track {
+    background-color: transparent;
+   }
+.address_frame::-webkit-scrollbar-thumb {
+    background-color: transparent;
+}
     
 
  .form-outline input.form-control  {

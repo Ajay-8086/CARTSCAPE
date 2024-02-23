@@ -56,7 +56,6 @@ module.exports = {
         const userId = req.session.userId
         const addressDetails = await profileModel.find({userId})
         const address= addressDetails[0]?.addresses
-        console.log(address);
         if(userId){
             const userDetails = await userModel.findOne({_id:userId})
             res.status(200).render('user/userProfile',{categories,userDetails,address})
@@ -137,4 +136,25 @@ module.exports = {
             res.status(500).send('Internal server error')
         }
     },
+    deleteAddress:async(req,res)=>{
+        try {
+            const userId = req.session?.userId
+            const addressId = req.query.addressId
+            const addressExist = await profileModel.findOne({userId})
+            if(addressExist){
+                console.log('gg');
+                const deleteAddress = await profileModel.updateOne(
+                    { userId },
+                    { $pull: { addresses: { _id: addressId } } }
+                );
+                if(deleteAddress){
+                    res.status(200).json('deleted address')
+                }else{
+                    res.status(401).json('can not delete address')
+                }
+            }
+        } catch (error) {
+            res.status(500).json('Internal server error')
+        }
+    }
 };

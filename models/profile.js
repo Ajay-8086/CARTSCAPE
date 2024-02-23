@@ -9,7 +9,7 @@ const profile = new mongoose.Schema({
         altr_number:String,
         country:String,
         district:String,
-        _id:false
+        state:String
     }]
 })
 const profileModel = mongoose.model('profile',profile)

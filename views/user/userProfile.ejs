@@ -82,7 +82,8 @@
             </div>
             
             
-            
+           
+            <div class="address_section" style="display: flex; justify-content: space-between;">
            
               <div class="col-lg-8">
                 <div class="card mb-4">
@@ -121,34 +122,68 @@
                     </div>
                     <hr>
                     <div class="row">
-                      <div class="col-sm-3">
-                        <p class="mb-0">Address</p>
-                        <p class="mb-0">HouseNo</p>
-                        <p class="mb-0">City</p>
-                        <p class="mb-0">Pincode</p>
-                        <p class="mb-0">District</p>
-                        <p class="mb-2">State</p>
+                    
+                     <% if(address){ %>
 
-                      </div>
-                      <div class="col-sm-9">
-                        <p><%=address[0].address%></p>
-                        <p><%=address[0].house_No%></p>
-                        <p><%=address[0].city%></p>
-                        <p><%=address[0].postcode%></p>
-                        <p><%=address[0].district%></p>
-                        <p><%=address[0].state%></p>
-                      </div>
-                     
-                          <div class="col-sm-9">
-                            <a href="/add-address"><button class="btn "
-                              style="background-color: #FEBD69; color: #131921; font-weight: 500;">Add Address</button></a>
-                          </div>
+                       <div class="col-sm-9" style="display: flex; gap: 10rem; width: 100%;">
+                        <div>
+                          <p>Address:<%=address[0].address%></p>
+                          <p>HouseNo:<%=address[0].house_No%></p>
+                          <p>City:<%=address[0].city%></p>
+                        </div>
+                         <div>
+                          <p>Pinde:<%=address[0].postcode%></p>
+                         <p>District:<%=address[0].district%></p>
+                         <p>State:<%=address[0].state%></p>
+                         </div>
+                       </div>
+                       <div class="col-sm-9">
+                         <%  }else %>
+                          <a href="/add-address"><button class="btn "
+                            style="background-color: #FEBD69; color: #131921; font-weight: 500;">Add Address</button></a>
+                        </div>
+                  
                           
                     </div>
                   </div>
                 </div>
-                </div>
+                </div>            
+                
+
+                <!-- ------------------------ -->
+
+
+              <div class="col-lg-4" style="width: 32%;">
+                <div class="card mb-4">
+                  <div class="card-body" style="padding: 0; padding-bottom: 1rem;">
+                <h3 style="font-size: 1rem; font-family: sans-serif;padding: 1.3rem 0; width: 100%; padding-left: 1rem; border-bottom: 1px solid rgba(0, 0, 0, 0.199);">SELECT ADDRESS</h3>
+
+                <div class="address_frame" style="width: 100%; height: 21.3rem;overflow-y: scroll;">
+                 <% if(address) { %>
+
+                  <% address.forEach(data=>{ %>
+                <section class="adrs<%=data._id%>" style="position: relative;display: flex; align-items: center; padding: .6rem 2rem; padding-left: 1rem; gap: 1rem;
+                border-bottom: 1px solid rgba(63, 63, 63, 0.327); cursor: pointer;">
+                  <input id="address" type="radio">
+                  <label for="address">
+
+                      <div>Address : <span><%=data.address%></span></div>
+                      <div>House No : <span><%=data.house_No%></span></div>
+                      <div>Pincode : <span><%=data.postcode%></span></div>
+                    </label>
+                    <a style="position: absolute; right: 1.5rem;" onclick="deleteAddress('<%=data._id%>')"><i class="fa-solid fa-trash"></i></a>
+                  </section>
+                  <%})%>
+                 <% } %>
               </div>
+                </div>
+
+                <!-- ------------------------ -->
+
+              </div>
+
+              </div>
+
         </div>
          </div>
   </section>
@@ -157,6 +192,22 @@
  
 <script src="js/accountDetails.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+ async function deleteAddress(id){
+  try {
+    console.log(id);
+    const response = await axios.delete(`/address/delete?addressId=${id}`)
+    if(response.status==200){
+      document.querySelector('.adrs'+id).remove();
+    } else {
+      console.log('error');
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+</script>
   <!-- include footer -->
   <%- include('../partials/footer.ejs') %>
   <!-- /include footer -->
