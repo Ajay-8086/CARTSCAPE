@@ -1,6 +1,6 @@
 <!-- include header -->
 <%- include('../partials/header.ejs') %>
-<!-- /include header -->
+  <!-- /include header -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
@@ -9,203 +9,220 @@
   <link rel="stylesheet" href="css/accountDetails.css">
 
 
-  <section style="background-color: #eee; height: 100vh;">
+  <section style="background-color: #eee; ">
     <div class="container py-5">
       <div class="row">
         <div class="col">
           <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
             <ol class="breadcrumb mb-0">
               <a href="/logout" style="margin-left: 10px;"><button class="btn "
-                style="background-color: #000000; color: #fff; font-weight: 500;">Logout</button></a>
+                  style="background-color: #000000; color: #fff; font-weight: 500;">Logout</button></a>
               <a href="/editprofile" style="margin-left: 10px;"><button class="btn "
-                style="background-color: #FEBD69; color: #131921; font-weight: 500;">Edit Profile</button></a>
+                  style="background-color: #FEBD69; color: #131921; font-weight: 500;">Edit Profile</button></a>
             </ol>
           </nav>
         </div>
       </div>
 
-        <div class="row">
-          <div class="col-lg-4">
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="card mb-4">
+            <div class="card-body text-center">
+              <h5 class="my-3">
+                Your Cart
+              </h5>
+              <p class="text-muted mb-1"></p>
+              <a href="/view_cart"><button class="btn "
+                  style="background-color: #FEBD69; color: #131921; font-weight: 500;">My cart</button></a>
+              <div class="d-flex justify-content-center mb-2">
+                <input type="text" name="id" value="" style="display: none;">
+                <input type="text" name="i" value="" style="display: none;">
+                <h1></h1>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="card mb-4">
+            <div class="card-body text-center">
+              <h5 class="my-3">
+                Your Orders
+              </h5>
+              <p class="text-muted mb-1"></p>
+              <a href="/my-Orders"><button class="btn "
+                  style="background-color: #FEBD69; color: #131921; font-weight: 500;">My Orders</button></a>
+              <div class="d-flex justify-content-center mb-2">
+                <input type="text" name="id" value="" style="display: none;">
+                <input type="text" name="i" value="" style="display: none;">
+                <h1></h1>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="card mb-4">
+            <div class="card-body text-center">
+              <h5 class="my-3">
+                Your wishlist
+              </h5>
+              <p class="text-muted mb-1"></p>
+              <a href="/wishlist"><button class="btn "
+                  style="background-color: #FEBD69; color: #131921; font-weight: 500;">My wishlist</button></a>
+              <div class="d-flex justify-content-center mb-2">
+                <input type="text" name="id" value="" style="display: none;">
+                <input type="text" name="i" value="" style="display: none;">
+                <h1></h1>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+        <div class="address_section" style="display: flex; justify-content: space-between;">
+
+          <div class="col-lg-8">
             <div class="card mb-4">
-              <div class="card-body text-center">
-                <h5 class="my-3">
-                  Your Cart
-                </h5>
-                <p class="text-muted mb-1"></p>
-                <a href="/view_cart"><button class="btn "
-                    style="background-color: #FEBD69; color: #131921; font-weight: 500;">My cart</button></a>
-                <div class="d-flex justify-content-center mb-2">
-                  <input type="text" name="id" value="" style="display: none;">
-                  <input type="text" name="i" value="" style="display: none;">
-                  <h1></h1>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="mb-0">Full Name</p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-muted mb-0">
+                      <%=userDetails.name%>
+                    </p>
+                  </div>
+                </div>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="mb-0">Email</p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-muted mb-0">
+                      <%=userDetails.email%>
+                    </p>
+                  </div>
+                </div>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="mb-0">Mobile</p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-muted mb-0">
+                      <%=userDetails.phone%>
+                    </p>
+                  </div>
+                </div>
+                <hr>
+                <div class="row">
+
+                  <% if(address && address.length > 0) { %>
+
+                    <div class="col-sm-9" style="display: flex; gap: 10rem; width: 100%;">
+                      <div>
+
+                        <p>Address:<%=address[0].address%>
+                        </p>
+                        <p>HouseNo:<%=address[0].house_No%>
+                        </p>
+                        <p>City:<%=address[0].city%>
+                        </p>
+                      </div>
+
+                      <div>
+
+                        <p>Pinde:<%=address[0].postcode%>
+                        </p>
+                        <p>District:<%=address[0].district%>
+                        </p>
+                        <p>State:<%=address[0].state%>
+                        </p>
+                      </div>
+
+                    </div>
+                    <div class="col-sm-9">
+                      <% } %>
+                        <a href="/add-address"><button class="btn "
+                            style="background-color: #FEBD69; color: #131921; font-weight: 500;">Add
+                            Address</button></a>
+                    </div>
+
+
                 </div>
               </div>
             </div>
           </div>
+
+
+          <!-- ------------------------ -->
+
           
-            <div class="col-lg-4">
-              <div class="card mb-4">
-                <div class="card-body text-center">
-                  <h5 class="my-3">
-                    Your Orders
-                  </h5>
-                  <p class="text-muted mb-1"></p>
-                  <a href="/my-Orders"><button class="btn "
-                      style="background-color: #FEBD69; color: #131921; font-weight: 500;">My Orders</button></a>
-                  <div class="d-flex justify-content-center mb-2">
-                    <input type="text" name="id" value="" style="display: none;">
-                    <input type="text" name="i" value="" style="display: none;">
-                    <h1></h1>
-                  </div>
-                </div>
-              </div>
-            </div>
-           
-            <div class="col-lg-4">
-              <div class="card mb-4">
-                <div class="card-body text-center">
-                  <h5 class="my-3">
-                    Your wishlist
-                  </h5>
-                  <p class="text-muted mb-1"></p>
-                  <a href="/wishlist"><button class="btn "
-                      style="background-color: #FEBD69; color: #131921; font-weight: 500;">My wishlist</button></a>
-                  <div class="d-flex justify-content-center mb-2">
-                    <input type="text" name="id" value="" style="display: none;">
-                    <input type="text" name="i" value="" style="display: none;">
-                    <h1></h1>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            
-           
-            <div class="address_section" style="display: flex; justify-content: space-between;">
-           
-              <div class="col-lg-8">
-                <div class="card mb-4">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-sm-3">
-                        <p class="mb-0">Full Name</p>
-                      </div>
-                      <div class="col-sm-9">
-                        <p class="text-muted mb-0">
-                         <%=userDetails.name%>
-                        </p>
-                      </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                      <div class="col-sm-3">
-                        <p class="mb-0">Email</p>
-                      </div>
-                      <div class="col-sm-9">
-                        <p class="text-muted mb-0">
-                          <%=userDetails.email%>
-                        </p>
-                      </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                      <div class="col-sm-3">
-                        <p class="mb-0">Mobile</p>
-                      </div>
-                      <div class="col-sm-9">
-                        <p class="text-muted mb-0">
-                          <%=userDetails.phone%>
-                        </p>
-                      </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                    
-                     <% if(address[0]){ %>
-
-                       <div class="col-sm-9" style="display: flex; gap: 10rem; width: 100%;">
-                        <div>
-                          <p>Address:<%=address[0].address%></p>
-                          <p>HouseNo:<%=address[0].house_No%></p>
-                          <p>City:<%=address[0].city%></p>
-                        </div>
-                         <div>
-                          <p>Pinde:<%=address[0].postcode%></p>
-                         <p>District:<%=address[0].district%></p>
-                         <p>State:<%=address[0].state%></p>
-                         </div>
-                       </div>
-                       <div class="col-sm-9">
-                         <%  }else %>
-                          <a href="/add-address"><button class="btn "
-                            style="background-color: #FEBD69; color: #131921; font-weight: 500;">Add Address</button></a>
-                        </div>
-                  
-                          
-                    </div>
-                  </div>
-                </div>
-                </div>            
-                
-
-                <!-- ------------------------ -->
-
-
-              <div class="col-lg-4" style="width: 32%;">
-                <div class="card mb-4">
-                  <div class="card-body" style="padding: 0; padding-bottom: 1rem;">
-                <h3 style="font-size: 1rem; font-family: sans-serif;padding: 1.3rem 0; width: 100%; padding-left: 1rem; border-bottom: 1px solid rgba(0, 0, 0, 0.199);">SELECT ADDRESS</h3>
+          <% if(address && address.length>0) { %>
+          <div class="col-lg-4 addressclss" style="width: 32%;">
+            <div class="card mb-4">
+              <div class="card-body" style="padding: 0; padding-bottom: 1rem;">
+                <h5 class="my-3"
+                  style="font-size: 1rem; font-family: sans-serif;padding: 1.3rem 0; width: 100%; padding-left: 1rem; border-bottom: 1px solid rgba(0, 0, 0, 0.199); ">
+                  YOUR ADDRESS</h5>
 
                 <div class="address_frame" style="width: 100%; height: 21.3rem;overflow-y: scroll;">
-                 <% if(address) { %>
 
-                  <% address.forEach(data=>{ %>
-                <section class="adrs<%=data._id%>" style="position: relative;display: flex; align-items: center; padding: .6rem 2rem; padding-left: 1rem; gap: 1rem;
+                    <% address.forEach(data=>{ %>
+                      <section class="adrs<%=data._id%>" style="position: relative;display: flex; align-items: center; padding: .6rem 2rem; padding-left: 1rem; gap: 1rem;
                 border-bottom: 1px solid rgba(63, 63, 63, 0.327); cursor: pointer;">
-                  <input id="address" type="radio">
-                  <label for="address">
+                        <label for="address">
 
-                      <div>Address : <span><%=data.address%></span></div>
-                      <div>House No : <span><%=data.house_No%></span></div>
-                      <div>Pincode : <span><%=data.postcode%></span></div>
-                    </label>
-                    <a style="position: absolute; right: 1.5rem;" onclick="deleteAddress('<%=data._id%>')"><i class="fa-solid fa-trash"></i></a>
-                  </section>
-                  <%})%>
-                 <% } %>
-              </div>
+                          <div>Address : <span>
+                              <%=data.address%>
+                            </span></div>
+                          <div>House No : <span>
+                              <%=data.house_No%>
+                            </span></div>
+                          <div>Pincode : <span>
+                              <%=data.postcode%>
+                            </span></div>
+                        </label>
+                        <a style="position: absolute; right: 1.5rem;" onclick="deleteAddress('<%=data._id%>','<%address.length%>')"><i
+                            class="fa-solid fa-trash"></i></a>
+                      </section>
+                      <%})%>
+                    </div>
+                  </div>
+                  
+                  <!-- ------------------------ -->
+                  
                 </div>
-
-                <!-- ------------------------ -->
-
               </div>
-
-              </div>
-
-        </div>
-         </div>
+            </div>
+            <% } %>
+          
+      </div>
+    </div>
   </section>
-  
- 
- 
-<script src="js/accountDetails.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
- async function deleteAddress(id){
-  try {
-    console.log(id);
-    const response = await axios.delete(`/address/delete?addressId=${id}`)
-    if(response.status==200){
-      document.querySelector('.adrs'+id).remove();
-    } else {
-      console.log('error');
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    async function deleteAddress(id,length) {
+      try {
+        const response = await axios.delete(`/address/delete?addressId=${id}`)
+        if (response.status == 200) {
+          document.querySelector('.adrs' + id).remove();
+          if(length==0){
+            document.querySelector('.addressclss').style.display='none'
+          }
+        } else {
+          console.log('error');
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
-  } catch (error) {
-    console.log(error);
-  }
-}
 
-</script>
+  </script>
   <!-- include footer -->
   <%- include('../partials/footer.ejs') %>
-  <!-- /include footer -->
+    <!-- /include footer -->

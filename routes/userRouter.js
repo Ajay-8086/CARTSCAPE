@@ -5,6 +5,7 @@ const userController = require('../controller/userController')
 const wislistController = require('../controller/wishlistController')
 const cartController = require('../controller/cartController')
 const productController = require('../controller/productController')
+const paymentController = require('../controller/paymentController')
 
 // USER MANAGEMENT =========================================================================================>
 
@@ -15,6 +16,7 @@ router.post('/editprofile',userController.editProfilePost)
 router.get('/add-address',userController.getAddAddress)
 router.post('/add-address',userController.postAddAddress)
 router.delete('/address/delete',userController.deleteAddress)
+router.get('/checkout',userController.getCheckout)
 router.get('/logout',userController.userLogout)
 
 // USER AUTHENTICATION MANAGEMENT===========================================================================>
@@ -33,8 +35,14 @@ router.post('/forget/password',authController.postForgotPassword)
 router.post('/signup',authController.postSignup)
 router.post('/verify-otp',authController.postOtp)
 
+// USER PRODUCT MANAGEMENT ==================================================================================>
 router.get('/allproducts',userController.getAllProducts)
-
+router.get('/search',userController.searchProduct)
+router.get('/checkout/add-address',userController.checkoutAddress)
+router.post('/checkout/add-address',userController.postcheckoutAddress)
+router.post('/make-purchase',userController.makePurchase)
+router.get('/payment',paymentController.getPayment)
+// router.post('/payment',paymentController.payment)
 
 // WHISHLISTMANAGEMENT ========================================================================================>
 router.get('/wishlistcount',wislistController.getWishListCount)
@@ -49,6 +57,6 @@ router.post('/addtocart',cartController.addToCart)
 router.patch('/cart_quanatity',cartController.cartQuantityManging)
 router.delete('/remove_cart',cartController.cartItemRemove)
 
-//PRODUCT MANAGEMENT=================================================================================================================>
+//PRODUCT MANAGEMENT===============================================================================================>
 router.get('/products_page',productController.getProductPage)
 module.exports = router

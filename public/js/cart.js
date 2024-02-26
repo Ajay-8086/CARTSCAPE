@@ -70,7 +70,7 @@ function updatingTotal(price){
     
 }
 
-async function quantityChange(id,operation){
+async function quantityChange(id,operation,stock){
     const quantityInput =  document.querySelector('.quantity-input'+id)
     const discountedPrice = document.querySelector('.discount'+id)
     const originalPrice = document.querySelector('.price'+id)
@@ -85,12 +85,22 @@ async function quantityChange(id,operation){
         discountedPrice.innerText ='$'+(parseInt(discount) -parseInt( priceOfAnItem))
         originalPrice.innerText = '$'+(parseInt(price)-parseInt( originaPriceOfAnItem))
         updatingTotal(priceOfAnItem*-1)
+        if(parseInt(quantityInput.value) < stock){
+            document.querySelector('.stockDetails'+id).innerText = ''
+        }else{
+            document.querySelector('.stockDetails'+id).innerText = 'Out of stock'
+        }
     }else if(operation=='increase'){
         quantity++
         quantityInput.value = quantity
         discountedPrice.innerText ='$'+(parseInt(discount) +parseInt( priceOfAnItem))
         originalPrice.innerText = '$'+(parseInt(price)+parseInt( originaPriceOfAnItem))
         updatingTotal(priceOfAnItem)
+        if(parseInt(quantityInput.value) < stock){
+            document.querySelector('.stockDetails'+id).innerText = ''
+        }else{
+            document.querySelector('.stockDetails'+id).innerText = 'Out of stock'
+        }
     }else{
         return
     }

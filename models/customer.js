@@ -26,6 +26,6 @@ var customer = new mongoose.Schema({
   }
 });
 customer.plugin(mongoosePaginate)
-const customerModel = mongoose.model('customer',customer)
+const customerModel = mongoose.model('customers',customer)
 
 module.exports = customerModel

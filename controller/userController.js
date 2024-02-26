@@ -4,6 +4,7 @@ const productModel = require('../models/product')
 const userModel = require('../models/customer')
 const profileModel = require('../models/profile')
 const bcrypt = require('bcrypt')
+const customerModel = require('../models/customer')
 module.exports = {
     home: async(req, res) => {
         try {
@@ -50,12 +51,30 @@ module.exports = {
            console.log(error); 
         }
     },
+    searchProduct:async(req,res)=>{
+        try {
+            const {query} = req.query
+            const categories = await categoryModel.find({isDeleted:false})
+            const products = await productModel.find({
+                isDeleted: false,
+                $or: [
+                    { name: { $regex: query, $options: 'i' } },
+                    { category: { $regex: query, $options: 'i' } }
+                ]
+            });
+            
+         res.status(200).render('user/store',{categories,products})
+        } catch (error) {
+           res.status(500).send('Internal server error') 
+        }
+    },
     getUserProfile:async(req,res)=>{
        try {
         const categories = await categoryModel.find({isDeleted:false})
         const userId = req.session.userId
-        const addressDetails = await profileModel.find({userId})
-        const address= addressDetails[0]?.addresses
+        const addressDetails = await profileModel.findOne({userId})
+        const address= addressDetails?.addresses
+        console.log(address);
         if(userId){
             const userDetails = await userModel.findOne({_id:userId})
             res.status(200).render('user/userProfile',{categories,userDetails,address})
@@ -142,7 +161,6 @@ module.exports = {
             const addressId = req.query.addressId
             const addressExist = await profileModel.findOne({userId})
             if(addressExist){
-                console.log('gg');
                 const deleteAddress = await profileModel.updateOne(
                     { userId },
                     { $pull: { addresses: { _id: addressId } } }
@@ -155,6 +173,71 @@ module.exports = {
             }
         } catch (error) {
             res.status(500).json('Internal server error')
+        }
+    },
+    makePurchase:(req,res)=>{
+        try {
+       const { totalAmount, discount, productId, quantity } = req.body;
+       req.session.totalPrice = totalAmount;
+       req.session.discount = discount;
+       req.session.productId = productId;
+       req.session.quantity = quantity;
+       res.status(200).redirect('/checkout')
+        } catch (error) {
+            console.log(error);
+            res.staus(500).send('Internal server error')
+        }
+    },
+    getCheckout:async(req,res)=>{
+        try {
+            const {totalPrice,discount} =req.session
+            const userId = req.session.userId
+            if(!userId){
+                res.status(401).redirect('/login')
+            }else{
+            const categories = await categoryModel.find({isDeleted:false})
+            let users;
+             usersAddressExist = await profileModel.findOne({userId})
+             if(usersAddressExist){
+                 users = await profileModel.findOne({userId}).populate('userId')
+             }else{
+                users = await customerModel.findOne({_id:userId})
+             }
+            res.status(200).render('user/checkout',{categories,users,totalPrice,discount})
+            }
+        } catch (error) {
+            res.status(500).send('Internal server error')
+        }
+    },
+    checkoutAddress:async(req,res)=>{
+        try {
+            const categories = await categoryModel.find({isDeleted:false})
+            res.status(200).render('user/checkout-address',{categories})
+        } catch (error) {
+            console.log(error);
+            res.send('Internal server error')
+        }
+    },
+    postcheckoutAddress:async(req,res)=>{
+        try {
+           const {address,city,house_No,postcode,altr_number,state,country,district} = req.body
+           const userId = req.session.userId
+           if(!userId){
+            res.status(401).redirect('/login')
+           }else{
+            const addressExist =await profileModel.findOne({userId})
+            if(!addressExist){
+                const newAdress =  new profileModel({userId,addresses:[{address,city,house_No,postcode,altr_number,state,country,district}]})
+                await newAdress.save()
+                res.status(200).redirect('/checkout')
+            }else{
+                addressExist.addresses.push({address,city,house_No,postcode,altr_number,state,country,district})
+                addressExist.save()
+                res.status(200).redirect('/checkout')
+            }
+           }
+        } catch (error) {
+            res.status(500).send('Internal server error')
         }
     },
     userLogout:(req,res)=>{

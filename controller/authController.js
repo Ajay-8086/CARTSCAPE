@@ -201,7 +201,7 @@ module.exports = {
         try {
             const { digit1, digit2, digit3, digit4, phone } = req.body;
             await verifyOtp(res, phone, `${digit1}${digit2}${digit3}${digit4}`);
-            console.log('redirected');
+            res.redirect('/login');
         } catch (error) {
             res.status(500).send('internal server error')
         }

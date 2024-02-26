@@ -21,7 +21,7 @@ async function verifyOtp(res, phone, digits) {
 
         if (verificationCheck.status === 'approved') {
             await updateCustomerVerificationStatus(phone);
-            res.redirect('/login');
+           
         } else {
             res.redirect('/signup');
         }

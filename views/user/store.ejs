@@ -217,9 +217,11 @@
 
 
         <!-- Pagination -->
-        
-        <% var total=total %>
-        <% var limit=limit %>
+        <% var page = parseInt(page) || 1; %>
+        <% var categoryName = categoryName || ''; %>
+        <% var total=total ||0 %>
+        <% var limit=limit || 9 %>
+        <% var noPages = Math.ceil(total / limit); %>
         <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-3">
           <ul class="pagination">
             <li class="page-item <%= page === 1 ? 'disabled' : '' %>">
@@ -256,16 +258,6 @@
 function redirectToProduct(productId) {
     window.location.href = "/products_page?id=" + productId;
 }
-
-const colors = document.querySelectorAll('.form-checkbox-input')
-colors.forEach((color)=>{
-color.addEventListener('change',()=>{
-  if(color.checked){
-    window.location.href='/allproducts?color='+color.value
-  
-  }
-})
-})
 
   </script>
 </body>

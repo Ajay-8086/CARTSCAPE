@@ -5,12 +5,16 @@ module.exports={
     getCart:async(req,res)=>{
         try {   
                  const userId = req.session.userId
+               if(userId){
                 const categories = await categoryModel.find({isDeleted:false})
                 const cartItems = await cartModel.findOne({userId}).populate('productId.id')
                 const totalCartPrice = cartItems?.productId.reduce((accumulator, element) => {
                     return accumulator + (parseInt((element.id.price-(element.id.price*element.id.discount/100))) * element.quantity);
                 }, 0);
                 res.status(200).render('user/cart',{categories,cartItems,totalCartPrice})
+               }else{
+                res.status(401).redirect('/login')
+               }
         
         } catch (error) {     
             console.log('error',error);
@@ -68,7 +72,9 @@ module.exports={
            const productId = req.body.id
            const newProductId = new mongoose.Types.ObjectId(productId)
             const newQuantity = req.body.quantity 
+            
             await cartModel.updateOne({userId:userId,"productId.id":newProductId},{$set:{"productId.$.quantity":newQuantity}})
+
             res.status(200).json({success:true})
        } catch (error) {
         console.log(error);
