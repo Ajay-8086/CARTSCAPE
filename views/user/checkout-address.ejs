@@ -1,9 +1,6 @@
-
-
 <!-- include header -->
 <%-include('../partials/header.ejs') %>
 <!-- /include header -->
-
 <div class="row">
   <div class="col-md-8 mb-4 mx-auto mb-4  mt-5" >
     <div class="card mb-4" style="background-color:#f5f5f7;">
@@ -11,68 +8,69 @@
         <h5 class="mb-0">Add Address</h5>
       </div>
       <div class="card-body">
-        <form action="/checkout/add-address" method="post">
+        <form class="form">
           <div class="card shadow-0 " >
             <div class="p-4" style="background-color:#f5f5f7;">
               <div class="row">
               </div>
               <div class="row">
+                <p class="error" style="text-align: center; color: red; "></p>
                 <div class="col-sm-8 mb-3">
                   <p class="mb-0">Address</p>
                   <div class="form-outline">
-                    <input type="text" id="typeText" placeholder="Type here" class="form-control" name="address" />
+                    <input type="text" id="typeText" placeholder="Type here" class="form-control address" name="address" />
                   </div>
                 </div>
 
                 <div class="col-sm-4 mb-3">
                   <p class="mb-0">City</p>
                   <div class="form-outline">
-                    <input type="text" id="typeText" name="city" placeholder="city" class="form-control" />
+                    <input type="text" id="typeText" name="city" placeholder="city" class="form-control city" />
                   </div>
                 </div>
                 <div class="col-sm-4 mb-3">
                   <p class="mb-0">District</p>
                   <div class="form-outline">
-                    <input type="text" id="typeText" name="district" placeholder="District" class="form-control" />
+                    <input type="text" id="typeText" name="district" placeholder="District" class="form-control district" />
                   </div>
                 </div>
                 <div class="col-sm-4 mb-3">
                   <p class="mb-0">State</p>
                   <div class="form-outline">
-                    <input type="text" id="typeText" name="state" placeholder="State" class="form-control" />
+                    <input type="text" id="typeText" name="state" placeholder="State" class="form-control state" />
                   </div>
                 </div>
 
                 <div class="col-sm-4 mb-3">
                   <p class="mb-0">House NO.</p>
                   <div class="form-outline">
-                    <input type="number" id="typeText" placeholder="Type here" name="house_No" class="form-control" />
+                    <input type="number" id="typeText" placeholder="Type here" name="house_No" class="form-control house_no" />
                   </div>
                 </div>
 
                 <div class="col-sm-4 col-6 mb-3">
                   <p class="mb-0">Postal code</p>
                   <div class="form-outline">
-                    <input type="number" id="typeText" name="postcode" class="form-control" />
+                    <input type="number" id="typeText" name="postcode" class="form-control pincode" />
                   </div>
                 </div>
 
                 <div class="col-sm-4 col-6 mb-3">
                   <p class="mb-0">Alternate Number</p>
                   <div class="form-outline">
-                    <input type="number" id="typeText" name="altr_number" class="form-control" />
+                    <input type="number" id="typeText" name="altr_number" class="form-control altr_no" />
                   </div>
                 </div>
                 <div class="col-sm-4 col-6 mb-3">
                   <p class="mb-0">Country</p>
                   <div class="form-outline">
-                    <input type="text" id="typeText" name="country" placeholder="Type here" class="form-control" />
+                    <input type="text" id="typeText" name="country" placeholder="Type here" class="form-control country" />
                   </div>
                 </div>
               </div>
               <div class="float-end">
 
-                <button type="submit" class="btn btn-black shadow-0 border">Continue</button>
+                <button type="submit" class="btn btn-black shadow-0 border submitBtn">Continue</button>
               </div>
             </div>
           </div>
@@ -81,5 +79,42 @@
     </div>
   </div>
 </div>
+<script>
 
+  const submitBtn = document.querySelector('.submitBtn')
+  submitBtn.addEventListener('click',async(event)=>{
+    event.preventDefault()
+    const error =  document.querySelector('.error')
+      const address =  document.querySelector('.address').value.trim()
+      const city =  document.querySelector('.city').value.trim()
+      const district = document.querySelector('.district').value.trim()
+      const house_No = document.querySelector('.house_no').value.trim()
+      const pinCode = document.querySelector('.pincode').value.trim()
+      const alternateNO = document.querySelector('.altr_no').value.trim()
+      const country = document.querySelector('.country').value.trim()
+      if(!address||!city||!district||!house_No||!pinCode||!alternateNO||!country){
+        error.innerHTML = 'all the fields are necessary'
+        setTimeout(() => {
+          error.innerHTML =''
+        }, 3000);
+      }
+      else{
+        const form = document.querySelector('.form')
+        const formData = new FormData(form)
+
+    const data = Object.fromEntries(formData)
+        try {
+          const response = await axios.post('/checkout/add-address',data)
+          if(response.status==200){
+            window.location.href = '/checkout'
+          }
+        } catch (error) {
+          if(error.status==401){
+            window.location.href = '/login'
+          }
+          console.log(error);
+        }
+      }
+    })
+</script>
 <%- include('../partials/footer.ejs') %>

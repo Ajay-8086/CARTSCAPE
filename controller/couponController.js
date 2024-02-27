@@ -24,9 +24,9 @@ module.exports = {
     },
     postAddCoupon: async (req, res) => {
         try {
-            const { couponCode, couponName, discount, purchaseAbove, validFrom, validTo } = req.body
+            const { couponCode, couponName, discount, purchaseAbove,purchaseminimum, validFrom, validTo } = req.body
             const newCoupon = await couponModel(
-                { couponCode, couponName, discount, purchaseAbove, validFrom, validTo }
+                { couponCode, couponName, discount, purchaseAbove,purchaseminimum, validFrom, validTo }
             )
             await newCoupon.save()
             res.status(200).redirect('/admin/coupons')
@@ -50,9 +50,9 @@ module.exports = {
 
             const id = req.params.couponId
 
-            const { couponCode, couponName, discount, purchaseAbove, validFrom, validTo } = req.body
+            const { couponCode, couponName, discount, purchaseAbove,purchaseminimum, validFrom, validTo } = req.body
 
-            const updateCoupon = await couponModel.findByIdAndUpdate(id, { $set: { couponCode, couponName, discount, purchaseAbove, validFrom, validTo } })
+            const updateCoupon = await couponModel.findByIdAndUpdate(id, { $set: { couponCode, couponName, discount, purchaseAbove,purchaseminimum, validFrom, validTo } })
             if (updateCoupon) {
                 res.status(200).json({ msg: 'coupon updated successfully' })
             } else {

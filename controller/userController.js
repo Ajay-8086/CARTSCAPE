@@ -5,6 +5,8 @@ const userModel = require('../models/customer')
 const profileModel = require('../models/profile')
 const bcrypt = require('bcrypt')
 const customerModel = require('../models/customer')
+const cartModel = require('../models/cart')
+const couponModel = require('../models/coupon')
 module.exports = {
     home: async(req, res) => {
         try {
@@ -32,7 +34,9 @@ module.exports = {
         try {
             const page = parseInt(req.query.page) || 1;
             const limit = parseInt(req.query.limit) || 9;
+            const userId = req?.session.userId
             const categories = await categoryModel.find({isDeleted:false})
+            const wishlist = await cartModel.findOne({userId}).populate('productId')
             const categoryName = req.query?.category
             let products;
             let total;
@@ -46,7 +50,7 @@ module.exports = {
              total=   await productModel.countDocuments({isDeleted:false})
             }
             const noPages = Math.ceil(total / limit);
-            res.status(200).render('user/store',{categories,products,page,total,noPages,categoryName})
+            res.status(200).render('user/store',{categories,products,page,total,noPages,categoryName,wishlist})
         } catch (error) {
            console.log(error); 
         }
@@ -74,7 +78,6 @@ module.exports = {
         const userId = req.session.userId
         const addressDetails = await profileModel.findOne({userId})
         const address= addressDetails?.addresses
-        console.log(address);
         if(userId){
             const userDetails = await userModel.findOne({_id:userId})
             res.status(200).render('user/userProfile',{categories,userDetails,address})
@@ -144,15 +147,15 @@ module.exports = {
             if(!addressExist){
                 const newAdress =  new profileModel({userId,addresses:[{address,city,house_No,postcode,altr_number,state,country,district}]})
                 await newAdress.save()
-                res.status(200).redirect('/profile')
+                res.status(200).json('address added successfully')
             }else{
                 addressExist.addresses.push({address,city,house_No,postcode,altr_number,state,country,district})
                 addressExist.save()
-                res.status(200).redirect('/profile')
+                res.status(200).json('address added successfully')
             }
            }
         } catch (error) {
-            res.status(500).send('Internal server error')
+            res.status(500).json('Internal server error')
         }
     },
     deleteAddress:async(req,res)=>{
@@ -191,6 +194,7 @@ module.exports = {
     getCheckout:async(req,res)=>{
         try {
             const {totalPrice,discount} =req.session
+
             const userId = req.session.userId
             if(!userId){
                 res.status(401).redirect('/login')
@@ -203,11 +207,31 @@ module.exports = {
              }else{
                 users = await customerModel.findOne({_id:userId})
              }
-            res.status(200).render('user/checkout',{categories,users,totalPrice,discount})
+             let products;
+             products = await cartModel.findOne({userId}).populate('productId.id')
+             const applicableCoupons = await couponModel.find({ 
+                $and: [
+                    { purchaseAbove: { $gte: totalPrice } }, 
+                    { purchaseminimum: { $lte: totalPrice } }
+                ]
+            });
+            res.status(200).render('user/checkout',{categories,users,totalPrice,discount,products,applicableCoupons})
             }
         } catch (error) {
             res.status(500).send('Internal server error')
         }
+    },
+    couponApply:async(req,res)=>{
+        try {
+            const {coupon} = req.body
+            const couponDetail = await couponModel.findOne({couponCode:coupon})
+            const discount = couponDetail.discount
+            res.status(200).json({discount:discount})
+        } catch (error) {
+            console.log(error);
+            res.staus(500).json('internal server error')
+        }
+
     },
     checkoutAddress:async(req,res)=>{
         try {
@@ -223,21 +247,21 @@ module.exports = {
            const {address,city,house_No,postcode,altr_number,state,country,district} = req.body
            const userId = req.session.userId
            if(!userId){
-            res.status(401).redirect('/login')
+            res.status(401).json('invalid user')
            }else{
             const addressExist =await profileModel.findOne({userId})
             if(!addressExist){
                 const newAdress =  new profileModel({userId,addresses:[{address,city,house_No,postcode,altr_number,state,country,district}]})
                 await newAdress.save()
-                res.status(200).redirect('/checkout')
+                res.status(200).json('address added success fully')
             }else{
                 addressExist.addresses.push({address,city,house_No,postcode,altr_number,state,country,district})
                 addressExist.save()
-                res.status(200).redirect('/checkout')
+                res.status(200).json('address added success fully')
             }
            }
         } catch (error) {
-            res.status(500).send('Internal server error')
+            res.status(500).json('Internal server error')
         }
     },
     userLogout:(req,res)=>{

@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded',async()=>{
+window.onload = async function (){
     try {
         const response = await axios.get('/cartcount')
         if(response.status==401){
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded',async()=>{
    } catch (error) {
     console.log(error);
    }
-})
+}
 
 //Getting cart count==============================================================================================>
 function cartCount(count){

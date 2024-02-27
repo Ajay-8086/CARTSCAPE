@@ -160,8 +160,6 @@
 
 
           <!-- ------------------------ -->
-
-          
           <% if(address && address.length>0) { %>
           <div class="col-lg-4 addressclss" style="width: 32%;">
             <div class="card mb-4">
@@ -211,9 +209,7 @@
         const response = await axios.delete(`/address/delete?addressId=${id}`)
         if (response.status == 200) {
           document.querySelector('.adrs' + id).remove();
-          if(length==0){
-            document.querySelector('.addressclss').style.display='none'
-          }
+         
         } else {
           console.log('error');
         }

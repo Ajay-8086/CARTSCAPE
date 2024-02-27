@@ -1,4 +1,4 @@
-const stripe = require('stripe')(process.env.STRIPE_SK);
+// const stripe = require('stripe')(process.env.STRIPE_SK);
 
 // app.post('/charge', async (req, res) => {
 //   const { amount, token } = req.body;
@@ -17,6 +17,7 @@ const stripe = require('stripe')(process.env.STRIPE_SK);
 //     res.status(500).send('Payment failed');
 //   }
 // });
+
 module.exports = {
   getPayment:(req,res)=>{
     try {
@@ -24,7 +25,8 @@ module.exports = {
     } catch (error) {
       console.log(error);
     }
-  },}
+  },
+}
 //   payment:async(req,res)=>{
 // try {
 //   const totalPrice = req.session.totalPrice

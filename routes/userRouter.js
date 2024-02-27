@@ -5,7 +5,7 @@ const userController = require('../controller/userController')
 const wislistController = require('../controller/wishlistController')
 const cartController = require('../controller/cartController')
 const productController = require('../controller/productController')
-const paymentController = require('../controller/paymentController')
+const orderController = require('../controller/orderController')
 
 // USER MANAGEMENT =========================================================================================>
 
@@ -41,7 +41,8 @@ router.get('/search',userController.searchProduct)
 router.get('/checkout/add-address',userController.checkoutAddress)
 router.post('/checkout/add-address',userController.postcheckoutAddress)
 router.post('/make-purchase',userController.makePurchase)
-router.get('/payment',paymentController.getPayment)
+router.post('/verify-coupon',userController.couponApply)
+router.get('/payment',orderController.getPayment)
 // router.post('/payment',paymentController.payment)
 
 // WHISHLISTMANAGEMENT ========================================================================================>
@@ -59,4 +60,7 @@ router.delete('/remove_cart',cartController.cartItemRemove)
 
 //PRODUCT MANAGEMENT===============================================================================================>
 router.get('/products_page',productController.getProductPage)
+
+// ORDER MANAGEMENT================================================================================================>
+
 module.exports = router

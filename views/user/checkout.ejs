@@ -11,7 +11,7 @@
                 <h5 class="card-title mb-3">checkout</h5>
                 <div class="row">
                   <form id="checkout-form">
-                    
+                    <p class="error-msg"></p>
                     <div class="col-6">
                       <p class="mb-0">Full name</p>
                       <div class="form-outline">
@@ -37,6 +37,7 @@
                       </div>
                     </div>
                     <% if (users && users.addresses && users.addresses.length > 0) { %>
+                      <p class="errorAddress"></p>
                   <div class="row">
                     <div class="col-sm-8 mb-3">
                       <p class="mb-0">Address</p>
@@ -86,6 +87,7 @@
                     </p>
                   </div>
                   <% }else{ %>
+                     <p class="errorAddress" style="color: red; text-align: center;">Please add address</p>
                       <p class="mt-4 mb-4"><a href="/checkout/add-address" class="button p-3" style="background-color: black; color: white;">Add Address</a></p>
                     <%}%>
                       <div class="mb-3">
@@ -124,7 +126,32 @@
             <!-- Checkout -->
           </div>
           <div class="col-xl-4 col-lg-4 d-flex justify-content-center justify-content-lg-end">
-            <div class="ms-lg-4 mt-4 mt-lg-0" style="max-width: 320px;">
+            <div class="ms-lg-4 mt-4 mt-lg-0" style="max-width: max-content;" >
+              <div >
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-muted">Your Products</span>
+
+                </h4>
+                <ul class="list-group mb-3 sticky-top">
+                  <%if(products&&products.productId.length>0){%>
+
+                    <% products.productId.forEach(product=>{%>
+
+                      <li class="list-group-item d-flex justify-content-between lh-condensed">
+                        <div>
+                        <img src="/uploads/products/<%=product.id.image[0]%>" alt="" width="60px" height="60px">
+                        </div>
+                          <div>
+                              <h6 class="my-0"><%=product.id.name%></h6>
+                              <small class="text-muted">Qty:<%=product.quantity%></small>
+                          </div>
+                          <span class="text-muted ms-4">$<%=product.id.price%></span>
+                      </li>
+                   <% })%>
+                 <% } %>
+                </ul>
+               
+            </div>
               <h6 class="mb-3">Summary</h6>
               <div class="d-flex justify-content-between">
                 <p class="mb-2">Total price:</p>
@@ -147,9 +174,8 @@
               </div> -->
               <div class="d-flex justify-content-between">
                 <p id="coupon" style="color: red;"></p>
-
               </div>
-              <hr />
+              <hr/>
               <div class="d-flex justify-content-between">
                 <p class="mb-2">Total price:</p>
                 <% let grandTotal = totalPrice - discount %>
@@ -157,19 +183,28 @@
                 </p>
               </div>
 
-              <div class="input-group mt-3 mb-4">
+              <div class="input-group mt-3 mb-4 " >
 
-                <form id="promo-code-form">
-
+                <form id="promo-code-form" class="d-flex" style="gap: 2rem; ">
+                  <p class="couponError" style="color: red; text-align: center;"></p>
+                 <div>
                   <input type="number" hidden id="price1" value="" name="totalsum">
 
                   <input type="text" class="form-control border" name="coupon" id="coupon-input"
                     placeholder="Promo code" />
+                  <ul class="mt-2" style="list-style: none; ">
+                    <% applicableCoupons.forEach(coupon=>{ %>
+                      <li style="background-color: #f5f5f7 !important;" >
+                        <input type="radio" name="couponRadio" value="<%= coupon.couponCode %>" id="<%= coupon.couponCode %>" class="couponInput">
+                        <label for="<%= coupon.couponCode %>" class="couponCode"><%= coupon.couponCode %></label>
+                        
+                    </li>
+                   <%  }) %>
+                  </ul>
+                 </div>
 
-                  <h1></h1>
-
-                  <button type="button" class="btn btn-light text-primary border"
-                    onclick="applyPromoCode()">Apply</button>
+                 <div class="mt-1"> <button type="button" class="btn btn-light text-primary border"
+                  onclick="applyPromoCode(event)">Apply</button></div>
                 </form>
               </div>
               
@@ -258,7 +293,7 @@
         const alternateNumber = this.parentElement.querySelector(".phone-altr").textContent;
 
         // Update the checkout form fields with the retrieved data
-       console.log(address);
+
         document.querySelector('.address-field').value = address;
         document.querySelector('.city-field').value = city;
         document.querySelector('.house_no-field').value = houseNo;
@@ -267,6 +302,44 @@
       }
     });
   });
+  const couponRadio =  document.querySelectorAll("input[name='couponRadio']");
+couponRadio.forEach((radio)=>{
+    radio.addEventListener('change',()=>{
+        if(radio.checked){
+            const couponCode = radio.value; 
+            document.getElementById('coupon-input').value = couponCode; 
+        }
+    })
+})
+async function applyPromoCode(event){
+  event.preventDefault()
+  const couponCode = document.querySelector('.couponInput').value
+  if(!couponCode){
+    document.querySelector('.couponError').innerHTML = 'Invalid coupon code'
+    setTimeout(() => {
+      document.querySelector('.couponError').innerHTML = ''
+    }, 3000);
+  }else{
+    try {
+      const response = await axios.post('/verify-coupon',{
+      coupon:couponCode
+    })
+    if(response.status==200){
+      const discount = response.data.discount
+      console.log(discount);
+    let  total =   document.getElementById('updatedPrice')
+    console.log(total);
+      const totalPrice =  total.innerText.replace(/\₹|,/g, '')
+      console.log(totalPrice);
+      const grandTotal = parseInt(totalPrice) - (parseInt(totalPrice)* parseInt(discount)/100)
+      console.log(grandTotal);
+      total.innerText ='₹'+parseInt(grandTotal)
+    }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}
 
   // Add event listener to the form submission
 document.getElementById("checkout-form").addEventListener("submit", function(event) {
@@ -275,14 +348,25 @@ document.getElementById("checkout-form").addEventListener("submit", function(eve
 
     // Check which payment method is selected
     const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+    const address = document.querySelector('.errorAddress')
+    if(!address.innerHTML){
+      if (paymentMethod === "Online_Payment") {
+          window.location.href = "/payment";
+      } else {
+          // If other payment methods are selected, redirect to captcha page or any other page
+          window.location.href = "/captcha"; 
+      }
+     
+    }else{
+      
+      setTimeout(() => {
+        address.innerHTML =''
+      }, 3000);
+      return window.location.href = window.location.href='/checkout'
+    
 
-    // If online payment is selected, redirect to payment page
-    if (paymentMethod === "Online_Payment") {
-        window.location.href = "/payment"; // Change this URL to your payment page URL
-    } else {
-        // If other payment methods are selected, redirect to captcha page or any other page
-        window.location.href = "/captcha"; // Change this URL to your captcha page URL or any other page
     }
+    // If online payment is selected, redirect to payment page
 });
 
  

@@ -30,11 +30,6 @@
                                 <small id="coupon-code-error" class="text-danger"></small>
                             </div>
                             <div class="form-group">
-                                <label for="coupon-code">Coupon Name</label>
-                                <input type="text" class="form-control" id="coupon-code"  name="couponName" required value="<%=coupon[0].couponName%>">
-                                <small id="coupon-code-error" class="text-danger"></small>
-                            </div>
-                            <div class="form-group">
                                 <label for="discount">Discount (%)</label>
                                 <input type="number" class="form-control" id="discount" placeholder="Enter Discount Percentage" name="discount" required value="<%=coupon[0].discount%>">
                                 <small id="discount-error" class="text-danger"></small>
@@ -42,6 +37,11 @@
                             <div class="form-group">
                                 <label for="discount">purchase above</label>
                                 <input type="number" class="form-control" id="discount" placeholder="Enter Discount Percentage" name="purchaseAbove" required value="<%=coupon[0].purchaseAbove%>">
+                                <small id="discount-error" class="text-danger"></small>
+                            </div>
+                            <div class="form-group">
+                                <label for="discount">purchase minimumm</label>
+                                <input type="number" class="form-control" id="discount" placeholder="Enter Discount Percentage" name="purchaseminimum" required value="<%=coupon[0].purchaseminimum%>">
                                 <small id="discount-error" class="text-danger"></small>
                             </div>
                             <div class="form-group">
