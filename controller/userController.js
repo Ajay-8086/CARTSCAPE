@@ -7,6 +7,7 @@ const bcrypt = require('bcrypt')
 const customerModel = require('../models/customer')
 const cartModel = require('../models/cart')
 const couponModel = require('../models/coupon')
+const sendMail = require('../utility/sendMail');
 module.exports = {
     home: async(req, res) => {
         try {
@@ -178,17 +179,31 @@ module.exports = {
             res.status(500).json('Internal server error')
         }
     },
-    makePurchase:(req,res)=>{
+    makePurchase:async(req,res)=>{
         try {
-       const { totalAmount, discount, productId, quantity } = req.body;
+       let { totalAmount, discount,productId} = req.body;
+       const userId = req.session.userId
+       if(req.query.productId){
+        productId = req.query.productId
+        const productDetails = await productModel.findOne({_id:productId})
+        req.session.productDetails = productDetails
+        const discountPrice = parseInt(productDetails.price*productDetails.discount/100)
+        totalAmount = (productDetails.price)-discountPrice
+        discount = discountPrice
+       }
        req.session.totalPrice = totalAmount;
        req.session.discount = discount;
-       req.session.productId = productId;
-       req.session.quantity = quantity;
-       res.status(200).redirect('/checkout')
+       if(!userId){
+       return res.status(400).redirect('/login')
+       }
+       if(productId){
+          return res.status(200).redirect('/checkout')
+       }else{
+       return res.status(401).redirect('/')
+       }
         } catch (error) {
             console.log(error);
-            res.staus(500).send('Internal server error')
+           return res.status(500).send('Internal server error')
         }
     },
     getCheckout:async(req,res)=>{
@@ -197,7 +212,7 @@ module.exports = {
 
             const userId = req.session.userId
             if(!userId){
-                res.status(401).redirect('/login')
+               return res.status(401).redirect('/login')
             }else{
             const categories = await categoryModel.find({isDeleted:false})
             let users;
@@ -208,7 +223,21 @@ module.exports = {
                 users = await customerModel.findOne({_id:userId})
              }
              let products;
-             products = await cartModel.findOne({userId}).populate('productId.id')
+             const productDetails = req.session.productDetails
+             const singleProduct = {
+                userId:userId,
+                productId:[{
+                id:productDetails,
+                quantity:1,
+                }]
+            }
+             if(productDetails){
+                products=singleProduct
+                delete req.session.productDetails;
+             }else{
+
+                 products = await cartModel.findOne({userId}).populate('productId.id')
+             }
              const applicableCoupons = await couponModel.find({ 
                 $and: [
                     { purchaseAbove: { $gte: totalPrice } }, 
@@ -221,6 +250,27 @@ module.exports = {
             res.status(500).send('Internal server error')
         }
     },
+    postCheckout:async(req,res)=>{
+        try {
+            const {payment,email,products,totalPrice} = req.body
+            req.session.productsDetails = products
+            req.session.payment = payment
+            req.session.totalPrice = parseInt(totalPrice)
+            if(payment == 'Online_Payment'){
+                res.status(200).json({online:true})
+            }else{
+                req.session.checkoutEmail = email
+                const generateOTP = req.session.generateOTP || Math.floor(1000 + Math.random() * 9000);
+                req.session.checkoutOTP = generateOTP;
+                await sendMail(email, `${generateOTP}`);
+                res.status(200).json({cod:true})
+            }
+        } catch (error) {
+            console.log(error);
+            res.status(500).json('internal server error')
+        }
+    },
+    
     couponApply:async(req,res)=>{
         try {
             const {coupon} = req.body

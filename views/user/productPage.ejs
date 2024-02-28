@@ -157,12 +157,12 @@ crossorigin="anonymous"></script>
 
               
                 <div style="display: flex; gap: 10px;">
-                <form action="/checkout-page" method="POST" class="mb-3">
-                  <input type="hidden" name="totalsum" value="" hidden>
-                  <div class=" d-flex align-items-center justify-content-center pb-0 px-0 pb-0 mt-auto">
-                    <a  class="cartBtn btn btn-primary shadow-0 me-1" style="background-color: #FFA530;" >Buy now</a>
-                </div>
-              </form>
+                  <form action="/make-purchase?productId=<%= productDetails._id %>" method="POST" class="mb-3">
+                    <div class="d-flex align-items-center justify-content-center pb-0 px-0 pb-0 mt-auto">
+                        <button type="submit" class="cartBtn btn btn-primary shadow-0 me-1" style="background-color: #FFA530;">Buy now</button>
+                    </div>
+                </form>
+                
               <div class=" d-flex align-items-center justify-content-center pb-3 px-0 pb-0 mt-auto">
                 <a  data-product-id="<%=productDetails._id%>" id="cart<%=productDetails._id%>" class="cartBtn btn btn-primary shadow-0 me-1" style="background-color: black;" onclick="addingToCart('<%=productDetails._id%>')">Add to cart</a>
             </div>

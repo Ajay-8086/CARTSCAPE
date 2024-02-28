@@ -16,7 +16,6 @@ router.post('/editprofile',userController.editProfilePost)
 router.get('/add-address',userController.getAddAddress)
 router.post('/add-address',userController.postAddAddress)
 router.delete('/address/delete',userController.deleteAddress)
-router.get('/checkout',userController.getCheckout)
 router.get('/logout',userController.userLogout)
 
 // USER AUTHENTICATION MANAGEMENT===========================================================================>
@@ -27,6 +26,8 @@ router.get('/verify-otp',authController.getOtp)
 router.get('/forget/password',authController.getForgotPassword)
 router.get('/forget/otp/verify',authController.getForgetOtp)
 router.get('/change_password',authController.getChangePassword)
+router.get('/checkout',userController.getCheckout)
+router.post('/checkout',userController.postCheckout)
 router.post('/login',authController.postLogin)
 router.post('/change_password',authController.postChangePassword)
 router.get('/resend_otpchange',authController.resendOtp)
@@ -62,5 +63,6 @@ router.delete('/remove_cart',cartController.cartItemRemove)
 router.get('/products_page',productController.getProductPage)
 
 // ORDER MANAGEMENT================================================================================================>
-
+router.get('/cod-otp',orderController.getCashonDelivery)
+router.post('/cod-otp',orderController.postCashonDelivery)
 module.exports = router

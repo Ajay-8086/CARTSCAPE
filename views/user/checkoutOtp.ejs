@@ -1,0 +1,105 @@
+
+<%-include('../partials/header.ejs') %>
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css'>
+    <section class="container-fluid bg-body-tertiary d-block" style="height: 100vh;">
+      <div class="row justify-content-center " style="display: flex; align-content: center;">
+        <div class="col-12 col-md-6 col-lg-4" style="min-width: 500px ;  margin-top: 100px;">
+          <div class="card bg-white mb-1 mt-5 border-0"
+            style="box-shadow: 0 12px 15px rgba(0, 0, 0, 0.02); display: flex; align-items: center;">
+            <div class="card-body p-5 text-center">
+              <h4>Verify</h4>
+              <p>Your code was sent to <span style="color: red;">
+                  
+                </span> </p>
+              <form action="/cod-otp" method="post" id="codform">
+                <p class="errorMsg" style="color: red; text-align: center;"></p>
+                <div class="otp-field mb-4">
+                  <input type="number" name="digit1"  class="input input1"/>
+                  <input type="number" name="digit2" class="input input2" />
+                  <input type="number" name="digit3"  class="input input3"/>
+                  <input type="number" name="digit4" class="input input4" />
+                </div>
+                <input type="text" name="userid" value="" style="display: none;">
+                <input type="text" name="email" value="" style="display: none;">
+                <button class="btn submitBtn  mb-3" style="background-color: #00224e; color: white;" type="submit">
+                  Verify
+                </button>
+              </form>
+
+
+              <div class="otp-timer mb-3" id="otp-timer">resend OTP in :30</div>
+              <!-- Update your form to include the Resend button -->
+              <form action="/resendCOD" method="post">
+                <input type="text" name="userid" value="" style="display: none;">
+                <input type="text" name="email" value="" style="display: none;">
+                <button class="btn mb-3" id="resend" style="background-color: #00224e; color: white;display: none ;" type="submit">
+                  resendOTP
+                </button>
+
+              </form>
+
+
+              <p class="resend text-muted mb-0">
+                Didn't receive code? <a href="">Request again</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script>
+      const otpInputs = document.querySelectorAll('.input');
+      
+      otpInputs.forEach((input, index) => { 
+        input.addEventListener('input', (event) => {
+          if (event.target.value.length === 1) {
+            if (index < otpInputs.length - 1) {
+              otpInputs[index + 1].focus();
+            }
+          } else if (event.target.value.length === 0 && index > 0) {
+            otpInputs[index - 1].focus();
+          }
+        });
+      });
+
+      const submitBtn = document.querySelector('.submitBtn')
+      const dataForm = document.getElementById('codform')
+      submitBtn.addEventListener('click',async(event)=>{
+        event.preventDefault()
+        const input1 = document.querySelector('.input1').value
+        const input2 = document.querySelector('.input2').value
+        const input3 = document.querySelector('.input3').value
+        const input4 = document.querySelector('.input4').value
+        if(!input1||!input2||!input3||!input4){
+            document.querySelector('.errorMsg').innerHTML='invalid otp'
+            setTimeout(() => {
+              document.querySelector('.errorMsg').innerHTML=''
+            }, 3000);
+          }else{
+            try {
+              const form = new FormData(dataForm)
+              const formData = Object.fromEntries(form)
+              const response = await axios.post('/cod-otp',formData)
+              console.log(response);
+              if(response.status==200){
+                console.log('fafad');
+                Swal.fire({
+                  icon: "success",
+                  title: "Your order confirmed successfully",
+                  showConfirmButton: false,
+                  timer: 3000
+                });
+                setTimeout(() => {
+                  window.location.href = '/'
+                }, 2500);
+              }
+            } catch (error) {
+              console.log('error');
+            }
+          }
+        })
+        </script>
+
+    <!-- include footer -->
+    <%- include('../partials/footer.ejs') %>
+      <!-- /include footer -->
