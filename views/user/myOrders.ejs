@@ -1,0 +1,129 @@
+<!-- include header -->
+<%- include('../partials/header2.ejs') %>
+<!-- /include header -->
+
+<!-- CDN -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<!-- CDN -->
+
+<section class=" my-5" style="background-color:#f5f5f7;">
+    <div class="container">
+        <div class="row">
+            <h5>Your Orders</h5>
+            <div class="col-lg-9">
+                <% if (myOrders.length > 0) { %>
+                    <% for (let i = 0; i < myOrders.length; i++) { %>
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <p style="font-size: 12px;" class="card-title">Order ID: <span style="font-weight: bold;"><%= myOrders[i]._id %></span></p>
+                                <% for (let j = 0; j < myOrders[i].products.length; j++) { %>
+                                    <div class="row gy-3 mb-2">
+                                        <div class="col-2" onclick="productDetailes('')">
+                                            <img src="/uploads/products/<%= myOrders[i].products[j].id.image[0] %>" class="img-fluid" alt="<%= myOrders[i].products[j].pname %>" />
+                                        </div>
+                                        <div onclick="productDetailes('<%= myOrders[i]._id %>')" class="col-8 d-flex flex-column align-items-start d-flex justify-content-center">
+                                            <h6 class="card-subtitle mb-2 text-muted text-center">
+                                                <%= myOrders[i].products[j].id.name %>
+                                            </h6>
+                                            <p class="card-text text-muted text-center">
+                                                <%= myOrders[i].products[j].id.category %>
+                                            </p>
+                                            <% if (myOrders[i].status === 'delivered') { %>
+                                                <span style="font-weight: 500; color: #28a745;">✓ Delivered</span>
+                                            <% } %>
+                                        </div>
+                                        <div class="col-2 d-flex align-items-center">
+                                            <% if (myOrders[i].status === 'completed' || myOrders[i].status === 'pending') { %>
+                                                <button class="btn btn-primary" onclick="openCancelConfirmationModal('<%= myOrders[i]._id %>')">cancel</button>
+                                            <% } else if (myOrders[i].status === 'cancelled') { %>
+                                                <button class="btn btn-danger">Cancelled</button>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+                    <% } %>
+                <% } else { %>
+                    <p>No Items In Orders</p>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Modal for cancel confirmation -->
+<div class="modal fade" id="cancelConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="cancelConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cancelConfirmationModalLabel">Confirm Cancellation</h5>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to cancel this order?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="confirmCancelBtn">Confirm Cancellation</button>
+            </div>
+        </div>
+    </div>
+</div>
+        <div class="modal fade" id="returnConfirmationModal" tabindex="-1" role="dialog"
+            aria-labelledby="cancelConfirmationModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="cancelConfirmationModalLabel">Confirm Return</h5>
+                    </div>
+                    <div class="modal-body">
+
+                        Are you sure you want to return this order?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="confirmreturnBtn">Confirm Return</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <script>
+        function openCancelConfirmationModal(orderId) {
+            // Set the orderId in the modal for reference
+            document.getElementById('confirmCancelBtn').setAttribute('data-order-id', orderId);
+
+            // Open the modal
+            $('#cancelConfirmationModal').modal('show');
+        }
+
+        // Attach a click event to the Confirm Cancelation button inside the modal
+        document.getElementById('confirmCancelBtn').addEventListener('click', function () {
+            // Retrieve the orderId from the data attribute
+            const orderId = this.getAttribute('data-order-id');
+
+            // Redirect to the cancel-product route with the orderId
+            window.location.href = `/cancel-order?id=${orderId}`;
+        });
+
+
+ 
+    </script>
+
+
+
+
+
+    <script>
+        function cancelProduct(orderId) {
+            window.location.href = `/cancel-order?id=${orderId}`;
+        }
+    </script>
+ 
+    <!-- include footer -->
+    <%- include('../partials/footer.ejs') %>
+        <!-- /include footer -->
+
+        </html>

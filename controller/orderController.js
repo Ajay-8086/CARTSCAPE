@@ -2,6 +2,7 @@ const categoryModel = require('../models/category')
 const orderModel =  require('../models/order')
 const productModel = require('../models/product')
 const cartModel = require('../models/cart')
+const customerModel = require('../models/customer')
 // const stripe = require('stripe')(process.env.STRIPE_SK);
 
 // app.post('/charge', async (req, res) => {
@@ -47,6 +48,8 @@ module.exports = {
         const products = req.session.productsDetails
         const totalPrice = req.session.totalPrice
         const userId = req.session.userId
+        const addressId = req.session.addressId
+        console.log(addressId);
         if(!email){
           res.status(401).json('User not found')
         }
@@ -63,6 +66,8 @@ module.exports = {
                     selectedColor: product.selectedColor,
                     selectedSize: product.selectedSize
                 })),
+                
+                address:addressId,
                 totalPrice: totalPrice,
                 paymentMethod: 'Cash on Delivery',
                 status:'pending'
@@ -90,9 +95,33 @@ module.exports = {
     } catch (error) {
         res.status(500).json('internal server error')
     }
-    } 
+    },
+    myOrders:async(req,res)=>{
+      try {
+        const categories = await categoryModel.find({isDeleted:false})
+        const email= req.session.signedEmail
+        const myOrders = await orderModel.find({userEmail:email}).populate('products.id')
+        res.status(200).render('user/myOrders',{categories,myOrders})
+      } catch (error) {
+        console.log(error);
+        res.status(500).send('internal sever error')
+      }
+    },
+    cancelOrder:async(req,res)=>{
+      try {
+        const orderId = req.query.id
+        const updatedOrder = await orderModel.findByIdAndUpdate(orderId,{status:'cancelled'})
+        if(updatedOrder){
+          res.status(200).redirect('/my-orders')
+        }
+      } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal server error')
+      }
+    }
   
 }
+
 //   payment:async(req,res)=>{
 // try {
 //   const totalPrice = req.session.totalPrice

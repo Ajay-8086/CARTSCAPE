@@ -65,4 +65,6 @@ router.get('/products_page',productController.getProductPage)
 // ORDER MANAGEMENT================================================================================================>
 router.get('/cod-otp',orderController.getCashonDelivery)
 router.post('/cod-otp',orderController.postCashonDelivery)
+router.get('/my-orders',orderController.myOrders)
+router.get('/cancel-order',orderController.cancelOrder)
 module.exports = router

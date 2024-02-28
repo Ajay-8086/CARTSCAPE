@@ -15,19 +15,20 @@
                     <p class="mb-0">Full name</p>
                     <div class="form-outline">
                       <input name="name" type="text" id="typeText"
-                        value="<%=users.userId?users.userId.name:users.name%>" class="form-control" required />
+                      value="<%=users.userId?users.userId.name:users.name%>" class="form-control" required />
                     </div>
                   </div>
-
+                  
                   <div class="col-6 mb-3">
                     <p class="mb-0">Phone</p>
                     <div class="form-outline">
                       <input type="number" name="phone" id="typePhone"
-                        value="<%=users.userId?users.userId.phone:users.phone%>" class="form-control" required />
+                      value="<%=users.userId?users.userId.phone:users.phone%>" class="form-control" required />
                     </div>
                   </div>
-                  <input type="hidden" name="prId" value="">
                   <div class="col-6 mb-3">
+                    <!-- <input type="text" id="typeNumber" value="<%=users.addresses[0]._id%>"
+                    name="address_Id" class="form-control address_id" required /> -->
                     <p class="mb-0">Email</p>
                     <div class="form-outline">
                       <input type="email" id="typeEmail" value="<%=users.userId?users.userId.email:users.email%>"
@@ -43,47 +44,47 @@
                     <div class="form-outline">
                       <input type="text" id="typeText" placeholder="Type here" name="address"
                         value="<%=users.addresses[0].address%> " class="form-control address-field" required />
+                      </div>
                     </div>
-                  </div>
-
-                  <div class="col-sm-4 mb-3">
-                    <p class="mb-0">City</p>
-                    <div class="form-outline">
-                      <input type="text" id="typeText" value="<%=users.addresses[0].city%>" name="city"
+                    
+                    <div class="col-sm-4 mb-3">
+                      <p class="mb-0">City</p>
+                      <div class="form-outline">
+                        <input type="text" id="typeText" value="<%=users.addresses[0].city%>" name="city"
                         placeholder="city" class="form-control city-field" required />
+                      </div>
                     </div>
-                  </div>
-
-                  <div class="col-sm-4 mb-3">
-                    <p class="mb-0">House NO.</p>
-                    <div class="form-outline">
-                      <input name="houseNo" type="text" id="typeText" placeholder="Type here"
+                    
+                    <div class="col-sm-4 mb-3">
+                      <p class="mb-0">House NO.</p>
+                      <div class="form-outline">
+                        <input name="houseNo" type="text" id="typeText" placeholder="Type here"
                         value="<%=users.addresses[0].house_No%>" class="form-control house_no-field
-                          " required />
+                        " required />
+                      </div>
                     </div>
-                  </div>
-
-                  <div class="col-sm-4 col-6 mb-3">
-                    <p class="mb-0">Postal code</p>
-                    <div class="form-outline">
-                      <input type="text" id="typeText" name="postalCode" class="form-control postalcode-field"
+                    
+                    <div class="col-sm-4 col-6 mb-3">
+                      <p class="mb-0">Postal code</p>
+                      <div class="form-outline">
+                        <input type="text" id="typeText" name="postalCode" class="form-control postalcode-field"
                         value="<%=users.addresses[0].postcode%>" required />
+                      </div>
                     </div>
-                  </div>
-
-                  <div class="col-sm-4 col-6 mb-3">
-                    <p class="mb-0">Alternate Number</p>
-                    <div class="form-outline">
-                      <input type="text" id="typeText" name="alternateNumber" class="form-control altr_number-field"
+                    
+                    <div class="col-sm-4 col-6 mb-3">
+                      <p class="mb-0">Alternate Number</p>
+                      <div class="form-outline">
+                        <input type="text" id="typeText" name="alternateNumber" class="form-control altr_number-field"
                         value="<%=users.addresses[0].altr_number%>" required />
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class=" mb-3">
-                  <p class="text-dark  mb-5 h">
-                    <a href="#" data-bs-toggle="modal" data-bs-target="#changeAddressModal"
+                  <div class=" mb-3">
+                    <p class="text-dark  mb-5 h">
+                      <a href="#" data-bs-toggle="modal" data-bs-target="#changeAddressModal"
                       style="color: #232F3E;text-decoration: underline;">Change Address</a>
-                  </p>
+                    </p>
                 </div>
                 <% }else{ %>
                   <p class="errorAddress" style="color: red; text-align: center;">Please add address</p>
@@ -246,6 +247,7 @@
             <% users.addresses.forEach(address=>{ %>
 
               <div class="chooseAdd existingAddress p-3 w-100 mb-3 position-relative">
+                <input type="text" value=" <%=address._id%>" class="addressSelect_id">
                 <p style="font-family: poppins; font-size: 1rem !important;"><span class="address">
                     <%=address.address%>
                   </span>,<span class="city">
@@ -294,6 +296,7 @@
         radio.addEventListener("change", function () {
           if (this.checked) {
             // Retrieve the corresponding address data
+            const address_id = this.parentElement.querySelector(".addressSelect_id").value;
             const address = this.parentElement.querySelector(".address").textContent;
             const city = this.parentElement.querySelector(".city").textContent;
             const houseNo = this.parentElement.querySelector(".house_no").textContent;
@@ -301,7 +304,7 @@
             const alternateNumber = this.parentElement.querySelector(".phone-altr").textContent;
 
             // Update the checkout form fields with the retrieved data
-
+            document.querySelector('.address_id').value = address_id;
             document.querySelector('.address-field').value = address;
             document.querySelector('.city-field').value = city;
             document.querySelector('.house_no-field').value = houseNo;

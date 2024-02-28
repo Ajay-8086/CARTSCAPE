@@ -189,7 +189,7 @@ module.exports = {
         req.session.productDetails = productDetails
         const discountPrice = parseInt(productDetails.price*productDetails.discount/100)
         totalAmount = (productDetails.price)-discountPrice
-        discount = discountPrice
+        discount =  parseInt(totalAmount * 5/100)
        }
        req.session.totalPrice = totalAmount;
        req.session.discount = discount;
@@ -208,7 +208,7 @@ module.exports = {
     },
     getCheckout:async(req,res)=>{
         try {
-            const {totalPrice,discount} =req.session
+            let {totalPrice,discount} =req.session
 
             const userId = req.session.userId
             if(!userId){
@@ -224,6 +224,7 @@ module.exports = {
              }
              let products;
              const productDetails = req.session.productDetails
+             
              const singleProduct = {
                 userId:userId,
                 productId:[{
@@ -252,8 +253,10 @@ module.exports = {
     },
     postCheckout:async(req,res)=>{
         try {
-            const {payment,email,products,totalPrice} = req.body
+            const {payment,email,products,totalPrice,address_Id} = req.body
+            console.log('fas',address_Id);
             req.session.productsDetails = products
+            req.session.addressId = address_Id
             req.session.payment = payment
             req.session.totalPrice = parseInt(totalPrice)
             if(payment == 'Online_Payment'){
