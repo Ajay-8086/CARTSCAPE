@@ -12,5 +12,5 @@ const profile = new mongoose.Schema({
         state:String
     }]
 })
-const profileModel = mongoose.model('profile',profile)
+const profileModel = mongoose.model('profiles',profile)
 module.exports = profileModel

@@ -9,7 +9,7 @@ const orderSchema = new mongoose.Schema({
         selectedColor: String,
         selectedSize: String
     }],
-    address: { type: mongoose.Schema.Types.ObjectId, ref: 'profiles' },
+    address: { type: mongoose.Schema.Types.ObjectId, ref:'profiles' },
     totalPrice: Number,
     paymentMethod: String,
     status:String,

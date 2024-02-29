@@ -253,10 +253,9 @@ module.exports = {
     },
     postCheckout:async(req,res)=>{
         try {
-            const {payment,email,products,totalPrice,address_Id} = req.body
-            console.log('fas',address_Id);
+            const {payment,email,products,totalPrice,addressId} = req.body
             req.session.productsDetails = products
-            req.session.addressId = address_Id
+            req.session.addressId = addressId
             req.session.payment = payment
             req.session.totalPrice = parseInt(totalPrice)
             if(payment == 'Online_Payment'){

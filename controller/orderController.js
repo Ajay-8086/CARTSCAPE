@@ -49,7 +49,6 @@ module.exports = {
         const totalPrice = req.session.totalPrice
         const userId = req.session.userId
         const addressId = req.session.addressId
-        console.log(addressId);
         if(!email){
           res.status(401).json('User not found')
         }
@@ -117,6 +116,22 @@ module.exports = {
       } catch (error) {
         console.log(error);
         res.status(500).send('Internal server error')
+      }
+    },
+    orderDetails:async(req,res)=>{
+      try {
+        const userId = req.session.userId
+        if(!userId){
+          return res.status(401).redirect('/login')
+        }
+        const categories = await categoryModel.find({isDeleted:false})
+        const orderId = req.query.id
+        const orderDetails = await orderModel.findById(orderId).populate('products.id')
+        const orderAddress = await orderModel.findById(orderId).populate('address')
+        res.status(200).render('user/orderDetails',{categories,orderDetails,orderAddress})
+      } catch (error) {
+        console.log(error);
+        res.status(500).send('internal server error')
       }
     }
   

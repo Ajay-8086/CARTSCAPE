@@ -27,8 +27,8 @@
                     </div>
                   </div>
                   <div class="col-6 mb-3">
-                    <!-- <input type="text" id="typeNumber" value="<%=users.addresses[0]._id%>"
-                    name="address_Id" class="form-control address_id" required /> -->
+                    <input type="hidden" id="typeNumber" value="<%=users.addresses[0]._id%>"
+                    name="address_Id" class="form-control address_id" required />
                     <p class="mb-0">Email</p>
                     <div class="form-outline">
                       <input type="email" id="typeEmail" value="<%=users.userId?users.userId.email:users.email%>"
@@ -376,9 +376,9 @@ continueBtn.addEventListener('click', async(event) => {
 
     const selectedPaymentMethod = document.querySelector('input[name="payment"]:checked').value;
     const email = document.getElementById('typeEmail').value;
-
+    const addressId = document.querySelector('.address_id').value
     // Send product information to the server using Axios
-    const response = await axios.post('/checkout', { products, email, payment: selectedPaymentMethod,totalPrice });
+    const response = await axios.post('/checkout', { products, email, payment: selectedPaymentMethod,totalPrice,addressId });
     if (response.status == 200) {
       if (response.data.online) {
         window.location.href = '/payment';

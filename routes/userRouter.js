@@ -67,4 +67,5 @@ router.get('/cod-otp',orderController.getCashonDelivery)
 router.post('/cod-otp',orderController.postCashonDelivery)
 router.get('/my-orders',orderController.myOrders)
 router.get('/cancel-order',orderController.cancelOrder)
+router.get('/order-details',orderController.orderDetails)
 module.exports = router

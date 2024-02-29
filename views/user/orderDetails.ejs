@@ -1,0 +1,61 @@
+
+
+
+<%- include('../partials/header2.ejs') %>
+<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css'>
+
+<section class="container-fluid bg-body-tertiary d-block" >
+    <div class="row justify-content-center " style="display: flex; align-content: center;">
+        <div class="col-12 col-md-6 col-lg-4" style="min-width: 500px;  margin-top: 100px;">
+            <div class="card bg-white mb-1 mt-5 border-0"
+                style="box-shadow: 0 12px 15px rgba(0, 0, 0, 0.02); display: flex; align-items: center;">
+                <div class="card-body p-5 text-center">
+                    <!-- Product Image -->
+                    <!-- Header -->
+                    <h4>Order Details</h4>
+                    <!-- Order Information -->
+                    <p style="color: rgb(134, 3, 3);">Order Id: <%= orderDetails._id %>
+                    </p>
+                    <% orderDetails.products.forEach(product=>{ %>
+
+                        <img src="/uploads/products/<%=product.id.image[0] %>" alt="Product Image" class="product-image"
+                            style="width: 40%;">
+    
+                        <p><strong>Product Name:</strong>
+                            <%= product.id.name %>
+                        </p>
+                        <p><strong>Product Price:</strong>
+                            <%= product.id.price %>
+                        </p>
+                        <p><strong>Product Category:</strong>
+                            <%= product.id.category %>
+                        </p>
+                  <%  }) %>
+                    <p><strong>Username: </strong>
+                        <%= orderDetails.userEmail %>
+                    </p>
+                    <p><strong>Payment method </strong>
+                        <%= orderDetails.aymentMethod %>
+                    </p>
+                    <p><strong>Amount:</strong>
+                        <%= orderDetails.totalPrice %>
+                    </p>
+                    <p><strong>OrderDate:</strong>
+                        <%= orderDetails.createdAt.toISOString().substring(0, 10)%>
+                    </p>
+                    <!--  -->
+                    <p><strong>Shipped address: </strong>
+                        <%= orderAddress.address %>
+                        <%= orderAddress.city %>
+                        <%= orderAddress.house_no %>
+                        <%= orderAddress.postcode %>
+                        <%= orderAddress.altr_bumber %>
+                    </p>
+                </div>
+                <a href="/my-orders"><button class="btn "
+                    style="background-color: #FEBD69; color: #131921; font-weight: 500;">Back to Orders</button></a>
+            </div>
+        </div>
+    </div>
+</section>
+<%- include('../partials/footer.ejs') %>
