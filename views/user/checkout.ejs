@@ -283,114 +283,15 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
     crossorigin="anonymous"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="/js/checkout.js"></script>
+
   <!-- include footer -->
   <%- include('../partials/footer.ejs') %>
     <!-- include footer -->
     </body>
     <script>
-      const addressRadios = document.querySelectorAll("input[name='adId']");
-      // const checkoutForm = document.getElementById("checkout-form");
-
-      // Add event listener to each radio button
-      addressRadios.forEach(function (radio) {
-        radio.addEventListener("change", function () {
-          if (this.checked) {
-            // Retrieve the corresponding address data
-            const address_id = this.parentElement.querySelector(".addressSelect_id").value;
-            const address = this.parentElement.querySelector(".address").textContent;
-            const city = this.parentElement.querySelector(".city").textContent;
-            const houseNo = this.parentElement.querySelector(".house_no").textContent;
-            const postalCode = this.parentElement.querySelector(".pincode").textContent;
-            const alternateNumber = this.parentElement.querySelector(".phone-altr").textContent;
-
-            // Update the checkout form fields with the retrieved data
-            document.querySelector('.address_id').value = address_id;
-            document.querySelector('.address-field').value = address;
-            document.querySelector('.city-field').value = city;
-            document.querySelector('.house_no-field').value = houseNo;
-            document.querySelector('.postalcode-field').value = postalCode;
-            document.querySelector('.altr_number-field').value = alternateNumber;
-          }
-        });
-      });
-      const couponRadio = document.querySelectorAll("input[name='couponRadio']");
-      couponRadio.forEach((radio) => {
-        radio.addEventListener('change', () => {
-          if (radio.checked) {
-            const couponCode = radio.value;
-            document.getElementById('coupon-input').value = couponCode;
-          }
-        })
-      })
-      async function applyPromoCode(event) {
-        event.preventDefault()
-        const couponCode = document.querySelector('.couponInput').value
-        if (!couponCode) {
-          document.querySelector('.couponError').innerHTML = 'Invalid coupon code'
-          setTimeout(() => {
-            document.querySelector('.couponError').innerHTML = ''
-          }, 3000);
-        } else {
-          try {
-            const response = await axios.post('/verify-coupon', {
-              coupon: couponCode
-            })
-            if (response.status == 200) {
-              const discount = response.data.discount
-              console.log(discount);
-              let total = document.getElementById('updatedPrice')
-              console.log(total);
-              const totalPrice = total.innerText.replace(/\₹|,/g, '')
-              console.log(totalPrice);
-              const grandTotal = parseInt(totalPrice) - (parseInt(totalPrice) * parseInt(discount) / 100)
-              console.log(grandTotal);
-              total.innerText = '₹' + parseInt(grandTotal)
-            }
-          } catch (error) {
-            console.log(error);
-          }
-        }
-      }
-      const continueBtn = document.getElementById('continueBtn');
-continueBtn.addEventListener('click', async(event) => {
-  event.preventDefault();
-  try {
-    const products = [];
-    const productElements = document.querySelectorAll('.list-group-item');
-    productElements.forEach((productElement) => {
-      const id = productElement.querySelector('.productIds').innerText;
-      const quantity = parseInt(productElement.querySelector('.text-muted').innerText.replace('Qty:', ''));
-      const price = parseFloat(productElement.querySelector('.text-muted.ms-4').innerText.replace('$', ''));
-
-      // Gather selected color and size
-      const selectedColorElement = productElement.querySelector(`#color_${id}`);
-      const selectedSizeElement = productElement.querySelector(`#size_${id}`);
-      const selectedColor = selectedColorElement ? selectedColorElement.value : null;
-      const selectedSize = selectedSizeElement ? selectedSizeElement.value : null;
-
-      products.push({ id, quantity, price, selectedColor, selectedSize });
-    });
-
-    let total = document.getElementById('updatedPrice')
-    const totalPrice = total.innerText.replace(/\₹|,/g, '')
-
-    const selectedPaymentMethod = document.querySelector('input[name="payment"]:checked').value;
-    const email = document.getElementById('typeEmail').value;
-    const addressId = document.querySelector('.address_id').value
-    // Send product information to the server using Axios
-    const response = await axios.post('/checkout', { products, email, payment: selectedPaymentMethod,totalPrice,addressId });
-    if (response.status == 200) {
-      if (response.data.online) {
-        window.location.href = '/payment';
-      } else {
-        window.location.href = '/cod-otp';
-      }
-    }
-  } catch (error) {
-    console.error('Error while sending product information:', error);
-  }
-});
-
+     
     
     </script>
 

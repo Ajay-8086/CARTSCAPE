@@ -8,6 +8,10 @@ const customerModel = require('../models/customer')
 const cartModel = require('../models/cart')
 const couponModel = require('../models/coupon')
 const sendMail = require('../utility/sendMail');
+const razorpay = require('razorpay');
+
+var instance = new razorpay({ key_id: process.env.KEY_ID, key_secret: process.env.KEY_SECRET })
+
 module.exports = {
     home: async(req, res) => {
         try {
@@ -258,8 +262,18 @@ module.exports = {
             req.session.addressId = addressId
             req.session.payment = payment
             req.session.totalPrice = parseInt(totalPrice)
+            const key = process.env.KEY_ID
             if(payment == 'Online_Payment'){
-                res.status(200).json({online:true})
+                const amount = Number(req.session.totalPrice) * 100
+                const orderOptions = {
+                    amount: amount, 
+                    currency: 'INR',
+                    receipt: 'receipt_order_1',
+                    payment_capture: 1 
+                };
+                const order = await instance.orders.create(orderOptions);
+                req.session.checkoutEmail = email
+                res.status(200).json({ online: true, order,key });
             }else{
                 req.session.checkoutEmail = email
                 const generateOTP = req.session.generateOTP || Math.floor(1000 + Math.random() * 9000);

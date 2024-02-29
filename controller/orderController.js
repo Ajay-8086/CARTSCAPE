@@ -2,27 +2,9 @@ const categoryModel = require('../models/category')
 const orderModel =  require('../models/order')
 const productModel = require('../models/product')
 const cartModel = require('../models/cart')
-const customerModel = require('../models/customer')
-// const stripe = require('stripe')(process.env.STRIPE_SK);
-
-// app.post('/charge', async (req, res) => {
-//   const { amount, token } = req.body;
-
-//   try {
-//     const charge = await stripe.charges.create({
-//       amount,
-//       currency: 'usd',
-//       source: token.id,
-//       description: 'Charge for test@example.com',
-//     });
-
-//     res.send('Payment successful');
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send('Payment failed');
-//   }
-// });
-
+const { default: mongoose } = require('mongoose')
+const profileModel = require('../models/profile')
+const crypto = require('crypto')
 module.exports = {
   getPayment:async(req,res)=>{
     try {
@@ -48,7 +30,7 @@ module.exports = {
         const products = req.session.productsDetails
         const totalPrice = req.session.totalPrice
         const userId = req.session.userId
-        const addressId = req.session.addressId
+        const addressId = new mongoose.Types.ObjectId(req.session.addressId)
         if(!email){
           res.status(401).json('User not found')
         }
@@ -127,29 +109,67 @@ module.exports = {
         const categories = await categoryModel.find({isDeleted:false})
         const orderId = req.query.id
         const orderDetails = await orderModel.findById(orderId).populate('products.id')
-        const orderAddress = await orderModel.findById(orderId).populate('address')
+        const addressId = orderDetails.address
+        const userAddress = await profileModel.findOne({userId,})
+        const orderAddress = userAddress.addresses.find(addr=>addr._id.toString()==addressId) 
         res.status(200).render('user/orderDetails',{categories,orderDetails,orderAddress})
       } catch (error) {
         console.log(error);
         res.status(500).send('internal server error')
       }
-    }
+    },
+    paymentConfirmation:async(req,res)=>{
+      try {
+        const {data} = req.body
+        let generated_signature = crypto.createHmac('sha256',process.env.KEY_SECRET)
+        generated_signature.update(data.razorpay_order_id + '|' + data.razorpay_payment_id)
+        generated_signature = generated_signature.digest('hex')
+       if (generated_signature == data.razorpay_signature) {
+        const email = req.session.checkoutEmail
+        const products = req.session.productsDetails
+        const totalPrice = req.session.totalPrice
+        const userId = req.session.userId
+        const addressId = new mongoose.Types.ObjectId(req.session.addressId)
+        const order = new orderModel({
+          userEmail: email,
+          products: products.map(product => ({
+              id: product.id,
+              quantity: product.quantity,
+              price:product.price,
+              selectedColor: product.selectedColor,
+              selectedSize: product.selectedSize
+          })),
+          
+          address:addressId,
+          totalPrice: totalPrice,
+          paymentMethod: 'Online Payment',
+          status:'pending'
+      });
+    const result=   await order.save();
+        if(result){
+          for(const product of products){
+           await productModel.updateOne(
+        {_id:product.id},
+        {$set:{$inc:{stock:-product.quantity}}
+        
+      })
+       await cartModel.updateOne(
+        { userId },
+        { $pull: { productId: { id: product.id} } }
+    );
+          }
+       await orderModel.findByIdAndUpdate(result._id, { status: 'completed' });
+          res.status(200).json({payment:true})
+        }
+    
+      }else{
+        res.status(400).json({payment:false})
+      }
+      } catch (error) {
+        console.log(error);
+        res.status(500).json('internal server error')
+      }
+    },
+  }
   
-}
 
-//   payment:async(req,res)=>{
-// try {
-//   const totalPrice = req.session.totalPrice
-//   const paymentIntent = await stripe.paymentIntents.create({
-//     amount: totalPrice,
-//     currency: "inr",
-//     // In the latest version of the API, specifying the `automatic_payment_methods` parameter is optional because Stripe enables its functionality by default.
-//     automatic_payment_methods: {
-//       enabled: true,
-//     },
-//   });
-// } catch (error) {
-//   res.status(500).send('internal server error')
-// }
-//   }
-// }

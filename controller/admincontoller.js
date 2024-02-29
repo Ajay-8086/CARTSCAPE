@@ -1,5 +1,6 @@
 
-const userModel = require('../models/customer')
+const userModel = require('../models/customer');
+const orderModel = require('../models/order');
 
 
 
@@ -71,6 +72,21 @@ module.exports = {
         } catch (error) {
             console.log('Server error');
             res.status(500).json({ error: 'Internal server error' })
+        }
+    },
+    getUserOrders:async(req,res)=>{
+        try {
+            const pageNumber = parseInt(req.query.page) || 1;
+            const options = {
+                page: pageNumber,
+                limit: 10
+            };
+            const result = await orderModel.paginate(options);
+            const orders = result.docs
+            res.status(200).render('admin/userOrders', { orders, paginationInfo: result, url: "order" });
+        } catch (error) {
+            console.log(error);
+            res.status(500).send('Internal server error')
         }
     }
 

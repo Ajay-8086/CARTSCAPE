@@ -1,98 +1,136 @@
-window.paypal
-  .Buttons({
-    style: {
-      shape: "rect",
-      layout: "vertical",
-    },
-    async createOrder() {
-      try {
-        const response = await fetch("/api/orders", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          // use the "body" param to optionally pass additional order information
-          // like product ids and quantities
-          body: JSON.stringify({
-            cart: [
-              {
-                id: "YOUR_PRODUCT_ID",
-                quantity: "YOUR_PRODUCT_QUANTITY",
-              },
-            ],
-          }),
-        });
+const addressRadios = document.querySelectorAll("input[name='adId']");
+// const checkoutForm = document.getElementById("checkout-form");
 
-        const orderData = await response.json();
+// Add event listener to each radio button
+addressRadios.forEach(function (radio) {
+  radio.addEventListener("change", function () {
+    if (this.checked) {
+      // Retrieve the corresponding address data
+      const address_id = this.parentElement.querySelector(".addressSelect_id").value;
+      const address = this.parentElement.querySelector(".address").textContent;
+      const city = this.parentElement.querySelector(".city").textContent;
+      const houseNo = this.parentElement.querySelector(".house_no").textContent;
+      const postalCode = this.parentElement.querySelector(".pincode").textContent;
+      const alternateNumber = this.parentElement.querySelector(".phone-altr").textContent;
 
-        if (orderData.id) {
-          return orderData.id;
-        } else {
-          const errorDetail = orderData?.details?.[0];
-          const errorMessage = errorDetail
-            ? `${errorDetail.issue} ${errorDetail.description} (${orderData.debug_id})`
-            : JSON.stringify(orderData);
-
-          throw new Error(errorMessage);
-        }
-      } catch (error) {
-        console.error(error);
-        resultMessage(`Could not initiate PayPal Checkout...<br><br>${error}`);
-      }
-    },
-    async onApprove(data, actions) {
-      try {
-        const response = await fetch(`/api/orders/${data.orderID}/capture`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        const orderData = await response.json();
-        // Three cases to handle:
-        //   (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
-        //   (2) Other non-recoverable errors -> Show a failure message
-        //   (3) Successful transaction -> Show confirmation or thank you message
-
-        const errorDetail = orderData?.details?.[0];
-
-        if (errorDetail?.issue === "INSTRUMENT_DECLINED") {
-          // (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
-          // recoverable state, per https://developer.paypal.com/docs/checkout/standard/customize/handle-funding-failures/
-          return actions.restart();
-        } else if (errorDetail) {
-          // (2) Other non-recoverable errors -> Show a failure message
-          throw new Error(`${errorDetail.description} (${orderData.debug_id})`);
-        } else if (!orderData.purchase_units) {
-          throw new Error(JSON.stringify(orderData));
-        } else {
-          // (3) Successful transaction -> Show confirmation or thank you message
-          // Or go to another URL:  actions.redirect('thank_you.html');
-          const transaction =
-            orderData?.purchase_units?.[0]?.payments?.captures?.[0] ||
-            orderData?.purchase_units?.[0]?.payments?.authorizations?.[0];
-          resultMessage(
-            `Transaction ${transaction.status}: ${transaction.id}<br><br>See console for all available details`,
-          );
-          console.log(
-            "Capture result",
-            orderData,
-            JSON.stringify(orderData, null, 2),
-          );
-        }
-      } catch (error) {
-        console.error(error);
-        resultMessage(
-          `Sorry, your transaction could not be processed...<br><br>${error}`,
-        );
-      }
-    },
+      // Update the checkout form fields with the retrieved data
+      document.querySelector('.address_id').value = address_id;
+      document.querySelector('.address-field').value = address;
+      document.querySelector('.city-field').value = city;
+      document.querySelector('.house_no-field').value = houseNo;
+      document.querySelector('.postalcode-field').value = postalCode;
+      document.querySelector('.altr_number-field').value = alternateNumber;
+    }
+  });
+});
+const couponRadio = document.querySelectorAll("input[name='couponRadio']");
+couponRadio.forEach((radio) => {
+  radio.addEventListener('change', () => {
+    if (radio.checked) {
+      const couponCode = radio.value;
+      document.getElementById('coupon-input').value = couponCode;
+    }
   })
-  .render("#paypal-button-container");
-
-// Example function to show a result to the user. Your site's UI library can be used instead.
-function resultMessage(message) {
-  const container = document.querySelector("#result-message");
-  container.innerHTML = message;
+})
+async function applyPromoCode(event) {
+  event.preventDefault()
+  const couponCode = document.querySelector('.couponInput').value
+  if (!couponCode) {
+    document.querySelector('.couponError').innerHTML = 'Invalid coupon code'
+    setTimeout(() => {
+      document.querySelector('.couponError').innerHTML = ''
+    }, 3000);
+  } else {
+    try {
+      const response = await axios.post('/verify-coupon', {
+        coupon: couponCode
+      })
+      if (response.status == 200) {
+        const discount = response.data.discount
+        console.log(discount);
+        let total = document.getElementById('updatedPrice')
+        console.log(total);
+        const totalPrice = total.innerText.replace(/\₹|,/g, '')
+        console.log(totalPrice);
+        const grandTotal = parseInt(totalPrice) - (parseInt(totalPrice) * parseInt(discount) / 100)
+        console.log(grandTotal);
+        total.innerText = '₹' + parseInt(grandTotal)
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
+const continueBtn = document.getElementById('continueBtn');
+continueBtn.addEventListener('click', async(event) => {
+event.preventDefault();
+try {
+const products = [];
+const productElements = document.querySelectorAll('.list-group-item');
+productElements.forEach((productElement) => {
+const id = productElement.querySelector('.productIds').innerText;
+const quantity = parseInt(productElement.querySelector('.text-muted').innerText.replace('Qty:', ''));
+const price = parseFloat(productElement.querySelector('.text-muted.ms-4').innerText.replace('$', ''));
+
+// Gather selected color and size
+const selectedColorElement = productElement.querySelector(`#color_${id}`);
+const selectedSizeElement = productElement.querySelector(`#size_${id}`);
+const selectedColor = selectedColorElement ? selectedColorElement.value : null;
+const selectedSize = selectedSizeElement ? selectedSizeElement.value : null;
+
+products.push({ id, quantity, price, selectedColor, selectedSize });
+});
+
+let total = document.getElementById('updatedPrice')
+const totalPrice = total.innerText.replace(/\₹|,/g, '')
+
+const selectedPaymentMethod = document.querySelector('input[name="payment"]:checked').value;
+const email = document.getElementById('typeEmail').value;
+const addressId = document.querySelector('.address_id').value
+// Send product information to the server using Axios
+const response = await axios.post('/checkout', { products, email, payment: selectedPaymentMethod, totalPrice, addressId });
+
+if (response.status == 200) {
+if (response.data.online) {
+const amountPaisa = response.data.order.amount 
+  var options = {
+      "key": 'rzp_test_KPvItqMWEp5C2S',
+      "amount": amountPaisa, 
+      "currency": "INR",
+      "name": "CartScape",
+      "description": "Test Transaction",
+      "order_id": response.data.order.id,
+      "handler":async function (response) {
+        const result = await axios.post('/confirm-payment',{
+          data:response,
+        })
+        if(result.data.payment){
+          window.location.href = '/my-orders'
+        }else{
+          window.location.href='/'
+        }
+         
+      },
+  };
+
+  var rzp1 = new Razorpay(options);
+
+  rzp1.on('payment.failed', function (response) {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Something went wrong!",
+     
+    });
+  });
+
+  rzp1.open();
+
+} else {
+  window.location.href = '/cod-otp';
+}
+}
+} catch (error) {
+console.error('Error while sending product information:', error);
+}
+});

@@ -30,26 +30,32 @@
                         <p><strong>Product Category:</strong>
                             <%= product.id.category %>
                         </p>
+                        <p><strong>Product size:</strong>
+                            <%= product.selectedSize %>
+                        </p>
+                        <p><strong>Product Color:</strong>
+                            <%= product.selectedColor %>
+                        </p>
                   <%  }) %>
                     <p><strong>Username: </strong>
                         <%= orderDetails.userEmail %>
                     </p>
-                    <p><strong>Payment method </strong>
-                        <%= orderDetails.aymentMethod %>
+                    <p><strong>Payment method:</strong>
+                        <%= orderDetails.paymentMethod %>
                     </p>
                     <p><strong>Amount:</strong>
                         <%= orderDetails.totalPrice %>
                     </p>
                     <p><strong>OrderDate:</strong>
-                        <%= orderDetails.createdAt.toISOString().substring(0, 10)%>
+                        <%= orderDetails.createdAt.toISOString().substring(0,10)%>
                     </p>
                     <!--  -->
                     <p><strong>Shipped address: </strong>
-                        <%= orderAddress.address %>
-                        <%= orderAddress.city %>
-                        <%= orderAddress.house_no %>
-                        <%= orderAddress.postcode %>
-                        <%= orderAddress.altr_bumber %>
+                        <%= orderAddress.address %>,
+                        <%= orderAddress.house_No %>,
+                        <%= orderAddress.city %>,
+                        <%= orderAddress.postcode %>,
+                        <%= orderAddress.altr_number %>,
                     </p>
                 </div>
                 <a href="/my-orders"><button class="btn "

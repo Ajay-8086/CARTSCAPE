@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const mongoosePaginate = require('mongoose-paginate-v2');
 const orderSchema = new mongoose.Schema({
     userEmail: String,
     products: [{
@@ -14,6 +14,8 @@ const orderSchema = new mongoose.Schema({
     paymentMethod: String,
     status:String,
 }, { timestamps: true });
+
+orderSchema.plugin(mongoosePaginate);
 
 const OrderModel = mongoose.model('Order', orderSchema);
 
