@@ -247,7 +247,7 @@
             <% users.addresses.forEach(address=>{ %>
 
               <div class="chooseAdd existingAddress p-3 w-100 mb-3 position-relative">
-                <input type="text" value=" <%=address._id%>" class="addressSelect_id">
+                <input type="hidden" value=" <%=address._id%>" class="addressSelect_id">
                 <p style="font-family: poppins; font-size: 1rem !important;"><span class="address">
                     <%=address.address%>
                   </span>,<span class="city">

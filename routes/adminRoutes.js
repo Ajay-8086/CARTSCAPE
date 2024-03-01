@@ -48,6 +48,7 @@ router.get('/dashboard',adminController.getDashboard)
       router.get('/blocked-users',adminController.getBlockedUsers)
       router.patch('/users-unblock/:userId',adminController.unBlockUser)
       router.get('/orders',adminController.getUserOrders)
+      router.delete('/userOrder-cancel',adminController.userOrderCancel)
 //BANNER MANAGEMENT===============================================================================================>
 
       router.get('/banners',bannerController.getBanner)

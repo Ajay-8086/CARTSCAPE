@@ -74,22 +74,40 @@ module.exports = {
             res.status(500).json({ error: 'Internal server error' })
         }
     },
-    getUserOrders:async(req,res)=>{
+ getUserOrders : async (req, res) => {
         try {
             const pageNumber = parseInt(req.query.page) || 1;
             const options = {
                 page: pageNumber,
-                limit: 10
+                limit: 10,
+                populate: { path: 'products.id', model: 'products' } 
             };
-            const result = await orderModel.paginate(options);
-            const orders = result.docs
+    
+            const result = await orderModel.paginate({}, options);
+            const orders = result.docs;
+    
             res.status(200).render('admin/userOrders', { orders, paginationInfo: result, url: "order" });
         } catch (error) {
             console.log(error);
-            res.status(500).send('Internal server error')
+            res.status(500).send('Internal server error');
+        }
+    },
+    userOrderCancel:async(req,res)=>{
+        try {
+            console.log('dds');
+           
+            const orderId = req.query.id
+            const updatedOrder = await orderModel.findByIdAndUpdate(orderId,{status:'cancelled'})
+            console.log(orderId);
+         if(updatedOrder){
+            console.log(updatedOrder);
+          res.status(200).json('orderCancelled')
+        }else{
+            res.status(400).json('order cant canccel')
+        }
+        } catch (error) {
+            res.status(500).json('Internal server error')
         }
     }
-
-
 
 }

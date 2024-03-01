@@ -18,9 +18,6 @@
 
                     <!-- End Pagination controls -->
                     <i class='bx bx-filter'></i>
-                    <a href="/admin/addproduct">
-                        <button class="add_btn">Add Product</button>
-                    </a>
                 </div>
 
 
@@ -29,40 +26,43 @@
                     <thead>
                         <tr>
                             <th>OrderID</th>
-                            <th>Image</th>
-                            <th>stock</th>
-                            <th>price</th>
-                            <th>Date product added</th>
+                            <th>ProductName</th>
+                            <th>quantity</th>
+                            <th>Price</th>
+                            <th>Order Date</th>
 
                             <th>Actions</th> <!-- Added Actions column -->
                         </tr>
                     </thead>
                     <tbody>
-                        <% products.forEach((product,index)=>{ %>
+                        <% orders.forEach((order,index)=>{ %>
 
 
-                            <tr class="table-row<%=product._id%>">
-                                <td><%=product.name%></td>
+                            <tr class="table-row<%=order._id%>">
+                                <td><%=order._id%></td>
+                                <% order.products.forEach(product=>{ %>
+
+                                    <td>
+                                        <%= product.id.name %>
+                                    </td>
+                                    <td>
+                                        <%= product.quantity %>
+                                    </td>
+                              <%  }) %>
                                 <td>
-                                    <a href="/admin/singleproduct/<%=product._id%>"> <img
-                                            src="/uploads/products/<%=product.image[0]%>" alt="<%=product.name%>"></a>
-                                    
+                                    <%= order.totalPrice %>
                                 </td>
                                 <td>
-                                    <%= product.stock %>
-                                </td>
-                                <td>
-                                    <%= product.price %>
-                                </td>
-                                <td>
-                                    <%= product.productAdded %>
+                                    <%= order.createdAt.toISOString().slice(0,10) %>
                                 </td>
 
                                 <td>
-                                    <a href="#" class="delete-btn" data-category-id="<%=product._id%>"
-                                        onclick="deletion (event)" title="Delete Order">
-                                        <i class='bx bx-trash' style="color: red;"></i>
-                                    </a>
+                                    <% if (order.status=='cancelled') { %>
+                                        <button class="btn btn-secondary" disabled>Cancelled</button>
+                                        <% } else { %>
+                                        <!-- Passing order ID to the cancelOrder function -->
+                                        <button class="btn btn-primary" onclick="cancelOrder('<%= order._id %>')">Cancel</button>
+                                        <% } %>
                                 </td>
                             </tr>
                             <% })%>
@@ -81,49 +81,7 @@
 
     <script src="/js/admin.js"></script>
     <script>
-        async function deleteProduct(id) {
-            Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, delete it!"
-            }).then(async (result) => {
-                if (result.isConfirmed) {
-                    const response = await axios.delete(`/admin/delete/${id}`);
-                    try {
-                        if (response.status >= 200 && response.status < 400) {
-                            document.querySelector('.table-row' + id).remove();
-                            Swal.fire({
-                                title: "Deleted!",
-                                text: "Your product has been deleted.",
-                                icon: "success"
-                });
-                        } else {
-                            errorMsg.style.visibility = 'visible';
-                            errorMsg.classList.add('error');
-                            errorMsg.innerHTML = response.data.error;
-                        }
-                    } catch (error) {
-                        errorMsg.classList.add('error');
-                        errorMsg.style.visibility = 'visible';
-                        errorMsg.innerHTML = 'An error occurred while deleting the product.';
-                    }
-                }
-            });
-        }
-    
-        const errorMsg = document.getElementById('errorMsg');
-    
-        async function deletion(event) {
-            event.preventDefault();
-            const id = event.currentTarget.getAttribute('data-category-id');
-            if (id) {
-                await deleteProduct(id);
-            }
-        }
+       
     
         function jumpOnEnter(event) {
             if (event.key === 'Enter') {
@@ -138,7 +96,40 @@
                 }
             }
         }
-    
-    </script>
-    
+         function cancelOrder(id){
+            try {
+                            Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+            }).then(async(result) => {
+            if (result.isConfirmed) {
+                console.log(id);
+               const response = await axios.delete('/admin/userOrder-cancel?id='+id)
+               if(response.status==200){
+                Swal.fire({
+                title: "Deleted!",
+                text: "Your file has been deleted.",
+                icon: "success"
+                });
+                const button = document.querySelector(`.table-row${id} .btn`);
+                  if (button) {
+                button.textContent = 'Cancelled';
+                button.classList.remove('btn-primary');
+                button.classList.add('btn-secondary');
+                button.disabled = true;
+            }
+
+               }
+            }
+            });
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        </script>
 <%-include('../partials/adminDashFooter.ejs') %>
