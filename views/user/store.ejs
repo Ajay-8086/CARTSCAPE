@@ -117,8 +117,6 @@
                     <!-- <div class="range">
                       <input type="range" class="form-range" id="customRange1" />
                     </div> -->
-                    <input type="hidden" name="page" value=">">
-
                     <form action="" id="fromPrice">
 
                       <div class="row mb-3">
@@ -141,7 +139,7 @@
                           </div>
                         </div>
                       </div>
-                      <button type="submit" class="btn btn-white w-100 border border-secondary">apply</button>
+                      <button type="submit" class="btn btn-white w-100 border border-secondary applyPrice">apply</button>
                     </form>
 
                   </div>
@@ -255,6 +253,11 @@
 function redirectToProduct(productId) {
     window.location.href = "/products_page?id=" + productId;
 }
+  document.querySelector('.applyPrice').addEventListener('click',function(){
+    const minPrice = document.querySelector('.minPrice').value
+    const maxPrice = document.querySelector('.maxPrice').value
+    window.location.href = `/allproducts?minPrice=${minPrice}&maxPrice=${maxPrice}`
+  })
 
   </script>
 </body>

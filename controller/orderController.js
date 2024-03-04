@@ -56,11 +56,12 @@ module.exports = {
           const result=   await order.save();
               if(result){
                 for(const product of products){
-                 await productModel.updateOne(
+              const dataUpdation =    await productModel.updateOne(
               {_id:product.id},
               {$set:{$inc:{stock:-product.quantity}}
               
             })
+            console.log(dataUpdation,"updated cart");
              await cartModel.updateOne(
               { userId },
               { $pull: { productId: { id: product.id} } }
@@ -93,6 +94,14 @@ module.exports = {
         const orderId = req.query.id
         const updatedOrder = await orderModel.findByIdAndUpdate(orderId,{status:'cancelled'})
         if(updatedOrder){
+          for(const product of updatedOrder.products){
+            await productModel.updateOne(
+         {_id:product.id},
+         {$set:{$inc:{stock:product.quantity}}
+            
+       })
+      }
+       console.log('updated');
           res.status(200).redirect('/my-orders')
         }
       } catch (error) {
@@ -148,11 +157,12 @@ module.exports = {
     const result=   await order.save();
         if(result){
           for(const product of products){
-           await productModel.updateOne(
+      const updation=     await productModel.updateOne(
         {_id:product.id},
         {$set:{$inc:{stock:-product.quantity}}
         
       })
+      console.log(updation);
        await cartModel.updateOne(
         { userId },
         { $pull: { productId: { id: product.id} } }

@@ -15,6 +15,12 @@
                     <a href="/admin/product?page=<%= paginationInfo.nextPage%>" class="pagination-icon">
                         <i class='bx bxs-chevron-right'></i>
                     </a>
+<!-- Inside the div with class "head" -->
+                    <select id="sortOrderSelect" onchange="changeSortOrder()">
+                        <option value="all">All</option>
+                        <option value="completed">completed</option>
+                        <option value="cancelled">cancelled</option>
+                    </select>
 
                     <!-- End Pagination controls -->
                     <i class='bx bx-filter'></i>
@@ -105,7 +111,7 @@
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!"
+            confirmButtonText: "Yes, cancell it!"
             }).then(async(result) => {
             if (result.isConfirmed) {
                 console.log(id);
@@ -113,7 +119,7 @@
                if(response.status==200){
                 Swal.fire({
                 title: "Deleted!",
-                text: "Your file has been deleted.",
+                text: "Your file has been cancelled.",
                 icon: "success"
                 });
                 const button = document.querySelector(`.table-row${id} .btn`);
@@ -130,6 +136,11 @@
             } catch (error) {
                 console.log(error);
             }
+        }
+        function changeSortOrder(){
+            const sortOrder=document.getElementById('sortOrderSelect')
+            const orders = sortOrder.value
+            window.location.href='/admin/orders?sort='+orders
         }
         </script>
 <%-include('../partials/adminDashFooter.ejs') %>

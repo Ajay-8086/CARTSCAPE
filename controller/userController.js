@@ -43,19 +43,24 @@ module.exports = {
             const categories = await categoryModel.find({isDeleted:false})
             const wishlist = await cartModel.findOne({userId}).populate('productId')
             const categoryName = req.query?.category
-            let products;
-            let total;
-            if(categoryName){
-                products = await productModel.find({isDeleted:false,category:categoryName}).skip((page - 1) * limit)
-                .limit(limit);
-                total=   await productModel.countDocuments({isDeleted:false,category:categoryName})
-            }else{
-                products = await productModel.find({isDeleted:false}).skip((page - 1) * limit)
-                .limit(limit);
-             total=   await productModel.countDocuments({isDeleted:false})
+            const minPrice = parseInt( req.query.minPrice)|| null
+            const maxPrice = parseInt( req.query.maxPrice)|| null
+            let filter = { isDeleted:false };
+            if (categoryName) {
+                filter.category = categoryName;
             }
+            if (minPrice !== null) {
+                filter.price = { $gte: minPrice };
+            }
+            if (maxPrice !== null) {
+                if (!filter.price) filter.price = {};
+                filter.price.$lte = maxPrice;
+            }
+    
+            const products = await productModel.find(filter).skip((page - 1) * limit).limit(limit);
+            const total = await productModel.countDocuments(filter);
             const noPages = Math.ceil(total / limit);
-            res.status(200).render('user/store',{categories,products,page,total,noPages,categoryName,wishlist})
+            res.status(200).render('user/store', { categories, products, page, total, noPages, categoryName, wishlist });
         } catch (error) {
            console.log(error); 
         }

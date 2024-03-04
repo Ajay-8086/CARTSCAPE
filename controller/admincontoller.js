@@ -81,8 +81,7 @@ module.exports = {
                 page: pageNumber,
                 limit: 10,
                 populate: { path: 'products.id', model: 'products' } 
-            };
-    
+            }; 
             const result = await orderModel.paginate({}, options);
             const orders = result.docs;
     
@@ -94,13 +93,18 @@ module.exports = {
     },
     userOrderCancel:async(req,res)=>{
         try {
-            console.log('dds');
            
             const orderId = req.query.id
             const updatedOrder = await orderModel.findByIdAndUpdate(orderId,{status:'cancelled'})
-            console.log(orderId);
          if(updatedOrder){
-            console.log(updatedOrder);
+            for(const product of updatedOrder.products){
+                await productModel.updateOne(
+             {_id:product.id},
+             {$set:{$inc:{stock:-product.quantity}}
+                
+           })
+          }
+          console.log('updated');
           res.status(200).json('orderCancelled')
         }else{
             res.status(400).json('order cant canccel')
