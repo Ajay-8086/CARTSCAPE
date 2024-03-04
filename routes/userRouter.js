@@ -44,7 +44,7 @@ router.post('/checkout/add-address',userController.postcheckoutAddress)
 router.post('/make-purchase',userController.makePurchase)
 router.post('/verify-coupon',userController.couponApply)
 router.get('/payment',orderController.getPayment)
-// router.post('/payment',paymentController.payment)
+router.post('/addreview',userController.addReview)
 
 // WHISHLISTMANAGEMENT ========================================================================================>
 router.get('/wishlistcount',wislistController.getWishListCount)

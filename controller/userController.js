@@ -5,6 +5,7 @@ const userModel = require('../models/customer')
 const profileModel = require('../models/profile')
 const bcrypt = require('bcrypt')
 const customerModel = require('../models/customer')
+const ratingModel = require('../models/rating')
 const cartModel = require('../models/cart')
 const couponModel = require('../models/coupon')
 const sendMail = require('../utility/sendMail');
@@ -45,7 +46,16 @@ module.exports = {
             const categoryName = req.query?.category
             const minPrice = parseInt( req.query.minPrice)|| null
             const maxPrice = parseInt( req.query.maxPrice)|| null
+            const sort  =  req.query.sort
             let filter = { isDeleted:false };
+            let sortCrieteria = {}
+            if(sort){
+                if(sort == 'priceAsc'){
+                    sortCrieteria.price =1
+                }else if(sort=='priceDsc'){
+                   sortCrieteria.price=-1
+                }
+            }
             if (categoryName) {
                 filter.category = categoryName;
             }
@@ -57,7 +67,7 @@ module.exports = {
                 filter.price.$lte = maxPrice;
             }
     
-            const products = await productModel.find(filter).skip((page - 1) * limit).limit(limit);
+            const products = await productModel.find(filter).sort(sortCrieteria).skip((page - 1) * limit).limit(limit);
             const total = await productModel.countDocuments(filter);
             const noPages = Math.ceil(total / limit);
             res.status(200).render('user/store', { categories, products, page, total, noPages, categoryName, wishlist });
@@ -335,6 +345,45 @@ module.exports = {
             res.status(500).json('Internal server error')
         }
     },
+        addReview:async(req,res)=>{
+            try {
+                const {productId,rating,comment}=req.body
+            const userId  = req.session.userId
+            const existRating = await ratingModel.findOne({productId:productId})
+            console.log(existRating);
+                if(existRating){
+                    const existingReview = existRating.reviews.find(review=>review.userId==userId)
+                    if(existingReview){
+                    return res.staus(400).json('User already rated')
+                    } 
+                    existRating.reviews.push({
+                        userId: userId,
+                        rating: rating,
+                        review: comment
+                    });
+                    await existRating.save();
+                    return res.status(200).json("Rating added successfully");
+
+                }else{
+                    const newRating = new ratingModel({
+                        productId: productId,
+                        reviews: [{
+                            userId: userId,
+                            rating: rating,
+                            review: comment
+                        }]
+                    });
+                    await newRating.save();
+                    return res.status(200).json("Rating added successfully");
+                }
+                
+
+            
+            } catch (error) {
+                console.log(error);
+                res.status(500).json('internal server error')
+            }
+        },
     userLogout:(req,res)=>{
         try {
             req.session.destroy((err)=>{

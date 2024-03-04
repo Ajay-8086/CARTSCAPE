@@ -5,6 +5,7 @@ const cartModel = require('../models/cart')
 const { default: mongoose } = require('mongoose')
 const profileModel = require('../models/profile')
 const crypto = require('crypto')
+const ratingModel = require('../models/rating')
 module.exports = {
   getPayment:async(req,res)=>{
     try {
@@ -121,7 +122,15 @@ module.exports = {
         const addressId = orderDetails.address
         const userAddress = await profileModel.findOne({userId,})
         const orderAddress = userAddress.addresses.find(addr=>addr._id.toString()==addressId) 
-        res.status(200).render('user/orderDetails',{categories,orderDetails,orderAddress})
+        let ratedProduct,existingReview;
+        for(const product of orderDetails.products){
+          ratedProduct = await ratingModel.findOne({ productId: product.id})
+        }
+        
+        if(ratedProduct){
+           existingReview = ratedProduct.reviews.find(review=>review.userId==userId)
+        }
+        res.status(200).render('user/orderDetails',{categories,existingReview,orderDetails,orderAddress})
       } catch (error) {
         console.log(error);
         res.status(500).send('internal server error')
