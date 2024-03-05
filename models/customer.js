@@ -24,7 +24,7 @@ var customer = new mongoose.Schema({
     type: Boolean,
     default:false
   }
-},{timestamp:true});
+},{timestamps: true});
 customer.plugin(mongoosePaginate)
 const customerModel = mongoose.model('customers',customer)
 

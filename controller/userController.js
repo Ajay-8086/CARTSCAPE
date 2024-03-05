@@ -198,33 +198,7 @@ module.exports = {
             res.status(500).json('Internal server error')
         }
     },
-    makePurchase:async(req,res)=>{
-        try {
-       let { totalAmount, discount,productId} = req.body;
-       const userId = req.session.userId
-       if(req.query.productId){
-        productId = req.query.productId
-        const productDetails = await productModel.findOne({_id:productId})
-        req.session.productDetails = productDetails
-        const discountPrice = parseInt(productDetails.price*productDetails.discount/100)
-        totalAmount = (productDetails.price)-discountPrice
-        discount =  parseInt(totalAmount * 5/100)
-       }
-       req.session.totalPrice = totalAmount;
-       req.session.discount = discount;
-       if(!userId){
-       return res.status(400).redirect('/login')
-       }
-       if(productId){
-          return res.status(200).redirect('/checkout')
-       }else{
-       return res.status(401).redirect('/')
-       }
-        } catch (error) {
-            console.log(error);
-           return res.status(500).send('Internal server error')
-        }
-    },
+   
     getCheckout:async(req,res)=>{
         try {
             let {totalPrice,discount} =req.session

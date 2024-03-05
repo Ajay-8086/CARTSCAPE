@@ -68,6 +68,7 @@ const chartController = require('../controller/chartController')
 router.get('/home',chartController.adminDahboardGet)
 router.get('/chart-category',chartController.categoryChart)
 router.get('/chart-order',chartController.orderChart)
+router.get('/chart-customers',chartController.customerGrowth)
 
 
 
