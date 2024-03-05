@@ -350,7 +350,6 @@ module.exports = {
                 const {productId,rating,comment}=req.body
             const userId  = req.session.userId
             const existRating = await ratingModel.findOne({productId:productId})
-            console.log(existRating);
                 if(existRating){
                     const existingReview = existRating.reviews.find(review=>review.userId==userId)
                     if(existingReview){

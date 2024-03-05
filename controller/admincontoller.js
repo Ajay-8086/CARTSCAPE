@@ -5,16 +5,6 @@ const orderModel = require('../models/order');
 
 
 module.exports = {
-
-    // ADMIN SIGNUP MANAGEMENT ------------------------------------------------------------------------------->
-    getDashboard: (req, res) => {
-        try {
-            res.status(200).render('admin/dashboard', { error: req.flash('error') })
-        } catch (error) {
-            res.status(500).send('Internal server error')
-        }
-    },
-
     // USER MANAGEMENT -------------------------------------------------------------------------->
 
     getUserList: async (req, res) => {
@@ -112,6 +102,7 @@ module.exports = {
         } catch (error) {
             res.status(500).json('Internal server error')
         }
-    }
+    },
+
 
 }

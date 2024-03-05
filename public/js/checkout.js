@@ -7,6 +7,7 @@ addressRadios.forEach(function (radio) {
     if (this.checked) {
       // Retrieve the corresponding address data
       const address_id = this.parentElement.querySelector(".addressSelect_id").value;
+      
       const address = this.parentElement.querySelector(".address").textContent;
       const city = this.parentElement.querySelector(".city").textContent;
       const houseNo = this.parentElement.querySelector(".house_no").textContent;

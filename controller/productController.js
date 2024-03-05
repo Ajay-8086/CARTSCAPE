@@ -129,14 +129,11 @@ module.exports = {
             const productDetails = await productModel.findById(productId);
             const categories = await categoryModel.find({ isDeleted: false });
             const ratingDetails = await ratingModel.findOne({ productId: productId }).populate('reviews.userId');
-        
-          
             let averageRating = 0;
             if (ratingDetails && ratingDetails.reviews.length > 0) {
                 const totalRating = ratingDetails.reviews.reduce((acc, review) => acc + review.rating, 0);
                 averageRating = totalRating / ratingDetails.reviews.length;
             }
-        
             res.status(200).render('user/productPage', { productDetails, ratingDetails,averageRating, categories, averageRating });
         } catch (error) {
             console.error('Error fetching product details:', error);

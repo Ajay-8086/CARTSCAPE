@@ -10,7 +10,7 @@ module.exports = {
                 limit: 10
             };
             const result = await bannerModel.paginate({}, options);
-            res.render('admin/banner', { banners: result.docs, paginationInfo: result, url: 'banner' });
+            res.status(200).render('admin/banner', { banners: result.docs, paginationInfo: result, url: 'banner' });
         } catch (error) {
             res.status(500).send('Internal server error')
         }

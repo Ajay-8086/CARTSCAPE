@@ -7,10 +7,7 @@ const categoryController = require('../controller/categoryController')
 const authController = require('../controller/authController')
 const{setUploadType,upload}=require('../utility/multer')
 const adminController=require('../controller/admincontoller')
-
-//ADMIN DASHBOARD==============================================================================================>
-
-router.get('/dashboard',adminController.getDashboard)
+const chartController = require('../controller/chartController')
 
 //AUTHENTICATIONS===============================================================================================>
 
@@ -67,7 +64,10 @@ router.get('/dashboard',adminController.getDashboard)
       router.post('/edit-coupon/:couponId',couponController.postUpdateCoupon)
       router.delete('/delete-coupon/:couponId',couponController.deleteCoupon)
 
-
+//GRAPH MANAGEMENT================================================================================================>
+router.get('/home',chartController.adminDahboardGet)
+router.get('/chart-category',chartController.categoryChart)
+router.get('/chart-order',chartController.orderChart)
 
 
 
