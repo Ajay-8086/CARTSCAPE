@@ -6,9 +6,13 @@ const moment = require('moment')
 const ratingModel = require('../models/rating')
 
 module.exports = {
-
+    // To View the product list in the admin side
     getProducts: async (req, res) => {
         try {
+            const adminLoggedIn =  req.session.adminLoggedIn
+            if(!adminLoggedIn){
+                return res.status(401).redirect('/admin/login')
+            }
             const pageNumber = parseInt(req.query.page) || 1;
             const options = {
                 page: pageNumber,

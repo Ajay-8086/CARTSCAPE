@@ -2,8 +2,13 @@ const bannerModel = require('../models/banner')
 const fs = require('fs')
 const path = require('path')
 module.exports = {
+    // View the banners
     getBanner: async (req, res) => {
         try {
+            const adminLoggedIn =  req.session.adminLoggedIn
+            if(!adminLoggedIn){
+                return res.status(401).redirect('/admin/login')
+            }
             const pageNumber = parseInt(req.query.page) || 1;
             const options = {
                 page: pageNumber,
@@ -15,14 +20,19 @@ module.exports = {
             res.status(500).send('Internal server error')
         }
     },
+    //Adding banner form get
     getAddBanner: (req, res) => {
         try {
+            const adminLoggedIn =  req.session.adminLoggedIn
+            if(!adminLoggedIn){
+                return res.status(401).redirect('/admin/login')
+            }
             res.status(200).render('admin/addBanner', { url: 'banner' })
-
         } catch (error) {
             res.status(500).send('Internal server error')
         }
     },
+    //Adding banner post
     postAddBanner: async (req, res) => {
         try {
             const { bannerName, bannerHeading, specialPrice, validFrom, validTo } = req.body
@@ -36,6 +46,7 @@ module.exports = {
         }
 
     },
+    
     deleteBanner: async (req, res) => {
         try {
             const id = req.params.bannerId

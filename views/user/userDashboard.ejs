@@ -58,10 +58,10 @@
             <% var Odiscount=parseInt(product.price * discount / 100 ) %>
               <% var showPrice=product.price-Odiscount %>
 
-                <div class="col-lg-3 mt-3 col-md-3 col-sm-3 d-flex">
+                <div class="col-lg-3 mt-3 col-md-3 col-sm-3 d-flex" onclick="redirectToProduct('<%=product._id%>')">
     
                   <div id="card" class="card w-100 my-2 border-" style="box-shadow: 0 0 10px #0000001a;" >
-                    <a onclick="addToWhislist('<%=product._id%>')" class="wishlist-icon position-absolute top-0 end-0 mt-2 ps-2 pe-2 wish<%=product._id%> " data-product-id="<%=product._id%>" id="wish<%=product._id%>" style=" font-size: 20px; color: rgb(185, 185, 185); "><i class="fas fa-heart"></i></a>
+                    <a onclick="addToWhislist('<%=product._id%>',event)" class="wishlist-icon position-absolute top-0 end-0 mt-2 ps-2 pe-2 wish<%=product._id%> " data-product-id="<%=product._id%>" id="wish<%=product._id%>" style=" font-size: 20px; color: rgb(185, 185, 185); "><i class="fas fa-heart"></i></a>
                     <% if(discount> 0) { %>
                       <div class="discount-badge position-absolute top-0 start-0 mt-2 px-1 py-0" 
                         style="background-color: #febd69; color: #131921; border-radius: 90px; margin-left: 8px; font-size: 0.75rem; font-weight: bolder;">
@@ -114,7 +114,7 @@
                           
                         </div>
                         <div class=" d-flex align-items-center justify-content-center pb-3 px-0 pb-0 mt-auto">
-                          <a   class="cartBtn btn btn-primary shadow-0 me-1 cart<%=product._id%>" style="background-color: black;" onclick="addingToCart('<%=product._id%>')">Add to cart</a>
+                          <a   class="cartBtn btn btn-primary shadow-0 me-1 cart<%=product._id%>" style="background-color: black;" onclick="addingToCart('<%=product._id%>',event)">Add to cart</a>
                       </div>
                       
     

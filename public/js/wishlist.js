@@ -27,8 +27,9 @@ console.log(error);
 
 })
 //Adding item to wishlist =========================================================>
-async function addToWhislist(productId){
+async function addToWhislist(productId,event){
     try {
+        event.stopPropagation()
       const wishlist = document.querySelector(`.wish${productId}`)
       const response = await axios.post('/addtoWhislist?productId='+productId)
      

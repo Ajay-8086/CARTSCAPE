@@ -7,14 +7,14 @@ const bcrypt = require('bcrypt')
 module.exports = {
     //ADMIN AUTHENTICATION MANAGEMENT===========================================================================>
     
-    getSignup: async(req, res) => {
+    adminGetSignup: async(req, res) => {
         try {
-            res.status(200).render('admin/signup',{categories})
+            res.status(200).render('admin/signup')
         } catch (error) {
             res.status(500).send('Internal sseerver error')
         }
     },
-    postSignup: async (req, res) => {
+    adminPostSignup: async (req, res) => {
         try {
             
             const { phone, email, name, password } = req.body
@@ -60,7 +60,7 @@ module.exports = {
                 
                 if (adminExist) {
                     await adminModel.findOneAndUpdate({ email }, { $set: { verified: true } })
-                    res.status(200).redirect('/admin/dashboard')
+                    res.status(200).redirect('/admin/home')
                 } else {
                     res.redirect('/admin/signup')
                 }
@@ -73,7 +73,7 @@ module.exports = {
             res.status(500).json({ error: 'Internal server error' })
         }
     },
-    getLogin: (req, res) => {
+    adminLogin: (req, res) => {
         try {
             const errorMessages = req.flash('error');
             res.status(200).render('admin/login', { error: errorMessages });
@@ -81,15 +81,17 @@ module.exports = {
             res.status(500).send('Internal server error')
         }
     },
-    postLogin: async (req, res) => {
+    adminPostLogin: async (req, res) => {
         const { email, password } = req.body
         const adminExist = await adminModel.findOne({ email })
         
         if (adminExist) {
             if (adminExist.verified) {
                 const passwordVerify = await bcrypt.compare(password, (adminExist.password))
-                if (passwordVerify)
-                    res.redirect('/admin/dashboard')
+                if (passwordVerify){
+                    req.session.adminLoggedIn = true
+                    res.redirect('/admin/home')
+                }
                 else {
                     req.flash('error', 'password is not valid')
                     res.redirect('/admin/login')

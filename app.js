@@ -5,7 +5,6 @@ const userRouter = require('./routes/userRouter')
 const adminRouter = require('./routes/adminRoutes')
 const flash = require('connect-flash');
 const session = require('express-session')
-// const morgan = require('morgan');
 const dbConnection = require('./config/DB')
 const app = express();
 const port = process.env.PORT || 3000;
@@ -20,8 +19,7 @@ app.use(session({
     resave: true,
     saveUninitialized: false
 }))
-// const customFormat = ':method :url :status - :response-time ms';
-// app.use(morgan(customFormat));
+
 
 app.use('/admin', adminRouter)
 app.use('/', userRouter)

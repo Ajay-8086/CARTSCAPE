@@ -11,12 +11,12 @@ const chartController = require('../controller/chartController')
 
 //AUTHENTICATIONS===============================================================================================>
 
-        router.get('/signup',authController.getSignup)
-        router.post('/signup',authController.postSignup)
+        router.get('/signup',authController.adminGetSignup)
+        router.post('/signup',authController.adminPostSignup)
         router.get('/verify',authController.getAdminVerify)
         router.post('/verify',authController.postAdminVerify)
-        router.get('/login',authController.getLogin)
-        router.post('/login',authController.postLogin)
+        router.get('/login',authController.adminLogin)
+        router.post('/login',authController.adminPostLogin)
         router.get('/logout',authController.adminLogout)
 
 // PRODUCT ROUTES=============================================================================================>

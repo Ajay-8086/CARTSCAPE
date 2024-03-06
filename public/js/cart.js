@@ -35,8 +35,9 @@ function cartCount(count){
 }
 
 
-async function addingToCart(productId){
+async function addingToCart(productId,event){
     try {
+        event.stopPropagation()
         const response  = await axios.post('/addtocart',{id:productId})
         if (response.status === 200) {
             document.querySelector('.cart' + productId).innerText="Go to cart"

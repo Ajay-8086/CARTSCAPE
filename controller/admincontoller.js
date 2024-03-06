@@ -6,9 +6,13 @@ const orderModel = require('../models/order');
 
 module.exports = {
     // USER MANAGEMENT -------------------------------------------------------------------------->
-
+    //To view the user details
     getUserList: async (req, res) => {
         try {
+            const adminLoggedIn =  req.session.adminLoggedIn
+            if(!adminLoggedIn){
+                return res.status(401).redirect('/admin/login')
+            }
             const pageNumber = parseInt(req.query.page) || 1;
             const options = {
                 page: pageNumber,
@@ -21,8 +25,13 @@ module.exports = {
             res.status(500).send('internal server error')
         }
     },
+    // To block the users 
     blockUser: async (req, res) => {
         try {
+            const adminLoggedIn =  req.session.adminLoggedIn
+            if(!adminLoggedIn){
+                return res.status(401).redirect('/admin/login')
+            }
             const userId = req.params.userId
             const blocked = await userModel.findByIdAndUpdate(userId, { $set: { blocked: true } })
             if (blocked) {
@@ -36,8 +45,13 @@ module.exports = {
             res.status(500).json({ error: 'Internal server error' })
         }
     },
+    //To view the blocked users
     getBlockedUsers: async (req, res) => {
         try {
+            const adminLoggedIn =  req.session.adminLoggedIn
+            if(!adminLoggedIn){
+                return res.status(401).redirect('/admin/login')
+            }
             const pageNumber = parseInt(req.query.page) || 1;
             const options = {
                 page: pageNumber,
@@ -50,6 +64,7 @@ module.exports = {
             res.status(500).send('internal server error')
         }
     },
+    //Unblock the blocked user
     unBlockUser:async(req,res)=>{
         try {
             const userId = req.params.userId
@@ -64,8 +79,13 @@ module.exports = {
             res.status(500).json({ error: 'Internal server error' })
         }
     },
- getUserOrders : async (req, res) => {
+    // To view complete user order
+    getUserOrders : async (req, res) => {
         try {
+            const adminLoggedIn =  req.session.adminLoggedIn
+            if(!adminLoggedIn){
+                return res.status(401).redirect('/admin/login')
+            }
             const pageNumber = parseInt(req.query.page) || 1;
             const options = {
                 page: pageNumber,
@@ -81,9 +101,13 @@ module.exports = {
             res.status(500).send('Internal server error');
         }
     },
+    //User order cancelling
     userOrderCancel:async(req,res)=>{
         try {
-           
+            const adminLoggedIn =  req.session.adminLoggedIn
+            if(!adminLoggedIn){
+                return res.status(401).redirect('/admin/login')
+            }
             const orderId = req.query.id
             const updatedOrder = await orderModel.findByIdAndUpdate(orderId,{status:'cancelled'})
          if(updatedOrder){

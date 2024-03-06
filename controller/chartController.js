@@ -3,8 +3,13 @@ const OrderModel = require('../models/order');
 const productModel = require('../models/product');
 
 module.exports = {
+    //Admin dashboard get
     adminDahboardGet:(req,res)=>{
         try {
+            const adminLoggedIn =  req.session.adminLoggedIn
+            if(!adminLoggedIn){
+                return res.status(401).redirect('/admin/login')
+            }
             res.render('admin/adminDashboard',{url:'home'})
         } catch (error) {
             console.log(error);

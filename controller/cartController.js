@@ -2,9 +2,10 @@ const categoryModel = require('../models/category')
 const cartModel = require('../models/cart')
 const mongoose = require('mongoose')
 module.exports={
+
     getCart:async(req,res)=>{
         try {   
-                 const userId = req.session.userId
+                const userId = req.session.userId
                if(userId){
                 const categories = await categoryModel.find({isDeleted:false})
                 const cartItems = await cartModel.findOne({userId}).populate('productId.id')
@@ -20,6 +21,7 @@ module.exports={
             console.log('error',error);
         }
     },
+    
     getCartCount:async(req,res)=>{
         try {
             const userId = req.session.userId

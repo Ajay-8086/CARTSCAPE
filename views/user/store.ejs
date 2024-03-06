@@ -73,27 +73,27 @@
                     <div>
 
                       <div class="form-check">
-                        <input class="form-checkbox-input colorCheck" type="checkbox" value="Red"  onchange="filterByColor('Red')"/>
+                        <input class="form-checkbox-input colorCheck"  <% if(selectedColor.includes('Red')) { %> checked <% } %> type="checkbox" value="Red"  onclick="filterByColor(event,'Red')"/>
                         <label class="form-checkbox-label" for="checkbox">
                           Red
                         </label>
-                        <input class="form-checkbox-input colorCheck" type="checkbox" value="Black"  onchange="filterByColor('Black')" />
+                        <input class="form-checkbox-input colorCheck"  <% if(selectedColor.includes('Black')) { %> checked <% } %> type="checkbox" value="Black"  onclick="filterByColor(event,'Black')" />
                         <label class="form-checkbox-label" for="checkbox">
                           Black
                         </label>
-                        <input class="form-checkbox-input colorCheck" type="checkbox" value="Yellow" onchange="filterByColor('Yellow')"/>
+                        <input class="form-checkbox-input colorCheck"  <% if(selectedColor.includes('Yellow')) { %> checked <% } %> type="checkbox" value="Yellow" onclick="filterByColor(event,'Yellow')"/>
                         <label class="form-checkbox-label" for="checkbox">
                           Yellow
                         </label>
-                        <input class="form-checkbox-input colorCheck" type="checkbox" value="Green" onchange="filterByColor('Green')" />
+                        <input class="form-checkbox-input colorCheck" <% if(selectedColor.includes('Green')) { %> checked <% } %> type="checkbox" value="Green" onclick="filterByColor(event,'Green')" />
                         <label class="form-checkbox-label" for="checkbox">
                           Green
                         </label>
-                        <input class="form-checkbox-input colorCheck" type="checkbox" value="Blue" onchange="filterByColor('Blue')" />
+                        <input class="form-checkbox-input colorCheck" type="checkbox" <% if(selectedColor.includes('Blue')) { %> checked <% } %> value="Blue" onclick="filterByColor(event,'Blue')" />
                         <label class="form-checkbox-label" for="checkbox">
                           Blue
                         </label>
-                        <input class="form-checkbox-input colorCheck" type="checkbox" value="White" onchange="filterByColor('White')" />
+                        <input class="form-checkbox-input colorCheck"  <% if(selectedColor.includes('White')) { %> checked <% } %> type="checkbox" value="White" onclick="filterByColor(event,'White')" />
                         <label class="form-checkbox-label" for="checkbox">
                           White
                         </label>
@@ -170,9 +170,9 @@
             <% let price = product.price %>
             <% let discountedPrice = parseInt(price - (price * discount/100)) %>
 
-            <div class="col-lg-4 col-md-6 col-sm-12 mb-4 product">
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-4 product" onclick="redirectToProduct('<%=product._id%>')">
               <div class="card h-100 position-relative" >
-                    <a onclick="addToWhislist('<%=product._id%>')"  class="wishlist-icon position-absolute top-0 end-0 mt-2 ps-2 pe-2 wish<%=product._id%> "  style=" font-size: 20px; color: rgb(185, 185, 185); "><i 
+                    <a onclick="addToWhislist('<%=product._id%>',event)"  class="wishlist-icon position-absolute top-0 end-0 mt-2 ps-2 pe-2 wish<%=product._id%> "  style=" font-size: 20px; color: rgb(185, 185, 185); "><i 
                       class="fas fa-heart"></i></a>
                 <% if(discountedPrice>0) {%>
                 
@@ -201,7 +201,7 @@
                 
               </div>
               <div class=" d-flex align-items-center justify-content-center pb-3 px-0 pb-0 mt-auto">
-                <a   class="cartBtn btn btn-primary shadow-0 me-1 cart<%=product._id%>" style="background-color: black;" onclick="addingToCart('<%=product._id%>')">Add to cart</a>
+                <a   class="cartBtn btn btn-primary shadow-0 me-1 cart<%=product._id%>" style="background-color: black;" onclick="addingToCart('<%=product._id%>',event)">Add to cart</a>
             </div>
         </div>
       </div>
@@ -261,6 +261,12 @@ function redirectToProduct(productId) {
     const maxPrice = document.querySelector('.maxPrice').value
     window.location.href = `/allproducts?minPrice=${minPrice}&maxPrice=${maxPrice}`
   })
+  function filterByColor(event) {
+        const checkboxes = document.querySelectorAll('.colorCheck:checked');
+        const selectedColors = Array.from(checkboxes).map(checkbox => checkbox.value);
+        const queryParams = selectedColors.map(color => `color=${color}`).join('&');
+        window.location.href = `/allproducts?${queryParams}`;
+    }
 
   </script>
 </body>

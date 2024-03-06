@@ -11,6 +11,7 @@ const cartModel = require('../models/cart')
 
 
 module.exports = {
+    //To view the user home
     home: async(req, res) => {
         try {
             const categories = await categoryModel.find({isDeleted:false})
@@ -33,7 +34,9 @@ module.exports = {
             res.status(500).send('Internal server error')
         }
     },
+    // view the all product page
     getAllProducts:async(req,res)=>{ 
+        let selectedColor=[];
         try {
             const page = parseInt(req.query.page) || 1;
             const limit = parseInt(req.query.limit) || 9;
@@ -44,6 +47,11 @@ module.exports = {
             const minPrice = parseInt( req.query.minPrice)|| null
             const maxPrice = parseInt( req.query.maxPrice)|| null
             const sort  =  req.query.sort
+            const colors = req.query.color;
+
+            if (colors) {
+                selectedColor = colors
+            }
             let filter = { isDeleted:false };
             let sortCrieteria = {}
             if(sort){
@@ -64,11 +72,14 @@ module.exports = {
                 if (!filter.price) filter.price = {};
                 filter.price.$lte = maxPrice;
             }
-    
+            if (selectedColor.length > 0) {
+                filter.colors = { $in: selectedColor };
+            }
             const products = await productModel.find(filter).sort(sortCrieteria).skip((page - 1) * limit).limit(limit);
+            // console.log(products);
             const total = await productModel.countDocuments(filter);
             const noPages = Math.ceil(total / limit);
-            res.status(200).render('user/store', { categories, products, page, total, noPages, categoryName, wishlist});
+            res.status(200).render('user/store', { categories, products, page, total, noPages, categoryName, wishlist,selectedColor});
         } catch (error) {
            console.log(error); 
         }

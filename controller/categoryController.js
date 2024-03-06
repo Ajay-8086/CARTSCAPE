@@ -2,10 +2,13 @@ const categoryModel = require('../models/category')
 const fs = require('fs')
 const path = require('path')
 module.exports = {
-
+    //View the category list
     getCategoryList: async (req, res) => {
         try {
-
+            const adminLoggedIn =  req.session.adminLoggedIn
+            if(!adminLoggedIn){
+                return res.status(401).redirect('/admin/login')
+            }
             const pageNumber = parseInt(req.query.page) || 1;
             const options = {
                 page: pageNumber,
@@ -21,6 +24,10 @@ module.exports = {
     },
     getAddCategory: (req, res) => {
         try {
+            const adminLoggedIn =  req.session.adminLoggedIn
+            if(!adminLoggedIn){
+                return res.status(401).redirect('/admin/login')
+            }
             res.status(200).render('admin/addCategory', { url: 'category' })
         } catch (error) {
             res.status(500).send('Internal server error')
