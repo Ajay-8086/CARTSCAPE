@@ -63,7 +63,6 @@ module.exports = {
     // Daily signedup user chart
     customerGrowth:async(req,res)=>{
         try {
-            console.log('aaaaaaaa');
             const dailySignup = await customerModel.aggregate([{
                 $group:{
                     _id:{

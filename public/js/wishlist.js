@@ -14,7 +14,6 @@ try {
         wishlistCount(response.data.count);
         const wishlistedProducts = response.data.wishlist.productId;
         wishlistedProducts.forEach(element => {
-            console.log('wishlist',element);
             const wishlistBtn =  document.querySelector(`.wish${element}`)
             wishlistBtn.classList.add('red')
         });

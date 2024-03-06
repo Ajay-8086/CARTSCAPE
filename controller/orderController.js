@@ -6,6 +6,11 @@ const { default: mongoose } = require('mongoose')
 const profileModel = require('../models/profile')
 const crypto = require('crypto')
 const ratingModel = require('../models/rating')
+const sendMail = require('../utility/sendMail');
+const couponModel = require('../models/coupon')
+const customerModel = require('../models/customer')
+const razorpay = require('razorpay');
+var instance = new razorpay({ key_id: process.env.KEY_ID, key_secret: process.env.KEY_SECRET })
 module.exports = {
   getPayment:async(req,res)=>{
     try {
@@ -86,7 +91,7 @@ module.exports = {
   },
   makePurchase:async(req,res)=>{
     try {
-   let { totalAmount, discount,productId} = req.body;
+      let { totalAmount, discount,productId}= req.body;
    const userId = req.session.userId
    if(req.query.productId){
     productId = req.query.productId
@@ -110,6 +115,125 @@ module.exports = {
         console.log(error);
        return res.status(500).send('Internal server error')
     }
+},
+getCheckout:async(req,res)=>{
+  try {
+      let {totalPrice,discount} =req.session
+
+      const userId = req.session.userId
+      if(!userId){
+         return res.status(401).redirect('/login')
+      }else{
+      const categories = await categoryModel.find({isDeleted:false})
+      let users;
+       usersAddressExist = await profileModel.findOne({userId})
+       if(usersAddressExist){
+           users = await profileModel.findOne({userId}).populate('userId')
+       }else{
+          users = await customerModel.findOne({_id:userId})
+       }
+       let products;
+       const productDetails = req.session.productDetails
+       
+       const singleProduct = {
+          userId:userId,
+          productId:[{
+          id:productDetails,
+          quantity:1,
+          }]
+      }
+       if(productDetails){
+          products=singleProduct
+          delete req.session.productDetails;
+       }else{
+
+           products = await cartModel.findOne({userId}).populate('productId.id')
+       }
+       const applicableCoupons = await couponModel.find({ 
+          $and: [
+              { purchaseAbove: { $gte: totalPrice } }, 
+              { purchaseminimum: { $lte: totalPrice } }
+          ]
+      });
+      res.status(200).render('user/checkout',{categories,users,totalPrice,discount,products,applicableCoupons})
+      }
+  } catch (error) {
+      res.status(500).send('Internal server error')
+  }
+},
+postCheckout:async(req,res)=>{
+  try {
+      const {payment,email,products,totalPrice,addressId} = req.body
+      req.session.productsDetails = products
+      req.session.addressId = addressId
+      req.session.payment = payment
+      req.session.totalPrice = parseInt(totalPrice)
+      const key = process.env.KEY_ID
+      if(payment == 'Online_Payment'){
+          const amount = Number(req.session.totalPrice) * 100
+          const orderOptions = {
+              amount: amount, 
+              currency: 'INR',
+              receipt: 'receipt_order_1',
+              payment_capture: 1 
+          };
+          const order = await instance.orders.create(orderOptions);
+          req.session.checkoutEmail = email
+          res.status(200).json({ online: true, order,key });
+      }else{
+          req.session.checkoutEmail = email
+          const generateOTP = req.session.generateOTP || Math.floor(1000 + Math.random() * 9000);
+          req.session.checkoutOTP = generateOTP;
+          await sendMail(email, `${generateOTP}`);
+          res.status(200).json({cod:true})
+      }
+  } catch (error) {
+      console.log(error);
+      res.status(500).json('internal server error')
+  }
+},
+couponApply:async(req,res)=>{
+  try {
+      const {coupon} = req.body
+      const couponDetail = await couponModel.findOne({couponCode:coupon})
+      const discount = couponDetail.discount
+      res.status(200).json({discount:discount})
+  } catch (error) {
+      console.log(error);
+      res.staus(500).json('internal server error')
+  }
+
+},
+checkoutAddress:async(req,res)=>{
+  try {
+      const categories = await categoryModel.find({isDeleted:false})
+      res.status(200).render('user/checkout-address',{categories})
+  } catch (error) {
+      console.log(error);
+      res.send('Internal server error')
+  }
+},
+postcheckoutAddress:async(req,res)=>{
+  try {
+     const {address,city,house_No,postcode,altr_number,state,country,district} = req.body
+     const userId = req.session.userId
+     if(!userId){
+      res.status(401).json('invalid user')
+     }else{
+      const addressExist =await profileModel.findOne({userId})
+      if(!addressExist){
+          const newAdress =  new profileModel({userId,addresses:[{address,city,house_No,postcode,altr_number,state,country,district}]})
+          await newAdress.save()
+          res.status(200).json('address added success fully')
+      }else{
+          addressExist.addresses.push({address,city,house_No,postcode,altr_number,state,country,district})
+          addressExist.save()
+          res.status(200).json('address added success fully')
+      }
+     }
+  } catch (error) {
+      res.status(500).json('Internal server error')
+  }
 },
   
   

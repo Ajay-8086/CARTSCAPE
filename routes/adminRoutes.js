@@ -17,6 +17,7 @@ const chartController = require('../controller/chartController')
         router.post('/verify',authController.postAdminVerify)
         router.get('/login',authController.getLogin)
         router.post('/login',authController.postLogin)
+        router.get('/logout',authController.adminLogout)
 
 // PRODUCT ROUTES=============================================================================================>
 
@@ -65,10 +66,10 @@ const chartController = require('../controller/chartController')
       router.delete('/delete-coupon/:couponId',couponController.deleteCoupon)
 
 //GRAPH MANAGEMENT================================================================================================>
-router.get('/home',chartController.adminDahboardGet)
-router.get('/chart-category',chartController.categoryChart)
-router.get('/chart-order',chartController.orderChart)
-router.get('/chart-customers',chartController.customerGrowth)
+      router.get('/home',chartController.adminDahboardGet)
+      router.get('/chart-category',chartController.categoryChart)
+      router.get('/chart-order',chartController.orderChart)
+      router.get('/chart-customers',chartController.customerGrowth)
 
 
 

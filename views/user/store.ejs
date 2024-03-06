@@ -73,27 +73,27 @@
                     <div>
 
                       <div class="form-check">
-                        <input class="form-checkbox-input" type="checkbox" value="Red" />
+                        <input class="form-checkbox-input colorCheck" type="checkbox" value="Red"  onchange="filterByColor('Red')"/>
                         <label class="form-checkbox-label" for="checkbox">
                           Red
                         </label>
-                        <input class="form-checkbox-input" type="checkbox" value="Black" />
+                        <input class="form-checkbox-input colorCheck" type="checkbox" value="Black"  onchange="filterByColor('Black')" />
                         <label class="form-checkbox-label" for="checkbox">
                           Black
                         </label>
-                        <input class="form-checkbox-input" type="checkbox" value="Yellow" />
+                        <input class="form-checkbox-input colorCheck" type="checkbox" value="Yellow" onchange="filterByColor('Yellow')"/>
                         <label class="form-checkbox-label" for="checkbox">
                           Yellow
                         </label>
-                        <input class="form-checkbox-input" type="checkbox" value="Green" />
+                        <input class="form-checkbox-input colorCheck" type="checkbox" value="Green" onchange="filterByColor('Green')" />
                         <label class="form-checkbox-label" for="checkbox">
                           Green
                         </label>
-                        <input class="form-checkbox-input" type="checkbox" value="Blue" />
+                        <input class="form-checkbox-input colorCheck" type="checkbox" value="Blue" onchange="filterByColor('Blue')" />
                         <label class="form-checkbox-label" for="checkbox">
                           Blue
                         </label>
-                        <input class="form-checkbox-input" type="checkbox" value="White" />
+                        <input class="form-checkbox-input colorCheck" type="checkbox" value="White" onchange="filterByColor('White')" />
                         <label class="form-checkbox-label" for="checkbox">
                           White
                         </label>
@@ -172,8 +172,8 @@
 
             <div class="col-lg-4 col-md-6 col-sm-12 mb-4 product">
               <div class="card h-100 position-relative" >
-                <a onclick="addToWhislist('<%=product._id%>')"  class="wishlist-icon position-absolute top-0 end-0 mt-2 ps-2 pe-2 wish<%=product._id%> "  style=" font-size: 20px; color: rgb(185, 185, 185); "><i 
-                  class="fas fa-heart"></i></a>
+                    <a onclick="addToWhislist('<%=product._id%>')"  class="wishlist-icon position-absolute top-0 end-0 mt-2 ps-2 pe-2 wish<%=product._id%> "  style=" font-size: 20px; color: rgb(185, 185, 185); "><i 
+                      class="fas fa-heart"></i></a>
                 <% if(discountedPrice>0) {%>
                 
                     <div class="discount-badge position-absolute top-0 start-0 mt-2   px-2 py-1"

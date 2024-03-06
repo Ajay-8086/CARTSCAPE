@@ -7,7 +7,7 @@ addressRadios.forEach(function (radio) {
     if (this.checked) {
       // Retrieve the corresponding address data
       const address_id = this.parentElement.querySelector(".addressSelect_id").value;
-      
+
       const address = this.parentElement.querySelector(".address").textContent;
       const city = this.parentElement.querySelector(".city").textContent;
       const houseNo = this.parentElement.querySelector(".house_no").textContent;
@@ -33,8 +33,13 @@ couponRadio.forEach((radio) => {
     }
   })
 })
+let couponApplied = false;
 async function applyPromoCode(event) {
   event.preventDefault()
+  if (couponApplied) {
+    return;
+  }
+
   const couponCode = document.querySelector('.couponInput').value
   if (!couponCode) {
     document.querySelector('.couponError').innerHTML = 'Invalid coupon code'
@@ -48,14 +53,11 @@ async function applyPromoCode(event) {
       })
       if (response.status == 200) {
         const discount = response.data.discount
-        console.log(discount);
         let total = document.getElementById('updatedPrice')
-        console.log(total);
         const totalPrice = total.innerText.replace(/\₹|,/g, '')
-        console.log(totalPrice);
         const grandTotal = parseInt(totalPrice) - (parseInt(totalPrice) * parseInt(discount) / 100)
-        console.log(grandTotal);
         total.innerText = '₹' + parseInt(grandTotal)
+        couponApplied = true
       }
     } catch (error) {
       console.log(error);
