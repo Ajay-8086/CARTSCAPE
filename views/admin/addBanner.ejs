@@ -117,5 +117,21 @@
           let today = new Date().toISOString().split('T')[0];
          document.getElementById("valid-from").setAttribute("min", today);
          document.getElementById("valid-to").setAttribute("min", today);
+         // preview th image
+         function previewImage(input) {
+            var preview = document.getElementById('imagePreview');
+            var file = input.files[0];
+            var reader = new FileReader();
+
+            reader.onloadend = function () {
+                preview.src = reader.result;
+            }
+
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = "";
+            }
+        }
 </script>
 <%-include('../partials/adminDashFooter.ejs') %>

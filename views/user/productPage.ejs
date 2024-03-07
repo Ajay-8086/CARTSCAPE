@@ -280,17 +280,6 @@
       var largeImage = document.getElementById('largeImage');
       largeImage.src = imagePath;
     }
-   const sizeSelect =  document.getElementById('selectedSize')
-   sizeSelect.addEventListener('change',()=>{
-    const selectedValue = sizeSelect.value
-  const s=  document.getElementById('sizeProduct').value = selectedValue
-  console.log(s);
-   })
-   const colorSelect =  document.getElementById('selectedColor')
-   colorSelect.addEventListener('change',()=>{
-    const selectedValue = colorSelect.value
-    document.getElementById('colorProduct').value = selectedValue
-   })
   </script>
   <%- include('../partials/footer.ejs') %>
   </body>

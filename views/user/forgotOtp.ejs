@@ -46,7 +46,6 @@
 
 <script>
   const otpInputs = document.querySelectorAll('.input');
-
   otpInputs.forEach((input, index) => {
     input.addEventListener('input', (event) => {
       if (event.target.value.length === 1) {
@@ -61,11 +60,9 @@
 
   function startResendTimer() {
     let countdown = 30;
-
     function updateTimer() {
       document.getElementById('timer').textContent = countdown;
     }
-
     function startTimer() {
       const timerInterval = setInterval(() => {
         countdown--;
@@ -80,15 +77,10 @@
         }
       }, 1000); 
     }
-
     startTimer();
   }
-
- 
-  window.onload = startResendTimer;
-
- 
-  document.querySelector('.resend a').addEventListener('click', () => {
+    window.onload = startResendTimer;
+    document.querySelector('.resend a').addEventListener('click', () => {
     document.getElementById('resend').style.display = 'none';
     document.getElementById('otp-timer').style.display = 'block';
     startResendTimer();

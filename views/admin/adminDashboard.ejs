@@ -19,6 +19,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
     document.addEventListener("DOMContentLoaded", (event) => {
+        // chart of the number of products in each category
         async function createChart() {
             try {
                 const ctx = document.getElementById('stockChart').getContext('2d');
@@ -47,7 +48,7 @@
         }
 
         createChart()
-
+        // order details chart
         async function orderCart(){
             try {
                 const ctx = document.getElementById('orderChart').getContext('2d');
@@ -79,6 +80,7 @@
             }
         }
         orderCart()
+        // signed customer chart 
         async function customerGrowth(){
             try {
                 const ctx = document.getElementById('userChart').getContext('2d');

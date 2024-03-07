@@ -15,7 +15,8 @@ module.exports = {
     home: async(req, res) => {
         try {
             const categories = await categoryModel.find({isDeleted:false})
-            const banners = await bannerModel.find({})
+            const currentDate = new Date()
+            const banners = await bannerModel.find({validFrom:{$lte:currentDate},validTo:{$gte:currentDate}})
             const subcategory =req.query?.subcat
             const oneWeekAgo = new Date()
             oneWeekAgo.setDate(oneWeekAgo.getDate()-7)

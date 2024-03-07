@@ -94,6 +94,14 @@
                 }, 2500);
               }
             } catch (error) {
+              console.log(error);
+              if(error.response.status==401){
+               
+                document.querySelector('.errorMsg').innerHTML = 'Invalid otp'
+                setTimeout(() => {
+                  document.querySelector('.errorMsg').innerHTML =''
+                }, 3000);
+              }
               console.log('error');
             }
           }

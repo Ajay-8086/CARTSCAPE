@@ -33,6 +33,7 @@ couponRadio.forEach((radio) => {
     }
   })
 })
+// apply coupon code
 let couponApplied = false;
 async function applyPromoCode(event) {
   event.preventDefault()
