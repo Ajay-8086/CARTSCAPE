@@ -1,6 +1,4 @@
 const addressRadios = document.querySelectorAll("input[name='adId']");
-// const checkoutForm = document.getElementById("checkout-form");
-
 // Add event listener to each radio button
 addressRadios.forEach(function (radio) {
   radio.addEventListener("change", function () {

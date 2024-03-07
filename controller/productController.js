@@ -29,6 +29,10 @@ module.exports = {
 
     getAddProduct: async (req, res) => {
         try {
+            const adminLoggedIn =  req.session.adminLoggedIn
+            if(!adminLoggedIn){
+                return res.status(401).redirect('/admin/login')
+            }
             const categoryList = await categoryModel.find({isDeleted:false})
             res.render('admin/addProduct', { categoryList, url: 'product' })
         } catch (error) {

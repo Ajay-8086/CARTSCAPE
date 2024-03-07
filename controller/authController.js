@@ -103,6 +103,30 @@ module.exports = {
             req.flash('error', 'please register')
         }
     },
+    getAdminForget:(req,res)=>{
+        try {
+            const error= req.flash('error')
+            res.status(200).render('admin/adminForgetpassword',{error})
+        } catch (error) {
+            console.log(error);
+            res.send('Internal server error')
+        }
+    },
+    postAdminForget:async(req,res)=>{
+        try {
+            const {email} = req.body
+            const adminExist = await adminModel.findOne({email})
+            if (adminExist) {
+                res.status(200).redirect('/admin/verify')
+            }else{
+                req.flash('error','Admin does not exist')
+                res.status(400).redirect('/admin/forget-password')
+            }
+        } catch (error) {
+            console.log(error);
+            res.status(500).send('Internal server error')
+        }
+    },
     adminLogout:(req,res)=>{
         try {
             req.session.destroy((err)=>{

@@ -6,13 +6,13 @@
                 <div class="head">
                     <h3>Products</h3>
 
-                    <a href="/admin/product?page=<%= paginationInfo.prevPage%>" class="pagination-icon">
+                    <a href="/admin/orders?page=<%= paginationInfo.prevPage%>" class="pagination-icon">
                         <i class='bx bxs-chevron-left'></i>
                     </a>
                     <input type="number" id="pageNumberInput" value="<%= paginationInfo.page %>" min="1"
                         max="<%= paginationInfo.totalPages %>" onkeydown="jumpOnEnter(event)">
 
-                    <a href="/admin/product?page=<%= paginationInfo.nextPage%>" class="pagination-icon">
+                    <a href="/admin/orders?page=<%= paginationInfo.nextPage%>" class="pagination-icon">
                         <i class='bx bxs-chevron-right'></i>
                     </a>
 <!-- Inside the div with class "head" -->
