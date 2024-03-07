@@ -6,10 +6,6 @@ const profileModel = require('../models/profile')
 const bcrypt = require('bcrypt')
 const ratingModel = require('../models/rating')
 const cartModel = require('../models/cart')
-
-
-
-
 module.exports = {
     //To view the user home
     home: async(req, res) => {
@@ -32,7 +28,7 @@ module.exports = {
             }
             res.status(200).render('user/userDashboard',{categories,banners,products,title:subcategory??'New Arrivals'})
         } catch (error) {
-            res.status(500).send('Internal server error')
+            res.status(500).redirect('/error')
         }
     },
     // view the all product page
@@ -77,7 +73,6 @@ module.exports = {
                 filter.colors = { $in: selectedColor };
             }
             const products = await productModel.find(filter).sort(sortCrieteria).skip((page - 1) * limit).limit(limit);
-            // console.log(products);
             const total = await productModel.countDocuments(filter);
             const noPages = Math.ceil(total / limit);
             res.status(200).render('user/store', { categories, products, page, total, noPages, categoryName, wishlist,selectedColor});
@@ -88,6 +83,7 @@ module.exports = {
     searchProduct:async(req,res)=>{
         try {
             const {query} = req.query
+            const selectedColor =[]
             const categories = await categoryModel.find({isDeleted:false})
             const products = await productModel.find({
                 isDeleted: false,
@@ -96,10 +92,9 @@ module.exports = {
                     { category: { $regex: query, $options: 'i' } }
                 ]
             });
-            
-         res.status(200).render('user/store',{categories,products})
+         res.status(200).render('user/store',{categories,products,selectedColor})
         } catch (error) {
-           res.status(500).send('Internal server error') 
+           res.status(500).redirect('/error') 
         }
     },
     getUserProfile:async(req,res)=>{
@@ -116,7 +111,7 @@ module.exports = {
         }
        } catch (error) {
         console.log(error);
-        res.status(500).send('Internal server error')
+        res.status(500).redirect('/error')
        }
 
     },
@@ -132,7 +127,7 @@ module.exports = {
         }
        } catch (error) {
         console.log(error);
-        res.status(500).send('Internal server error')
+        res.status(500).redirect('/error')
        }
     },
     editProfilePost:async(req,res)=>{
@@ -163,7 +158,7 @@ module.exports = {
             res.status(200).render('user/addAddress',{categories})
         } catch (error) {
             console.log(error);
-            res.send('Internal server error')
+            res.redirect('/error')
         }
     },
     postAddAddress:async(req,res)=>{
@@ -251,13 +246,20 @@ module.exports = {
                 req.session.destroy((err)=>{
                     if(err){
                         console.log(err);
-                        res.status(500).send('Internal server error')
+                        res.status(500).redirect('/error')
                     }else{
                         res.status(200).redirect('/')
                     }
                 })
             } catch (error) {
-                res.status(500).send('Internal server error')
+                res.status(500).redirect('/error')
             }
+    },
+    erroPage:(req,res)=>{
+        try {
+            res.status(200).render('user/error404')
+        } catch (error) {
+            console.log(error);
+        }
     }
 };

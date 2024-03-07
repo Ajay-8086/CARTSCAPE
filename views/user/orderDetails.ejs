@@ -129,7 +129,7 @@
                         <% if (existingReview) { %>
                             <p>You have already reviewed this product.</p>
                         <% } else { %>
-                            <% if(orderDetails.status=="completed"){ %>
+                            <% if(orderDetails.status=="deliverd"){ %>
 
                                 <p><a href="#" data-toggle="modal" data-target="#form">Add Review</a></p>
                            <% } %>
@@ -175,11 +175,7 @@
               <div style="display: flex; gap: 20px;">
                 <a href="/my-orders"><button class="btn "
                     style="background-color: #FEBD69; color: #131921; font-weight: 500;">Back to Orders</button></a>
-              </div>
-
-
-    
-                  
+              </div> 
             </div>
         </div>
         

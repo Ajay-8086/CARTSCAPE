@@ -8,7 +8,7 @@ const authController = require('../controller/authController')
 const{setUploadType,upload}=require('../utility/multer')
 const adminController=require('../controller/admincontoller')
 const chartController = require('../controller/chartController')
-
+const {adminSession}  = require('../middlewares/sessionMiddleware')
 //AUTHENTICATIONS===============================================================================================>
 
         router.get('/signup',authController.adminGetSignup)
@@ -20,6 +20,8 @@ const chartController = require('../controller/chartController')
         router.get('/login',authController.adminLogin)
         router.post('/login',authController.adminPostLogin)
         router.get('/logout',authController.adminLogout)
+
+        router.use(adminSession)   
 
 // PRODUCT ROUTES=============================================================================================>
 

@@ -39,7 +39,7 @@ async function addingToCart(productId,event){
     try {
         event.stopPropagation()
         const response  = await axios.post('/addtocart',{id:productId})
-        if (response.status === 200) {
+        if (response.status == 200) {
             document.querySelector('.cart' + productId).innerText="Go to cart"
             cartCount(response.data.count)
             document.querySelector('.cart' + productId).setAttribute('href', '/view_cart')
