@@ -1,7 +1,7 @@
 
 const userModel = require('../models/customer');
 const orderModel = require('../models/order');
-
+const sendMail = require('../utility/sendMail');
 
 
 module.exports = {
@@ -127,6 +127,27 @@ module.exports = {
             res.status(500).json('Internal server error')
         }
     },
-
-
+    // Order delivery confirming
+    userOrderdeliver:async(req,res)=>{
+        try {
+            console.log('gssg');
+            const adminLoggedIn =  req.session.adminLoggedIn
+            if(!adminLoggedIn){
+                return res.status(401).redirect('/admin/login')
+            }
+            const orderId = req.query.id
+            console.log(orderId);
+            const orderDeliverd = await orderModel.findByIdAndUpdate(orderId,{status:'deliverd'})
+            const userEmail = orderDeliverd.userEmail
+            if(orderDeliverd){
+                console.log('gs');
+                console.log(userEmail);
+            const deliverd =  await sendMail(userEmail,'deliverd');
+            console.log(deliverd);
+        }
+        res.status(200).json('Order Deliverd')
+        } catch (error) {
+            res.status(500).json('Internal server error')
+        }
+    }
 }

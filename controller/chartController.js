@@ -48,7 +48,7 @@ module.exports = {
                     $gte:startOfCurrentYear,
                     $lt:endOfNextYear
                 },
-                status: "completed"
+                status: "deliverd"
             })
             const productCounts = {}
             const allProducts = await productModel.find({}, {_id: 1, name: 1})

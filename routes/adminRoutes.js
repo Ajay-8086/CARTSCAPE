@@ -49,6 +49,7 @@ const chartController = require('../controller/chartController')
       router.patch('/users-unblock/:userId',adminController.unBlockUser)
       router.get('/orders',adminController.getUserOrders)
       router.delete('/userOrder-cancel',adminController.userOrderCancel)
+      router.delete('/userOrder-deliver',adminController.userOrderdeliver)
 //BANNER MANAGEMENT===============================================================================================>
 
       router.get('/banners',bannerController.getBanner)
