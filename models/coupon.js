@@ -10,5 +10,6 @@ const coupon = new mongoose.Schema({
     validTo:{type:String}
 })
 coupon.plugin(mongoosePaginate);
+coupon.index({ validTo: 1 });
 const couponModel = mongoose.model('coupon',coupon)
 module.exports = couponModel

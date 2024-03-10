@@ -9,7 +9,6 @@
             <div class="card-body p-5 text-center">
               <h4>Verify</h4>
               <p>Your code was sent to <span style="color: red;">
-                  
                 </span> </p>
               <form action="/cod-otp" method="post" id="codform">
                 <p class="errorMsg" style="color: red; text-align: center;"></p>
@@ -25,20 +24,6 @@
                   Verify
                 </button>
               </form>
-
-
-              <!-- <div class="otp-timer mb-3" id="otp-timer">resend OTP in :30</div> -->
-              <!-- Update your form to include the Resend button -->
-              <!-- <form action="/resendCOD" method="post">
-                <input type="text" name="userid" value="" style="display: none;">
-                <input type="text" name="email" value="" style="display: none;">
-                <button class="btn mb-3" id="resend" style="background-color: #00224e; color: white;display: none ;" type="submit">
-                  resendOTP
-                </button> -->
-
-              </form>
-
-
               <p class="resend text-muted mb-0">
                 <!-- Didn't receive code? <a href="">Request again</a> -->
               </p>
@@ -48,8 +33,7 @@
       </div>
     </section>
     <script>
-      const otpInputs = document.querySelectorAll('.input');
-      
+      const otpInputs = document.querySelectorAll('.input'); 
       otpInputs.forEach((input, index) => { 
         input.addEventListener('input', (event) => {
           if (event.target.value.length === 1) {
@@ -62,6 +46,7 @@
         });
       });
 
+      // COD otp verification
       const submitBtn = document.querySelector('.submitBtn')
       const dataForm = document.getElementById('codform')
       submitBtn.addEventListener('click',async(event)=>{

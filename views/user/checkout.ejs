@@ -27,8 +27,14 @@
                     </div>
                   </div>
                   <div class="col-6 mb-3">
+                    <% if(users && users.addresses) {%>
                     <input type="hidden" id="typeNumber" value="<%=users.addresses[0]._id%>"
                     name="address_Id" class="form-control address_id" required />
+                    <% }else{%>
+                      <p class="errorAddress" style="color: red; text-align: center;">Please add address</p>
+                      <p class="mt-4 mb-4"><a href="/checkout/add-address" class="button p-3"
+                          style="background-color: black; color: white;">Add Address</a></p>
+                  <%  }%>
                     <p class="mb-0">Email</p>
                     <div class="form-outline">
                       <input type="email" id="typeEmail" value="<%=users.userId?users.userId.email:users.email%>"

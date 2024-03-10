@@ -1,15 +1,9 @@
 <!-- header section  -->
-
 <%-include('../partials/header.ejs') %>
-
   <!-- header section  -->
-
-
   <div>
-
     <!-- Heading -->
     </header>
-
     <!-- cart + summary -->
     <section class="bg-light my-5">
       <div class="container">
@@ -58,7 +52,7 @@
                                 <% let price=product.id.price %>
                                   <% let discountedPrice=parseInt(price - (price * discount / 100)) %>
                                     <text class="h6 discount<%= product.id._id %>">$<%= discountedPrice *quantity %>
-                                        </text> <br />
+                                    </text> <br />
                                     <small class="text-muted text-nowrap price<%= product.id._id %>"
                                       style="color: red !important; text-decoration: line-through;"> $<%= price
                                         *quantity %></small>
@@ -178,14 +172,15 @@
                     <input type="hidden" name="totalAmount" value="<%= totalCartPrice + tax - discount %>">
                     <input type="hidden" name="discount" value="<%= discount %>">
                     <!-- Include hidden fields for each product's ID and quantity -->
-                    <% cartItems.productId.forEach((product) => { %>
+                    <% cartItems.productId.forEach((product)=> { %>
                       <input type="hidden" name="productId[]" value="<%= product.id._id %>">
                       <input type="hidden" name="quantity[]" value="<%= product.quantity %>">
-                    <% }) %>
-                    <!-- Button to submit the form -->
-                    <button type="submit" class="btn btn-success w-100 shadow-0 mb-2" style="background-color: #000000;">Make Purchase</button>
+                      <% }) %>
+                        <!-- Button to submit the form -->
+                        <button type="submit" class="btn btn-success w-100 shadow-0 mb-2"
+                          style="background-color: #000000;">Make Purchase</button>
                   </form>
-                  
+
                   <a href="/allproducts" class="btn btn-light w-100 border mt-2"> Back to shop </a>
                 </div>
               </div>
