@@ -16,6 +16,8 @@ module.exports = {
             const subcategory =req.query?.subcat
             const oneWeekAgo = new Date()
             oneWeekAgo.setDate(oneWeekAgo.getDate()-7)
+            const userId = req.session.userId
+            const cart =  await cartModel.findOne({userId}).populate('productId')
             let products ;
             if(subcategory){
                 products = await productModel.find({isDeleted:false,subcategory:subcategory,stock:{$gt:0}}).limit(8)
@@ -26,7 +28,7 @@ module.exports = {
                    products = await productModel.find({isDeleted:false,stock:{$gt:0}}).limit(8)
                }
             }
-            res.status(200).render('user/userDashboard',{categories,banners,products,title:subcategory??'New Arrivals'})
+            res.status(200).render('user/userDashboard',{categories,banners,products,title:subcategory??'New Arrivals',cart})
         } catch (error) {
             res.status(500).redirect('/error')
         }
@@ -39,12 +41,13 @@ module.exports = {
             const limit = parseInt(req.query.limit) || 9;
             const userId = req?.session.userId
             const categories = await categoryModel.find({isDeleted:false})
-            const wishlist = await cartModel.findOne({userId}).populate('productId')
+            const cart = await cartModel.findOne({userId}).populate('productId')
             const categoryName = req.query?.category
             const minPrice = parseInt( req.query.minPrice)|| null
             const maxPrice = parseInt( req.query.maxPrice)|| null
             const sort  =  req.query.sort
             const colors = req.query.color;
+            // const cart =await cartModel.findOne({userId})
 
             if (colors) {
                 selectedColor = colors
@@ -75,9 +78,10 @@ module.exports = {
             const products = await productModel.find(filter).sort(sortCrieteria).skip((page - 1) * limit).limit(limit);
             const total = await productModel.countDocuments(filter);
             const noPages = Math.ceil(total / limit);
-            res.status(200).render('user/store', { categories, products, page, total, noPages, categoryName, wishlist,selectedColor});
+            console.log(cart);
+            res.status(200).render('user/store', { categories, products, page, total, noPages, categoryName,selectedColor,cart});
         } catch (error) {
-           console.log(error); 
+            res.status(500).redirect('/error') 
         }
     },
     searchProduct:async(req,res)=>{
@@ -92,7 +96,9 @@ module.exports = {
                     { category: { $regex: query, $options: 'i' } }
                 ]
             });
-         res.status(200).render('user/store',{categories,products,selectedColor})
+            const userId = req.session.useId
+            const cart =  await cartModel.findOne({userId}).populate('productId')
+         res.status(200).render('user/store',{categories,products,cart,selectedColor})
         } catch (error) {
            res.status(500).redirect('/error') 
         }

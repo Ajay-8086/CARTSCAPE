@@ -115,9 +115,19 @@
                       </div>
                   </form>
                   
-                <div class=" d-flex align-items-center justify-content-center pb-3 px-0 pb-0 mt-auto">
-                  <a  data-product-id="<%=productDetails._id%>" id="cart<%=productDetails._id%>" class="cartBtn btn btn-primary shadow-0 me-1" style="background-color: black;" onclick="addingToCart('<%=productDetails._id%>',event)">Add to cart</a>
-              </div>
+                  <div class="d-flex align-items-center justify-content-center pb-3 px-0 pb-0 mt-auto">
+                    <% const productId = productDetails._id.toString(); %>
+                    <% if (!cart || cart.productId.length === 0) { %>
+                        <a  class="btn btn-primary shadow-0 me-1 cart<%= productDetails._id %>" style="background-color: black;" onclick="addingToCart('<%= productDetails._id %>', event)">Add to cart</a>
+                    <% } else { %>
+                        <% const productInCart = cart.productId.some(item => item.id.toString() === productId); %>
+                        <% if (productInCart) { %>
+                            <a href="/view_cart" class="btn btn-primary shadow-0 me-1" style="background-color: black;">Go to cart</a>
+                        <% } else { %>
+                            <a  class="btn btn-primary shadow-0 me-1 cart<%= productDetails._id %>" style="background-color: black;" onclick="addingToCart('<%= productDetails._id %>', event)">Add to cart</a>
+                        <% } %>
+                    <% } %>
+                </div>
               </div>
 
                     <!-- Modal -->

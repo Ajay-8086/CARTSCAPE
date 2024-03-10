@@ -7,14 +7,6 @@ window.onload = async function (){
         }
         else if (response.status === 200 && response.data.isLogged && response.data.count > 0) {
             cartCount(response.data.count);
-            const cartProducts = response.data.cart.productId
-            cartProducts.forEach(product=>{
-                
-                let id =product.id
-               let cartBtn = document.querySelector(`.cart${id}`)
-               cartBtn.innerText="Go to cart"
-                cartBtn.setAttribute('href', '/view_cart')
-            })
         } else {
             cartCount('');
             document.querySelector('.cartTitle').innerHTML='Your Cart is empty'

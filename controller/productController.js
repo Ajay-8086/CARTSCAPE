@@ -1,5 +1,6 @@
 const productModel = require('../models/product')
 const categoryModel = require('../models/category')
+const cartModel  = require('../models/cart')
 const fs = require('fs')
 const path = require('path')
 const moment = require('moment')
@@ -22,7 +23,7 @@ module.exports = {
             const products = result.docs
             res.render('admin/products', { products, paginationInfo: result, url: 'product' })
         } catch (error) {
-            res.status(500).json({ error: 'Internal server error' });
+            res.status(500).redirect('/error') 
         }
     },
 
@@ -36,7 +37,7 @@ module.exports = {
             const categoryList = await categoryModel.find({isDeleted:false})
             res.render('admin/addProduct', { categoryList, url: 'product' })
         } catch (error) {
-            res.status(500).json({ error: 'Internal server error' })
+            res.status(500).redirect('/error') 
         }
 
     },
@@ -91,7 +92,7 @@ module.exports = {
             const categoryList = await categoryModel.find({})
             res.status(200).render('admin/updateProduct', { product, categoryList, url: 'product' })
         } catch (error) {
-            res.status(500).send('internal server error')
+            res.status(500).redirect('/error') 
         }
 
     },
@@ -119,22 +120,25 @@ module.exports = {
             res.status(200).redirect('/admin/product');
         } catch (error) {
             console.log('Server error:', error);
-            res.status(500).send('Internal server error');
+            res.status(500).redirect('/error') 
         }
     },
+    //admin get single product
     getSingleProduct: async (req, res) => {
         try {
             const id = req.params.productId
             const productDetails = await productModel.findById(id)
             res.status(200).render('admin/singleProductPage', { productDetails, url: 'product' })
         } catch (error) {
-            res.status(500).send('Internal server eroor')
+            res.status(500).redirect('/error') 
         }
     },
     getProductPage:async(req,res)=>{
         try {
             const productId = req.query.id;
             const productDetails = await productModel.findById(productId);
+            const userId = req.session.userId
+            const cart = await cartModel.findOne({userId}).populate('productId')
             const categories = await categoryModel.find({ isDeleted: false });
             const ratingDetails = await ratingModel.findOne({ productId: productId }).populate('reviews.userId');
             let averageRating = 0;
@@ -142,10 +146,10 @@ module.exports = {
                 const totalRating = ratingDetails.reviews.reduce((acc, review) => acc + review.rating, 0);
                 averageRating = totalRating / ratingDetails.reviews.length;
             }
-            res.status(200).render('user/productPage', { productDetails, ratingDetails,averageRating, categories, averageRating });
+            res.status(200).render('user/productPage', { productDetails, ratingDetails,averageRating, categories, averageRating,cart });
         } catch (error) {
             console.error('Error fetching product details:', error);
-            res.status(500).send('Internal server error');
+            res.status(500).redirect('/error') 
         }
     }
 
