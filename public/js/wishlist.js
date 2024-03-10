@@ -5,27 +5,27 @@ function wishlistCount(count){
     counts.innerHTML = count !==0 ? count :''
 }
 //showing wishlist count and updating it===================================================>
-document.addEventListener('DOMContentLoaded',async()=>{
-    
-try {
-
-    const response = await axios.get('/wishlistcount')
-    if (response.status === 200 && response.data.isLogged && response.data.count > 0) {
-        wishlistCount(response.data.count);
-        const wishlistedProducts = response.data.wishlist.productId;
-        wishlistedProducts.forEach(element => {
-            const wishlistBtn =  document.querySelector(`.wish${element}`)
-            wishlistBtn.classList.add('red')
-        });
-    } else {
-        wishlistCount('');
-        document.querySelector('.wishlistTitle').innerHTML='your Wishlist is Empty'
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const response = await axios.get('/wishlistcount');
+        if (response.status === 200 && response.data.isLogged && response.data.count > 0) {
+            wishlistCount(response.data.count);
+            const wishlistedProducts = response.data.wishlist.productId;
+            wishlistedProducts.forEach(element => {
+                const wishlistBtn = document.querySelector(`.wish${element}`);
+                if (wishlistBtn) {
+                    wishlistBtn.classList.add('red');
+                }
+            });
+        } else {
+            wishlistCount('');
+            document.querySelector('.wishlistTitle').innerHTML = 'Your Wishlist is Empty';
+        }
+    } catch (error) {
+        console.error("Error:", error);
     }
-} catch (error) {
-console.log(error);
-}
+});
 
-})
 //Adding item to wishlist =========================================================>
 async function addToWhislist(productId,event){
     try {

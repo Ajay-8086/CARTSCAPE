@@ -4,6 +4,7 @@ const productModel = require('../models/product')
 const userModel = require('../models/customer')
 const profileModel = require('../models/profile')
 const bcrypt = require('bcrypt')
+const wishlistModel = require('../models/wishlist')
 const ratingModel = require('../models/rating')
 const cartModel = require('../models/cart')
 module.exports = {
@@ -78,7 +79,6 @@ module.exports = {
             const products = await productModel.find(filter).sort(sortCrieteria).skip((page - 1) * limit).limit(limit);
             const total = await productModel.countDocuments(filter);
             const noPages = Math.ceil(total / limit);
-            console.log(cart);
             res.status(200).render('user/store', { categories, products, page, total, noPages, categoryName,selectedColor,cart});
         } catch (error) {
             res.status(500).redirect('/error') 
