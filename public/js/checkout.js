@@ -1,27 +1,13 @@
-const addressRadios = document.querySelectorAll("input[name='adId']");
 // Add event listener to each radio button
-addressRadios.forEach(function (radio) {
-  radio.addEventListener("change", function () {
-    if (this.checked) {
-      // Retrieve the corresponding address data
-      const address_id = this.parentElement.querySelector(".addressSelect_id").value;
-
-      const address = this.parentElement.querySelector(".address").textContent;
-      const city = this.parentElement.querySelector(".city").textContent;
-      const houseNo = this.parentElement.querySelector(".house_no").textContent;
-      const postalCode = this.parentElement.querySelector(".pincode").textContent;
-      const alternateNumber = this.parentElement.querySelector(".phone-altr").textContent;
-
+function changingAdrs(adId,address,city,houseNo,pin,altrNo) {
       // Update the checkout form fields with the retrieved data
-      document.querySelector('.address_id').value = address_id;
+      document.querySelector('.address_id').value = adId;
       document.querySelector('.address-field').value = address;
       document.querySelector('.city-field').value = city;
       document.querySelector('.house_no-field').value = houseNo;
-      document.querySelector('.postalcode-field').value = postalCode;
-      document.querySelector('.altr_number-field').value = alternateNumber;
+      document.querySelector('.postalcode-field').value = pin;
+      document.querySelector('.altr_number-field').value = altrNo;
     }
-  });
-});
 const couponRadio = document.querySelectorAll("input[name='couponRadio']");
 couponRadio.forEach((radio) => {
   radio.addEventListener('change', () => {
@@ -64,6 +50,7 @@ async function applyPromoCode(event) {
   }
 }
 const continueBtn = document.getElementById('continueBtn');
+
 continueBtn.addEventListener('click', async(event) => {
 event.preventDefault();
 try {
@@ -89,9 +76,11 @@ const totalPrice = total.innerText.replace(/\₹|,/g, '')
 const selectedPaymentMethod = document.querySelector('input[name="payment"]:checked').value;
 const email = document.getElementById('typeEmail').value;
 const addressId = document.querySelector('.address_id').value
-// Send product information to the server using Axios
-const response = await axios.post('/checkout', { products, email, payment: selectedPaymentMethod, totalPrice, addressId });
 
+// Send product information to the server using Axios
+document.getElementById('preloader').style.display = 'block';
+const response = await axios.post('/checkout', { products, email, payment: selectedPaymentMethod, totalPrice, addressId });
+document.getElementById('preloader').style.display = 'none';
 if (response.status == 200) {
 if (response.data.online) {
 const amountPaisa = response.data.order.amount 

@@ -118,7 +118,6 @@ module.exports = {
                 
            })
           }
-          console.log('updated');
           res.status(200).json('orderCancelled')
         }else{
             res.status(400).json('order cant canccel')
@@ -130,20 +129,15 @@ module.exports = {
     // Order delivery confirming
     userOrderdeliver:async(req,res)=>{
         try {
-            console.log('gssg');
             const adminLoggedIn =  req.session.adminLoggedIn
             if(!adminLoggedIn){
                 return res.status(401).redirect('/admin/login')
             }
             const orderId = req.query.id
-            console.log(orderId);
             const orderDeliverd = await orderModel.findByIdAndUpdate(orderId,{status:'deliverd'})
             const userEmail = orderDeliverd.userEmail
             if(orderDeliverd){
-                console.log('gs');
-                console.log(userEmail);
             const deliverd =  await sendMail(userEmail,'deliverd');
-            console.log(deliverd);
         }
         res.status(200).json('Order Deliverd')
         } catch (error) {

@@ -133,6 +133,7 @@ module.exports = {
             res.status(500).redirect('/error') 
         }
     },
+    // user single product page
     getProductPage:async(req,res)=>{
         try {
             const productId = req.query.id;

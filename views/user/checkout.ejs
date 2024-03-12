@@ -1,6 +1,42 @@
 <!-- include header -->
 <%- include('../partials/header.ejs') %>
   <!-- /include header -->
+<style>
+  #preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.858); /* Black background with some transparency */
+  z-index: 9999;
+  display: none;
+}
+
+#loader {
+  border: 8px solid #fff; /* White border */
+  border-top: 8px solid #000; /* Black border */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -60px;
+  margin-left: -60px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+</style>
+  
+<div id="preloader">
+  <div id="loader"></div>
+</div>
   <section class=" py-5" style="background-color:#f5f5f7;">
     <div class="container" style="background-color:#f5f5f7;">
       <div class="row">
@@ -13,7 +49,7 @@
                   <p class="error-msg"></p>
                   <div class="col-6">
                     <p class="mb-0">Full name</p>
-                    <div class="form-outline">
+                    <div class="form-outline" style="pointer-events: none;">
                       <input name="name" type="text" id="typeText"
                       value="<%=users.userId?users.userId.name:users.name%>" class="form-control" required />
                     </div>
@@ -21,12 +57,12 @@
                   
                   <div class="col-6 mb-3">
                     <p class="mb-0">Phone</p>
-                    <div class="form-outline">
+                    <div class="form-outline" style="pointer-events: none;">
                       <input type="number" name="phone" id="typePhone"
                       value="<%=users.userId?users.userId.phone:users.phone%>" class="form-control" required />
                     </div>
                   </div>
-                  <div class="col-6 mb-3">
+                  <div class="col-6 mb-3" style="pointer-events: none;">
                     <% if(users && users.addresses) {%>
                     <input type="hidden" id="typeNumber" value="<%=users.addresses[0]._id%>"
                     name="address_Id" class="form-control address_id" required />
@@ -44,7 +80,7 @@
               </div>
               <% if (users && users.addresses && users.addresses.length> 0) { %>
                 <p class="errorAddress"></p>
-                <div class="row">
+                <div class="row" style="pointer-events: none;">
                   <div class="col-sm-8 mb-3">
                     <p class="mb-0">Address</p>
                     <div class="form-outline">
@@ -257,7 +293,7 @@
                 <p style="font-family: poppins; font-size: 1rem !important;"><span class="address">
                     <%=address.address%>
                   </span>
-                  <span> <%=address._id%></span>,<span class="city">
+                  <span class="city">
                     <%=address.city%>
                   </span> ,<span class="house_no">
                     <%=address.house_No%>
@@ -267,7 +303,7 @@
                 <p class="phone-altr" style="font-family: poppins; font-size: 1rem !important;">
                   <%=address.altr_number%>
                 </p>
-                <input name="adId" class="position-absolute radio" type="radio" value="proId1">
+                <input name="adId" class="position-absolute radio" type="radio" onclick="changingAdrs('<%=address._id%>','<%=address.address%>','<%=address.city%>',' <%=address.house_No%>',' <%=address.postcode%>','<%=address.altr_number%>')" value="proId1">
               </div>
               <% }) %>
                 <%}%>

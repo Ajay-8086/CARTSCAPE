@@ -16,8 +16,10 @@ module.exports = {
   // COD otp verification get
   getCashonDelivery: async (req, res) => {
     try {
-      const categories = await categoryModel.find({ isDeleted: false })
-      res.status(200).render('user/checkoutOtp', { categories })
+
+        const categories = await categoryModel.find({ isDeleted: false })
+        res.status(200).render('user/checkoutOtp', { categories })
+      
     } catch (error) {
       console.log('internal server error');
       res.status(500).send('Internal server error')
@@ -63,7 +65,7 @@ module.exports = {
           if (result) {
             await productModel.updateOne(
               { _id: product.id },
-              { $set: { $inc: { stock: -product.quantity } } }
+               { $inc: { stock: -product.quantity }  }
             );
 
             await cartModel.updateOne(
@@ -74,7 +76,7 @@ module.exports = {
             await orderModel.findByIdAndUpdate(result._id, { status: 'completed' });
           }
         }
-
+        delete req.session.productDetails
         res.status(200).json('success');
       } else {
         res.status(401).json('Invalid otp');
@@ -116,45 +118,45 @@ module.exports = {
   //Renering the checkout page 
   getCheckout: async (req, res) => {
     try {
-      let { totalPrice, discount } = req.session
-
-      const userId = req.session.userId
-      if (!userId) {
-        return res.status(401).redirect('/login')
-      } else {
-        const categories = await categoryModel.find({ isDeleted: false })
-        let users;
-        usersAddressExist = await profileModel.findOne({ userId })
-        if (usersAddressExist) {
-          users = await profileModel.findOne({ userId }).populate('userId')
+        let { totalPrice, discount } = req.session
+        const userId = req.session.userId
+        if (!userId) {
+          return res.status(401).redirect('/login')
         } else {
-          users = await customerModel.findOne({ _id: userId })
-        }
-        let products;
-        const productDetails = req.session.productDetails
-
-        const singleProduct = {
-          userId: userId,
-          productId: [{
-            id: productDetails,
-            quantity: 1,
-          }]
-        }
-        if (productDetails) {
-          products = singleProduct
-          delete req.session.productDetails;
-        } else {
-
-          products = await cartModel.findOne({ userId }).populate('productId.id')
-        }
-        const applicableCoupons = await couponModel.find({
-          $and: [
-            { purchaseAbove: { $gte: totalPrice } },
-            { purchaseminimum: { $lte: totalPrice } }
-          ]
-        });
-        res.status(200).render('user/checkout', { categories, users, totalPrice, discount, products, applicableCoupons })
+          const categories = await categoryModel.find({ isDeleted: false })
+          let users;
+          usersAddressExist = await profileModel.findOne({ userId })
+          if (usersAddressExist) {
+            users = await profileModel.findOne({ userId }).populate('userId')
+          } else {
+            users = await customerModel.findOne({ _id: userId })
+          }
+          let products;
+          const productDetails = req.session.productDetails
+  
+          const singleProduct = {
+            userId: userId,
+            productId: [{
+              id: productDetails,
+              quantity: 1,
+            }]
+          }
+          if (productDetails) {
+            products = singleProduct
+          } else {
+  
+            products = await cartModel.findOne({ userId }).populate('productId.id')
+          }
+          const applicableCoupons = await couponModel.find({
+            $and: [
+              { purchaseAbove: { $gte: totalPrice } },
+              { purchaseminimum: { $lte: totalPrice } }
+            ]
+          });
+          res.status(200).render('user/checkout', { categories, users, totalPrice, discount, products, applicableCoupons })
+        
       }
+     
     } catch (error) {
       res.status(500).send('Internal server error')
     }
@@ -258,8 +260,7 @@ module.exports = {
           await productModel.updateOne(
             { _id: product.id },
             {
-              $set: { $inc: { stock: product.quantity } }
-
+               $inc: { stock: product.quantity } 
             })
         }
         res.status(200).redirect('/my-orders')
@@ -280,7 +281,7 @@ module.exports = {
       const orderId = req.query.id
       const orderDetails = await orderModel.findById(orderId).populate('products.id')
       const addressId = orderDetails.address
-      const userAddress = await profileModel.findOne({ userId, })
+      const userAddress = await profileModel.findOne({ userId })
       const orderAddress = userAddress.addresses.find(addr => addr._id.toString() == addressId)
       let ratedProduct, existingReview;
       for (const product of orderDetails.products) {
@@ -307,7 +308,6 @@ module.exports = {
       if (generated_signature === data.razorpay_signature) {
         const email = req.session.checkoutEmail;
         const products = req.session.productsDetails;
-        const totalPrice = req.session.totalPrice;
         const userId = req.session.userId;
         const addressId = new mongoose.Types.ObjectId(req.session.addressId);
 
@@ -332,7 +332,7 @@ module.exports = {
           if (result) {
             await productModel.updateOne(
               { _id: product.id },
-              { $set: { $inc: { stock: -product.quantity } } }
+               { $inc: { stock: -product.quantity }  }
             );
             await cartModel.updateOne(
               { userId },
@@ -341,7 +341,8 @@ module.exports = {
             await orderModel.findByIdAndUpdate(result._id, { status: 'completed' });
           }
         }
-
+        delete req.session.addressId
+        delete req.session.productDetails
         res.status(200).json({ payment: true });
       } else {
         res.status(400).json({ payment: false });

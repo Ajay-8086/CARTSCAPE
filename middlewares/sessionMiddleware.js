@@ -2,10 +2,10 @@ module.exports={
     // user session 
     userSession:(req,res,next)=>{
         try {
-            if(!req.session.userId){
-                res.status(401).redirect('/login')
-            }else{
+            if(req.session.isLoggedIn){
                 next()
+            }else{
+                res.status(401).redirect('/login')
             }
         } catch (error) {
             console.log(error);

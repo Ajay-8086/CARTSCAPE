@@ -18,7 +18,7 @@
                             <div class="card-body">
                                 <p style="font-size: 12px;" class="card-title">Order ID: <span style="font-weight: bold;"><%= myOrders[i]._id %></span></p>
                                 <% for (let j = 0; j < myOrders[i].products.length; j++) { %>
-                                    <div class="row gy-3 mb-2">
+                                    <div class="row gy-3 mb-2" style="cursor: pointer;">
                                         <div class="col-2" onclick="orderDetails('<%= myOrders[i]._id %>')">
                                             <img src="/uploads/products/<%= myOrders[i].products[j].id.image[0] %>" class="img-fluid" alt="<%= myOrders[i].products[j].pname %>" />
                                         </div>

@@ -164,6 +164,7 @@
                         <%= orderDetails.createdAt.toISOString().substring(0,10)%>
                     </p>
                     <!--  -->
+                    <%if(orderAddress){%>
                     <p><strong>Shipped address: </strong>
                         <%= orderAddress.address %>,
                         <%= orderAddress.house_No %>,
@@ -171,6 +172,7 @@
                         <%= orderAddress.postcode %>,
                         <%= orderAddress.altr_number %>,
                     </p>
+                 <%}%>
                 </div>
               <div style="display: flex; gap: 20px;">
                 <a href="/my-orders"><button class="btn "

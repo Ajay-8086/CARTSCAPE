@@ -168,6 +168,7 @@ module.exports = {
                     if (userExist.verified && !userExist.blocked) {
                         req.session.userId = userExist._id
                         req.session.signedEmail = userExist.email
+                        req.session.isLoggedIn = true
                         res.status(200).redirect('/')
                     } else if(!userExist.verified && !userExist.blocked) {
                         console.log('not verified');

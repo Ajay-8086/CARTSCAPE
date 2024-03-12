@@ -44,7 +44,7 @@ router.get('/add-address',userController.getAddAddress)
 router.post('/add-address',userController.postAddAddress)
 router.delete('/address/delete',userController.deleteAddress)
 router.get('/logout',userController.userLogout) 
-
+  
  
 // USER PRODUCT MANAGEMENT ==================================================================================>
 
@@ -52,7 +52,7 @@ router.get('/checkout/add-address',orderController.checkoutAddress)
 router.get('/checkout',orderController.getCheckout)
 router.post('/checkout',orderController.postCheckout)
 router.post('/checkout/add-address',orderController.postcheckoutAddress)
-router.post('/make-purchase',orderController.makePurchase)
+router.post('/make-purchase',orderController.makePurchase)  
 router.post('/verify-coupon',orderController.couponApply)
 router.post('/addreview',userController.addReview)
 
