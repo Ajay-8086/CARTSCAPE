@@ -5,6 +5,7 @@ const fs = require('fs')
 const path = require('path')
 const moment = require('moment')
 const ratingModel = require('../models/rating')
+const wishlistModel = require('../models/wishlist')
 
 module.exports = {
     // To View the product list in the admin side
@@ -74,6 +75,8 @@ module.exports = {
         try {
             const product_id = req.params.id
             const deletedProduct = await productModel.findByIdAndUpdate(product_id,{$set:{isDeleted:true}})
+            await wishlistModel.updateMany({},{$pull:{ productId: product_id }})
+            await cartModel.updateMany({},{$pull:{ productId: { id:  id} }})
             if (deletedProduct) {
                 res.status(200).json({ success: true, message: 'product deleted successfully' })
             }

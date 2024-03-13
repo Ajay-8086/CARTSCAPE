@@ -221,14 +221,6 @@
           </div>
           <hr />
         </div>
-
-
-        <!-- Pagination -->
-        <% var page = parseInt(page) || 1; %>
-        <% var categoryName = categoryName || ''; %>
-        <% var total=total ||0 %>
-        <% var limit=limit || 9 %>
-        <% var noPages = Math.ceil(total / limit); %>
         <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-3">
           <ul class="pagination">
             <li class="page-item <%= page === 1 ? 'disabled' : '' %>">

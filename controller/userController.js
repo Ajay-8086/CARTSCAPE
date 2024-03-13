@@ -48,7 +48,6 @@ module.exports = {
             const maxPrice = parseInt( req.query.maxPrice)|| null
             const sort  =  req.query.sort
             const colors = req.query.color;
-            // const cart =await cartModel.findOne({userId})
 
             if (colors) {
                 selectedColor = colors
