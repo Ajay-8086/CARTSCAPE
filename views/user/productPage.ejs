@@ -109,9 +109,9 @@
 
                 
                   <div style="display: flex; gap: 10px;">
-                    <form action="/make-purchase?productId=<%= productDetails._id %>" method="POST" class="mb-3">
+                    <form  class="mb-3">
                       <div class="d-flex align-items-center justify-content-center pb-0 px-0 pb-0 mt-auto">
-                          <button type="submit" class="cartBtn btn btn-primary shadow-0 me-1" style="background-color: #FFA530;">Buy now</button>
+                          <button type="button" onclick="window.location.href='/checkout?productId=<%= productDetails._id %>'" class="cartBtn btn btn-primary shadow-0 me-1" style="background-color: #FFA530;">Buy now</button>
                       </div>
                   </form>
                   

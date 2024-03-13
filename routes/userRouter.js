@@ -52,7 +52,6 @@ router.get('/checkout/add-address',orderController.checkoutAddress)
 router.get('/checkout',orderController.getCheckout)
 router.post('/checkout',orderController.postCheckout)
 router.post('/checkout/add-address',orderController.postcheckoutAddress)
-router.post('/make-purchase',orderController.makePurchase)  
 router.post('/verify-coupon',orderController.couponApply)
 router.post('/addreview',userController.addReview)
 

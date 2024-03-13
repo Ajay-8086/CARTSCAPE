@@ -167,17 +167,8 @@
                 </div>
 
                 <div class="mt-3">
-                  <form action="/make-purchase" method="POST">
-                    <!-- Hidden input fields to store data -->
-                    <input type="hidden" name="totalAmount" value="<%= totalCartPrice + tax - discount %>">
-                    <input type="hidden" name="discount" value="<%= discount %>">
-                    <!-- Include hidden fields for each product's ID and quantity -->
-                    <% cartItems.productId.forEach((product)=> { %>
-                      <input type="hidden" name="productId[]" value="<%= product.id._id %>">
-                      <input type="hidden" name="quantity[]" value="<%= product.quantity %>">
-                      <% }) %>
-                        <!-- Button to submit the form -->
-                        <button type="submit" class="btn btn-success w-100 shadow-0 mb-2"
+                  <form > 
+                        <button type="button" onclick=" window.location.href='/checkout'" class="btn btn-success w-100 shadow-0 mb-2"
                           style="background-color: #000000;">Make Purchase</button>
                   </form>
 

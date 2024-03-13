@@ -86,39 +86,9 @@ module.exports = {
       res.status(500).json('Internal server error');
     }
   },
-  //Buying single product 
-
-  makePurchase: async (req, res) => {
-    try {
-      let { totalAmount, discount, productId } = req.body;
-      const userId = req.session.userId
-      if (req.query.productId) {
-        productId = req.query.productId
-        const productDetails = await productModel.findOne({ _id: productId })
-        req.session.productDetails = productDetails
-        const discountPrice = parseInt(productDetails.price * productDetails.discount / 100)
-        totalAmount = (productDetails.price) - discountPrice
-        discount = parseInt(totalAmount * 5 / 100)
-      }
-      req.session.totalPrice = totalAmount;
-      req.session.discount = discount;
-      if (!userId) {
-        return res.status(400).redirect('/login')
-      }
-      if (productId) {
-        return res.status(200).redirect('/checkout')
-      } else {
-        return res.status(401).redirect('/')
-      }
-    } catch (error) {
-      console.log(error);
-      return res.status(500).send('Internal server error')
-    }
-  },
   //Renering the checkout page 
   getCheckout: async (req, res) => {
     try {
-        let { totalPrice, discount } = req.session
         const userId = req.session.userId
         if (!userId) {
           return res.status(401).redirect('/login')
@@ -131,22 +101,29 @@ module.exports = {
           } else {
             users = await customerModel.findOne({ _id: userId })
           }
-          let products;
-          const productDetails = req.session.productDetails
-  
-          const singleProduct = {
-            userId: userId,
-            productId: [{
-              id: productDetails,
-              quantity: 1,
-            }]
-          }
-          if (productDetails) {
+          let products,totalPrice,discount;
+          if(req.query.productId){
+            const productId = req.query.productId
+            const productDetails = await productModel.findOne({ _id: productId })
+            totalPrice =Math.floor(productDetails.price - (productDetails.price * productDetails.discount/100))
+            req.session.productDetails = productDetails
+            const singleProduct = {
+              userId: userId,
+              productId: [{
+                id: productDetails,
+                quantity: 1,
+              }]
+            }
             products = singleProduct
           } else {
-  
+            let mrp;
             products = await cartModel.findOne({ userId }).populate('productId.id')
+             mrp = products.productId.reduce((acc,data)=>{
+            return acc += (((data.id.price)-(data.id.price*data.id.discount/100))*data.quantity)
+          },0)
+          totalPrice = Math.floor(mrp- (mrp * 4/100))
           }
+          discount =  parseInt(totalPrice*.02)
           const applicableCoupons = await couponModel.find({
             $and: [
               { purchaseAbove: { $gte: totalPrice } },
