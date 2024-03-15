@@ -130,6 +130,7 @@ module.exports = {
               { purchaseminimum: { $lte: totalPrice } }
             ]
           });
+          req.session.totalPrice = Math.floor(totalPrice)
           res.status(200).render('user/checkout', { categories, users, totalPrice, discount, products, applicableCoupons })
         
       }
@@ -140,14 +141,14 @@ module.exports = {
   },
   postCheckout: async (req, res) => {
     try {
-      const { payment, email, products, totalPrice, addressId } = req.body
+      const { payment, email, products, addressId } = req.body
+      const totalPrice = req.session.totalPrice
       req.session.productsDetails = products
       req.session.addressId = addressId
       req.session.payment = payment
-      req.session.totalPrice = parseInt(totalPrice)
       const key = process.env.KEY_ID
       if (payment == 'Online_Payment') {
-        const amount = Number(req.session.totalPrice) * 100
+        const amount = Number(totalPrice) * 100
         const orderOptions = {
           amount: amount,
           currency: 'INR',
@@ -172,10 +173,14 @@ module.exports = {
   //coupon discount adding
   couponApply: async (req, res) => {
     try {
-      const { coupon } = req.body
+      const { coupon} = req.body
+      const discounted = Math.floor(req.session.totalPrice * .02)
+      const totalPrice =  req.session.totalPrice -  discounted
       const couponDetail = await couponModel.findOne({ couponCode: coupon })
       const discount = couponDetail.discount
-      res.status(200).json({ discount: discount })
+      const grandTotal = parseInt(totalPrice) - (parseInt(totalPrice) * parseInt(discount) / 100)
+      req.session.totalPrice = Math.floor(grandTotal)
+      res.status(200).json({ discount: grandTotal })
     } catch (error) {
       console.log(error);
       res.staus(500).json('internal server error')

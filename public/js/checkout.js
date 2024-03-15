@@ -33,15 +33,15 @@ async function applyPromoCode(event) {
     }, 3000);
   } else {
     try {
+      let total = document.querySelector('.updatedPrice').innerHTML
       const response = await axios.post('/verify-coupon', {
-        coupon: couponCode
+        coupon: couponCode,
+        totalPrice:total
       })
       if (response.status == 200) {
         const discount = response.data.discount
-        let total = document.getElementById('updatedPrice')
-        const totalPrice = total.innerText.replace(/\₹|,/g, '')
-        const grandTotal = parseInt(totalPrice) - (parseInt(totalPrice) * parseInt(discount) / 100)
-        total.innerText = '₹' + parseInt(grandTotal)
+        let total = document.querySelector('.updatedPrice')
+        total.innerText = Math.floor(discount)
         couponApplied = true
       }
     } catch (error) {

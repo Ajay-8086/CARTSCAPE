@@ -73,19 +73,19 @@
                     <div>
 
                       <div class="form-check">
-                        <input class="form-checkbox-input colorCheck"  <% if(selectedColor.includes('Red')) { %> checked <% } %> type="checkbox" value="Red"  onclick="filterByColor(event,'Red')"/>
+                        <input class="form-checkbox-input colorCheck"  <% if(selectedColor.includes('Red')) { %> checked <% } %> type="checkbox" value="Red"  onclick="filterByColor(event)"/>
                         <label class="form-checkbox-label" for="checkbox">
                           Red
                         </label>
-                        <input class="form-checkbox-input colorCheck"  <% if(selectedColor.includes('Black')) { %> checked <% } %> type="checkbox" value="Black"  onclick="filterByColor(event,'Black')" />
+                        <input class="form-checkbox-input colorCheck"  <% if(selectedColor.includes('Black')) { %> checked <% } %> type="checkbox" value="Black"  onclick="filterByColor(event)" />
                         <label class="form-checkbox-label" for="checkbox">
                           Black
                         </label>
-                        <input class="form-checkbox-input colorCheck"  <% if(selectedColor.includes('Yellow')) { %> checked <% } %> type="checkbox" value="Yellow" onclick="filterByColor(event,'Yellow')"/>
+                        <input class="form-checkbox-input colorCheck"  <% if(selectedColor.includes('Yellow')) { %> checked <% } %> type="checkbox" value="Yellow" onclick="filterByColor(event)"/>
                         <label class="form-checkbox-label" for="checkbox">
                           Yellow
                         </label>
-                        <input class="form-checkbox-input colorCheck" <% if(selectedColor.includes('Green')) { %> checked <% } %> type="checkbox" value="Green" onclick="filterByColor(event,'Green')" />
+                        <input class="form-checkbox-input colorCheck" <% if(selectedColor.includes('Green')) { %> checked <% } %> type="checkbox" value="Green" onclick="filterByColor(event)" />
                         <label class="form-checkbox-label" for="checkbox">
                           Green
                         </label>
@@ -93,7 +93,7 @@
                         <label class="form-checkbox-label" for="checkbox">
                           Blue
                         </label>
-                        <input class="form-checkbox-input colorCheck"  <% if(selectedColor.includes('White')) { %> checked <% } %> type="checkbox" value="White" onclick="filterByColor(event,'White')" />
+                        <input class="form-checkbox-input colorCheck"  <% if(selectedColor.includes('White')) { %> checked <% } %> type="checkbox" value="White" onclick="filterByColor(event)" />
                         <label class="form-checkbox-label" for="checkbox">
                           White
                         </label>
@@ -221,6 +221,11 @@
           </div>
           <hr />
         </div>
+        <% var page = parseInt(page) || 1; %>
+        <% var categoryName = categoryName || ''; %>
+        <% var total=total ||0 %>
+        <% var limit=limit || 9 %>
+        <% var noPages = Math.ceil(total / limit); %>
         <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-3">
           <ul class="pagination">
             <li class="page-item <%= page === 1 ? 'disabled' : '' %>">
