@@ -191,8 +191,7 @@ module.exports = {
     
     getSignup: async(req, res) => {
         try {
-            const categories = await categoryModel.find({isDeleted:false})
-            res.status(200).render('user/signup',{categories})
+            res.status(200).render('user/signup')
         } catch (error) {
             res.status(500).send('Internal server error')
         }

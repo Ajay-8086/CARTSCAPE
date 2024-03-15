@@ -1,8 +1,5 @@
 
 <%-include('../partials/header.ejs') %>
-
-
-
     <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css'>
     <section class="container-fluid bg-body-tertiary d-block" style="height: 100vh;">
       <div class="row justify-content-center " style="display: flex; align-content: center;">
@@ -11,8 +8,7 @@
             style="box-shadow: 0 12px 15px rgba(0, 0, 0, 0.02); display: flex; align-items: center;">
             <div class="card-body p-5 text-center">
               <h4>Verify</h4>
-              <p>Your code was sent to <span style="color: red;">
-                  
+              <p>Your code was sent to <span style="color: red;">  
                 </span> </p>
               <form action="/verify-otp" method="post">
                 <input type="hidden" name="phone" value="<%= error.phone %>">
@@ -28,23 +24,8 @@
                   Verify
                 </button>
               </form>
-
-
               <div class="otp-timer mb-3" id="otp-timer">resend OTP in :30</div>
-              <!-- Update your form to include the Resend button -->
-              <form action="/resendOTP" method="post">
-                <input type="text" name="userid" value="" style="display: none;">
-                <input type="text" name="email" value="" style="display: none;">
-                <button class="btn mb-3" id="resend" style="background-color: #00224e; color: white;display: none ;" type="submit">
-                  resendOTP
-                </button>
-
-              </form>
-
-
-              <p class="resend text-muted mb-0">
-                Didn't receive code? <a href="">Request again</a>
-              </p>
+              
             </div>
           </div>
         </div>
@@ -66,7 +47,6 @@
         });
       });
     </script>
-
     <!-- include footer -->
     <%- include('../partials/footer.ejs') %>
       <!-- /include footer -->

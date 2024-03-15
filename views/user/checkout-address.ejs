@@ -105,8 +105,9 @@
     const data = Object.fromEntries(formData)
         try {
           const response = await axios.post('/checkout/add-address',data)
+          id = response.data.productId
           if(response.status==200){
-            window.location.href = '/checkout'
+            window.location.href = '/checkout?productId='+id
           }
         } catch (error) {
           if(error.status==401){

@@ -73,7 +73,15 @@ products.push({ id, quantity, price, selectedColor, selectedSize });
 let total = document.getElementById('updatedPrice')
 const totalPrice = total.innerText.replace(/\₹|,/g, '')
 
-const selectedPaymentMethod = document.querySelector('input[name="payment"]:checked').value;
+const selectedPayment = document.querySelector('input[name="payment"]:checked');
+if(!selectedPayment){
+  document.querySelector('.paymentError').innerHTML =  'Please select the payment method'
+  setTimeout(() => {
+    document.querySelector('.paymentError').innerHTML = ''
+  }, 3000);
+}
+// document.querySelector('.paymentError').innerHTML = ''
+const selectedPaymentMethod  =selectedPayment.value
 const email = document.getElementById('typeEmail').value;
 const addressId = document.querySelector('.address_id').value
 

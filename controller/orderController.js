@@ -102,6 +102,7 @@ module.exports = {
             users = await customerModel.findOne({ _id: userId })
           }
           let products,totalPrice,discount;
+          req.session.productId = req.query.productId
           if(req.query.productId){
             const productId = req.query.productId
             const productDetails = await productModel.findOne({ _id: productId })
@@ -132,9 +133,7 @@ module.exports = {
           });
           req.session.totalPrice = Math.floor(totalPrice)
           res.status(200).render('user/checkout', { categories, users, totalPrice, discount, products, applicableCoupons })
-        
       }
-     
     } catch (error) {
       res.status(500).send('Internal server error')
     }
@@ -202,18 +201,20 @@ module.exports = {
     try {
       const { address, city, house_No, postcode, altr_number, state, country, district } = req.body
       const userId = req.session.userId
+      const productId = req.session.productId
       if (!userId) {
-        res.status(401).json('invalid user')
+        console.log('user exist');
+       return res.status(401).json('invalid user')
       } else {
         const addressExist = await profileModel.findOne({ userId })
         if (!addressExist) {
           const newAdress = new profileModel({ userId, addresses: [{ address, city, house_No, postcode, altr_number, state, country, district }] })
           await newAdress.save()
-          res.status(200).json('address added success fully')
+          res.status(200).json({productId})
         } else {
           addressExist.addresses.push({ address, city, house_No, postcode, altr_number, state, country, district })
           addressExist.save()
-          res.status(200).json('address added success fully')
+          res.status(200).json({productId})
         }
       }
     } catch (error) {

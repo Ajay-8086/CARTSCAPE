@@ -63,14 +63,7 @@
                     </div>
                   </div>
                   <div class="col-6 mb-3" style="pointer-events: none;">
-                    <% if(users && users.addresses) {%>
-                    <input type="hidden" id="typeNumber" value="<%=users.addresses[0]._id%>"
-                    name="address_Id" class="form-control address_id" required />
-                    <% }else{%>
-                      <p class="errorAddress" style="color: red; text-align: center;">Please add address</p>
-                      <p class="mt-4 mb-4"><a href="/checkout/add-address" class="button p-3"
-                          style="background-color: black; color: white;">Add Address</a></p>
-                  <%  }%>
+                   
                     <p class="mb-0">Email</p>
                     <div class="form-outline">
                       <input type="email" id="typeEmail" value="<%=users.userId?users.userId.email:users.email%>"
@@ -153,10 +146,9 @@
                     </div>
 
                     <div class="float-end">
+                      <p style="text-align: center; color: red;" class="paymentError"></p>
                       <div class="container">
                         <div class="row">
-
-
                           <input type="text" id="totalsum" hidden name="totalsum" value="">
                           <button type="submit" class="btn shadow-0 border"
                             style="color: antiquewhite; background-color: #232F3E;" id="continueBtn">Continue</button>
