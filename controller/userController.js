@@ -39,7 +39,7 @@ module.exports = {
         let selectedColor=[];
         try {
             const page = parseInt(req.query.page) || 1;
-            const limit = parseInt(req.query.limit) || 9;
+            const limit =  9;
             const userId = req?.session.userId
             const categories = await categoryModel.find({isDeleted:false})
             const cart = await cartModel.findOne({userId}).populate('productId')

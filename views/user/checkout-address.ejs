@@ -51,7 +51,7 @@
                 <div class="col-sm-4 col-6 mb-3">
                   <p class="mb-0">Postal code</p>
                   <div class="form-outline">
-                    <input type="number" id="typeText" name="postcode" class="form-control pincode" />
+                    <input type="number" id="typeText" name="postcode" min="6" max="6" class="form-control pincode" />
                   </div>
                 </div>
 
@@ -92,8 +92,14 @@
       const pinCode = document.querySelector('.pincode').value.trim()
       const alternateNO = document.querySelector('.altr_no').value.trim()
       const country = document.querySelector('.country').value.trim()
+      const mobilenumregex = /^\d{10}$/
       if(!address||!city||!district||!house_No||!pinCode||!alternateNO||!country){
         error.innerHTML = 'all the fields are necessary'
+        setTimeout(() => {
+          error.innerHTML =''
+        }, 3000);
+      }else if(!mobilenumregex.test(alternateNO)){
+        error.innerHTML = 'Invalid mobile number format'
         setTimeout(() => {
           error.innerHTML =''
         }, 3000);

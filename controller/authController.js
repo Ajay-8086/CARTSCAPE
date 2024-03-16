@@ -166,6 +166,7 @@ module.exports = {
                 const passwordCheck = await bcrypt.compare(password, userExist.password);
                 if (passwordCheck) {
                     if (userExist.verified && !userExist.blocked) {
+                        console.log('gsa');
                         req.session.userId = userExist._id
                         req.session.signedEmail = userExist.email
                         req.session.isLoggedIn = true
@@ -184,7 +185,8 @@ module.exports = {
                 }
             }
         } catch (error) {
-            res.status(500).send('Internal server error')
+            console.log(error.message);
+            res.status(500).redirect('/error')
         }
     },
 
@@ -199,28 +201,22 @@ module.exports = {
     
     postSignup: async (req, res) => {
         try {
-            const { name, email, phone, password } = req.body;
+            const { name, email, phone, password } = req.body.data;
             const hashPassword = await bcrypt.hash(password, 10);
-            const userExist = await customerModel.findOne({ phone });
-
+            const userExist = await customerModel.findOne({ email });
             if (userExist) {
                 if (userExist.verified) {
-                    return res.status(200).redirect('/login');
+                    return res.status(400).json('User exist');
                 } else {
-                    req.flash('error', { phone })
-                    res.status(200).redirect('/verify-otp');
                     await sendVerificationCode(phone);
+                    res.status(200).json({phone});
                 }
-            } else {
-
-                
+            } else { 
                 const user = new customerModel({ name, email, phone, password: hashPassword });
-                            await user.save();
-                            
+                            await user.save();                      
                const saveData =  await sendVerificationCode(phone);
                if (saveData) {
-                   req.flash('error', { phone })
-                    res.status(200).redirect('/verify-otp');
+                    res.status(200).json({phone});
                 }
             }
         } catch (err) {
@@ -232,7 +228,8 @@ module.exports = {
     getOtp: async(req, res) => {
         try {
             const categories = await categoryModel.find({isDeleted:false})
-            res.status(200).render('user/otpVerify', { error: req.flash('error')[0],categories })
+            const phone = req.query.phone
+            res.status(200).render('user/otpVerify',{categories,phone})
         } catch (error) {
             res.status(500).send('Internal server error')
         }
@@ -240,7 +237,8 @@ module.exports = {
 
     postOtp: async (req, res) => {
         try {
-            const { digit1, digit2, digit3, digit4, phone } = req.body;
+            const { digit1, digit2, digit3, digit4 } = req.body;
+            const phone = req.query.phone
             await verifyOtp(res, phone, `${digit1}${digit2}${digit3}${digit4}`);
             res.redirect('/login');
         } catch (error) {

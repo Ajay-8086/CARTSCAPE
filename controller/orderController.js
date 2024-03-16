@@ -102,8 +102,8 @@ module.exports = {
             users = await customerModel.findOne({ _id: userId })
           }
           let products,totalPrice,discount;
-          req.session.productId = req.query.productId
           if(req.query.productId){
+            req.session.productId = req.query.productId
             const productId = req.query.productId
             const productDetails = await productModel.findOne({ _id: productId })
             totalPrice =Math.floor(productDetails.price - (productDetails.price * productDetails.discount/100))
@@ -193,7 +193,7 @@ module.exports = {
       res.status(200).render('user/checkout-address', { categories })
     } catch (error) {
       console.log(error);
-      res.send('Internal server error')
+      res.status(500).redirect('/error')
     }
   },
   // adding new address from checkout 
@@ -203,18 +203,17 @@ module.exports = {
       const userId = req.session.userId
       const productId = req.session.productId
       if (!userId) {
-        console.log('user exist');
        return res.status(401).json('invalid user')
       } else {
         const addressExist = await profileModel.findOne({ userId })
         if (!addressExist) {
           const newAdress = new profileModel({ userId, addresses: [{ address, city, house_No, postcode, altr_number, state, country, district }] })
           await newAdress.save()
-          res.status(200).json({productId})
+          res.status(200).json({productId:productId??''})
         } else {
           addressExist.addresses.push({ address, city, house_No, postcode, altr_number, state, country, district })
           addressExist.save()
-          res.status(200).json({productId})
+          res.status(200).json({productId:productId??''})
         }
       }
     } catch (error) {
@@ -226,7 +225,7 @@ module.exports = {
     try {
       const categories = await categoryModel.find({ isDeleted: false })
       const email = req.session.signedEmail
-      const myOrders = await orderModel.find({ userEmail: email }).populate('products.id');
+      const myOrders = await orderModel.find({ userEmail: email }).populate('products.id').sort({createdAt:-1});
       res.status(200).render('user/myOrders', { categories, myOrders })
     } catch (error) {
       console.log(error);
@@ -287,13 +286,11 @@ module.exports = {
       let generated_signature = crypto.createHmac('sha256', process.env.KEY_SECRET);
       generated_signature.update(data.razorpay_order_id + '|' + data.razorpay_payment_id);
       generated_signature = generated_signature.digest('hex');
-
       if (generated_signature === data.razorpay_signature) {
         const email = req.session.checkoutEmail;
         const products = req.session.productsDetails;
         const userId = req.session.userId;
         const addressId = new mongoose.Types.ObjectId(req.session.addressId);
-
         for (const product of products) {
           const order = new orderModel({
             userEmail: email,

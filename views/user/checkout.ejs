@@ -77,6 +77,8 @@
                   <div class="col-sm-8 mb-3">
                     <p class="mb-0">Address</p>
                     <div class="form-outline">
+                      <input type="hidden" id="typeText" placeholder="Type here" name="address"
+                        value="<%=users.addresses[0]._id%>" class="form-control address_id" required />
                       <input type="text" id="typeText" placeholder="Type here" name="address"
                         value="<%=users.addresses[0].address%> " class="form-control address-field" required />
                       </div>
@@ -214,12 +216,6 @@
               <p class="mb-2" style="display: none;" id="co">Coupon Code:</p>
               <p class="mb-2 text-success" id="couponDis"></p>
             </div>
-            <!-- <div class="d-flex justify-content-between">
-                <p class="mb-2">Shipping cost:</p>
-
-                <p class="mb-2">+</p>
-
-              </div> -->
             <div class="d-flex justify-content-between">
               <p id="coupon" style="color: red;"></p>
             </div>

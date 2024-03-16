@@ -44,7 +44,7 @@
                 <!-- Input for entering the rest of the phone number -->
                    <div class="form mb-4">
                       <div id="phoneTooltp" class="tooltips" style="color: red !important"></div>
-                      <input type="tel" name="phone" id="phone" class="form-control form-control-lg" style="background-color: #d9d9d99d;" placeholder="Phone Number" value="">
+                      <input type="number" name="phone" id="phone" class="form-control form-control-lg" style="background-color: #d9d9d99d;" placeholder="Phone Number" value="">
                     </div>
                   <div class="form mb-4">
                     <div id="passwordTooltip" class="tooltips" style="color: red !important"></div>
@@ -56,7 +56,7 @@
                   class="form-control form-control-lg " placeholder="confirmPassword">
                 </div>
                 <div class="form-check d-flex justify-content-center mb-5">
-                  <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3cg" />
+                  <input class="form-check-input me-2 userAgreement" type="checkbox" value="" id="form2Example3cg" />
                   <label class="form-check-label" for="form2Example3g">
                     I agree all statements in <a href="#!" class="text-body"><u>Terms of service</u></a>
                   </label>
@@ -67,7 +67,7 @@
                       <button type="submit"  class="btn btn-success btn-block btn-lg  "
                         style="color: white; background-color: #00224e;; box-shadow: none;">Send OTP</button>
                     </div> -->
-                    <button class="btn-success" type="submit">Send OTP</button>
+                    <button class="btn-success otpSending" type="submit">Send OTP</button>
                     <p class="text-center text-muted mt-5 mb-0">Have already an account? <a href="/login"
                         class="fw-bold text-body"><u>Login here</u></a></p>
               </form>
